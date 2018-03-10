@@ -23,7 +23,7 @@ class UseLatestVersionsTask extends DefaultTask {
             this.newVersion = newVersion
         }
         String oldModuleVersionMatchString() {
-            return "([\"']" + this.group + ":" + this.name + ":)[^\$].*([\"'])"
+            return "([\"']" + this.group + ":" + this.name + ":)[^\$].*?([\"'])"
         }
         String newModuleVersionString() {
             return '$1' + this.newVersion + '$2'
@@ -35,12 +35,13 @@ class UseLatestVersionsTask extends DefaultTask {
             return '$1' + this.newVersion + '$2'
         }
         String variableUseMatchString() {
-            return "[\"']" + this.group + ":" + this.name + ":[\$](.*)[\"']"
+            // Capture variables starting with $, but not expresions starting with ${
+            return "[\"']" + this.group + ":" + this.name + ":[\$]([^{].*?)[\"']"
         }
     }
 
     String variablDefinitionMatchString(String variable) {
-        return "(" + variable + "[ \\t]+=[ \t]*[\"'])(.*)([\"'])"
+        return "(" + variable + "[ \\t]+=[ \t]*?[\"'])(.*)([\"'])"
     }
 
     String newVariableDefinitionString(String newVersion) {
