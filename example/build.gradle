@@ -1,0 +1,12 @@
+buildscript {
+    repositories {
+        mavenLocal()
+    }
+    dependencies {
+        classpath 'se.patrikerdes:gradle-use-latest-versions-plugin:1.0-SNAPSHOT'
+    }
+}
+
+apply plugin: 'se.patrikerdes.use-latest-versions'
+
+defaultTasks 'useLatestVersions'

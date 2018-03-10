@@ -1,0 +1,17 @@
+apply plugin: 'groovy'
+apply plugin: 'maven'
+apply plugin: 'java-gradle-plugin'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile 'junit:junit:4.12'
+    testCompile('org.spockframework:spock-core:1.1-groovy-2.4') {
+        exclude(module: 'groovy-all')
+    }
+}
+
+group = 'se.patrikerdes'
+version = '1.0-SNAPSHOT'
