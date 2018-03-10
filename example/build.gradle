@@ -12,5 +12,10 @@ plugins {
 }
 
 apply plugin: 'se.patrikerdes.use-latest-versions'
+apply plugin: 'java'
+
+repositories {
+    mavenCentral()
+}
 
 defaultTasks 'useLatestVersions'
