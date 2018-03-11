@@ -6,40 +6,14 @@ import groovy.transform.TupleConstructor
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
 
+import java.nio.file.Files
+import java.nio.file.StandardCopyOption
 import java.util.regex.Matcher
+
+import static se.patrikerdes.Common.getOutDatedDependencies
 
 @CompileStatic
 class UseLatestVersionsTask extends DefaultTask {
-    @TupleConstructor
-    class DependencyUpdate {
-        String group
-        String name
-        String oldVersion
-        String newVersion
-        DependencyUpdate(group, name, oldVersion, newVersion) {
-            this.group = group
-            this.name = name
-            this.oldVersion = oldVersion
-            this.newVersion = newVersion
-        }
-        String oldModuleVersionMatchString() {
-            return "([\"']" + this.group + ":" + this.name + ":)[^\$].*?([\"'])"
-        }
-        String newModuleVersionString() {
-            return '$1' + this.newVersion + '$2'
-        }
-        String oldPluginVersionMatchString() {
-            return "(id[ \\t]+[\"']" + this.group + "[\"'][ \\t]+version[ \\t]+[\"'])" + this.oldVersion + "([\"'])"
-        }
-        String newPluginVersionString() {
-            return '$1' + this.newVersion + '$2'
-        }
-        String variableUseMatchString() {
-            // Capture variables starting with $, but not expresions starting with ${
-            return "[\"']" + this.group + ":" + this.name + ":[\$]([^{].*?)[\"']"
-        }
-    }
-
     String variablDefinitionMatchString(String variable) {
         return "(" + variable + "[ \\t]+=[ \t]*?[\"'])(.*)([\"'])"
     }
@@ -50,17 +24,24 @@ class UseLatestVersionsTask extends DefaultTask {
 
     @TaskAction
     def useLatestVersions() {
+        // Save a copy of the json report from dependencyUpdates, for use by the check task
+        File useLatestVersionsFolder = new File(project.rootDir, 'build' + File.separator + 'useLatestVersions')
+        if(!useLatestVersionsFolder.exists()) {
+            useLatestVersionsFolder.mkdirs()
+        }
+        File dependencyUpdatesJsonReportFile = new File(project.rootDir, 'build' + File.separator + 'dependencyUpdates' + File.separator + 'report.json')
+        Files.copy(dependencyUpdatesJsonReportFile.toPath(), new File(useLatestVersionsFolder, 'latestDependencyUpdatesReport.json').toPath(), StandardCopyOption.REPLACE_EXISTING)
+
+        // Get all *.gradle files
         def dotGradleFileNames = new FileNameFinder().getFileNames(project.rootDir.getAbsolutePath(), "**/*.gradle")
 
-        def dependencyUpdatesJsonReportFile = new File(project.rootDir, 'build' + File.separator + 'dependencyUpdates' + File.separator + 'report.json')
+        // Read the json report from dependencyUpdates
         def dependencyUpdatesJson = new JsonSlurper().parse(dependencyUpdatesJsonReportFile)
 
-        def outdatedDependencies = dependencyUpdatesJson['outdated']['dependencies']
-        def dependecyUpdates = []
-        for(outdatedDependency in outdatedDependencies) {
-            dependecyUpdates.add(new DependencyUpdate(outdatedDependency['group'], outdatedDependency['name'], outdatedDependency['version'], outdatedDependency['available']['milestone']))
-        }
+        // Get outdated dependencies
+        List<DependencyUpdate> dependecyUpdates = getOutDatedDependencies(dependencyUpdatesJson)
 
+        // Get current dependencies
         def currentDependencies = dependencyUpdatesJson['current']['dependencies']
         def dependencyStables = []
         for(currentDependency in currentDependencies) {
@@ -112,7 +93,7 @@ class UseLatestVersionsTask extends DefaultTask {
             versionVariables.remove(problemVariable)
         }
 
-        // Pass 5: Todo: Exclude variables defined more than once
+        // Pass 5: Exclude variables defined more than once
         Set variableDefinitions = []
         problemVariables = []
 
@@ -146,7 +127,7 @@ class UseLatestVersionsTask extends DefaultTask {
             }
         }
 
-        // Pass X: Write all files back
+        // Pass 7: Write all files back
         for(dotGradleFileName in dotGradleFileNames) {
             new File(dotGradleFileName).setText(gradleFileContents[dotGradleFileName], 'UTF-8')
         }

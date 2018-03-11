@@ -30,4 +30,28 @@ class BaseFunctionalTest extends Specification {
                 .withPluginClasspath()
                 .buildAndFail()
     }
+
+    BuildResult useLatestVersionsCheck() {
+        GradleRunner.create()
+                .withProjectDir(testProjectDir.root)
+                .withArguments('useLatestVersionsCheck')
+                .withPluginClasspath()
+                .build()
+    }
+
+    BuildResult useLatestVersionsCheckAndFail() {
+        GradleRunner.create()
+                .withProjectDir(testProjectDir.root)
+                .withArguments('useLatestVersionsCheck')
+                .withPluginClasspath()
+                .buildAndFail()
+    }
+
+    BuildResult clean() {
+        GradleRunner.create()
+                .withProjectDir(testProjectDir.root)
+                .withArguments('clean')
+                .withPluginClasspath()
+                .build()
+    }
 }

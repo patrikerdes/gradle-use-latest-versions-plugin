@@ -12,10 +12,9 @@ plugins {
 }
 
 apply plugin: 'se.patrikerdes.use-latest-versions'
+apply plugin: 'com.github.ben-manes.versions'
 apply plugin: 'java'
 
 repositories {
     mavenCentral()
 }
-
-defaultTasks 'useLatestVersions'

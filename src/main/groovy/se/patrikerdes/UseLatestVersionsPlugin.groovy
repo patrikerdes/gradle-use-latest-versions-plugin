@@ -9,5 +9,6 @@ class UseLatestVersionsPlugin implements Plugin<Project> {
     void apply(Project project) {
         System.setProperty('outputFormatter', 'json')
         project.task('useLatestVersions', type: UseLatestVersionsTask, dependsOn: 'dependencyUpdates')
+        project.task('useLatestVersionsCheck', type: UseLatestVersionsCheckTask, dependsOn: 'dependencyUpdates')
     }
 }
