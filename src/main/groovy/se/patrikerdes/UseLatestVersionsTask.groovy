@@ -2,7 +2,6 @@ package se.patrikerdes
 
 import groovy.json.JsonSlurper
 import groovy.transform.CompileStatic
-import groovy.transform.TupleConstructor
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
 
@@ -33,7 +32,8 @@ class UseLatestVersionsTask extends DefaultTask {
         Files.copy(dependencyUpdatesJsonReportFile.toPath(), new File(useLatestVersionsFolder, 'latestDependencyUpdatesReport.json').toPath(), StandardCopyOption.REPLACE_EXISTING)
 
         // Get all *.gradle files
-        def dotGradleFileNames = new FileNameFinder().getFileNames(project.rootDir.getAbsolutePath(), "**/*.gradle")
+        List<String> dotGradleFileNames = new FileNameFinder().getFileNames(project.rootDir.getAbsolutePath(), "**/*.gradle")
+        // TODO: Also get *.gradle.kts files
 
         // Read the json report from dependencyUpdates
         def dependencyUpdatesJson = new JsonSlurper().parse(dependencyUpdatesJsonReportFile)
@@ -59,14 +59,17 @@ class UseLatestVersionsTask extends DefaultTask {
         // Pass 2: Update module versions
         for(String dotGradleFileName in dotGradleFileNames) {
             for(DependencyUpdate update in dependecyUpdates) {
-                gradleFileContents[dotGradleFileName] = gradleFileContents[dotGradleFileName].replaceAll(update.oldModuleVersionMatchString(), update.newModuleVersionString())
+                // String notation
+                gradleFileContents[dotGradleFileName] = gradleFileContents[dotGradleFileName].replaceAll(update.oldModuleVersionStringFormatMatchString(), update.newVersionString())
+                // Map notation
+                gradleFileContents[dotGradleFileName] = gradleFileContents[dotGradleFileName].replaceAll(update.oldModuleVersionMapFormatMatchString(), update.newVersionString())
             }
         }
 
         // Pass 3: Update plugin versions
         for(String dotGradleFileName in dotGradleFileNames) {
             for(DependencyUpdate update in dependecyUpdates) {
-                gradleFileContents[dotGradleFileName] = gradleFileContents[dotGradleFileName].replaceAll(update.oldPluginVersionMatchString(), update.newPluginVersionString())
+                gradleFileContents[dotGradleFileName] = gradleFileContents[dotGradleFileName].replaceAll(update.oldPluginVersionMatchString(), update.newVersionString())
             }
         }
 

@@ -1,7 +1,7 @@
 package se.patrikerdes
 
 class ModuleUpdatesFunctionalTest extends BaseFunctionalTest {
-    def "an outdated module dependency with a fixed version can be updated"() {
+    def "an outdated module dependency with a fixed version can be updated, string notation"() {
         given:
         buildFile << """
             plugins {
@@ -26,6 +26,60 @@ class ModuleUpdatesFunctionalTest extends BaseFunctionalTest {
 
         then:
         updatedBuildFile.contains("junit:junit:$CurrentVersions.junit")
+    }
+
+    def "an outdated module dependency with a fixed version can be updated, map notation, single quotes"() {
+        given:
+        buildFile << """
+            plugins {
+                id 'se.patrikerdes.use-latest-versions'
+                id 'com.github.ben-manes.versions' version '$CurrentVersions.versions'
+            }
+            
+            apply plugin: 'java'
+            
+            repositories {
+                mavenCentral()
+            }
+            
+            dependencies {
+                testCompile group: 'junit', name: 'junit', version: '4.0'
+            }
+        """
+
+        when:
+        useLatestVersions()
+        def updatedBuildFile = buildFile.getText('UTF-8')
+
+        then:
+        updatedBuildFile.contains("group: 'junit', name: 'junit', version: '$CurrentVersions.junit'")
+    }
+
+    def "an outdated module dependency with a fixed version can be updated, map notation, double quotes"() {
+        given:
+        buildFile << """
+            plugins {
+                id 'se.patrikerdes.use-latest-versions'
+                id 'com.github.ben-manes.versions' version '$CurrentVersions.versions'
+            }
+
+            apply plugin: 'java'
+            
+            repositories {
+                mavenCentral()
+            }
+            
+            dependencies {
+                testCompile group: "junit", name: "junit", version: "4.0"
+            }
+        """
+
+        when:
+        useLatestVersions()
+        def updatedBuildFile = buildFile.getText('UTF-8')
+
+        then:
+        updatedBuildFile.contains("group: \"junit\", name: \"junit\", version: \"$CurrentVersions.junit\"")
     }
 
     def "an outdated module dependency with a version range can be updated"() {

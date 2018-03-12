@@ -91,6 +91,39 @@ class VariableUpdatesFunctionalTest extends BaseFunctionalTest {
         updatedBuildFile.contains("ext.kotlin_version = '$CurrentVersions.kotlin'")
     }
 
+    // It might make sense to update these expressions as well, but this is the current behavior
+    def "an expression with \${x} won't be updated"() {
+        given:
+        buildFile << """
+            plugins {
+                id 'se.patrikerdes.use-latest-versions'
+                id 'com.github.ben-manes.versions' version '$CurrentVersions.versions'
+            }
+
+            apply plugin: 'java'
+            
+            repositories {
+                mavenCentral()
+            }
+            
+            def commons = "1.0"
+            
+            dependencies {
+                compile "commons-lang:commons-lang:\${commons}"
+                compile "commons-logging:commons-logging:\${"1.0"}"
+            }
+        """
+
+        when:
+        useLatestVersions()
+        def updatedBuildFile = buildFile.getText('UTF-8')
+
+        then:
+        updatedBuildFile.contains('commons = "1.0"')
+        updatedBuildFile.contains('${commons}')
+        updatedBuildFile.contains('${"1.0"}')
+    }
+
     def "a variable used for multiple dependencies with different latest versions won't be updated"() {
         given:
         buildFile << """
