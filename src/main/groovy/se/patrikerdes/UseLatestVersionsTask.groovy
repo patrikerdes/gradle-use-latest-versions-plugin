@@ -79,7 +79,18 @@ class UseLatestVersionsTask extends DefaultTask {
 
         for(String dotGradleFileName in dotGradleFileNames) {
             for(DependencyUpdate update in dependecyUpdates + dependencyStables) {
-                Matcher variableMatch = gradleFileContents[dotGradleFileName] =~ update.variableUseMatchString()
+                Matcher variableMatch = gradleFileContents[dotGradleFileName] =~ update.variableUseStringFormatMatchString()
+                if(variableMatch.size() == 1) {
+                    String variableName = ((List)variableMatch[0])[1]
+                    if(versionVariables.containsKey(variableName) && versionVariables[variableName] != update.newVersion) {
+                        println("A problem was detected: $variableName is supposed to be updated to both ${versionVariables[variableName]} and ${update.newVersion}, it won't be changed.")
+                        problemVariables.add(variableName)
+                    } else {
+                        versionVariables.put(variableName, update.newVersion)
+                    }
+                }
+
+                variableMatch = gradleFileContents[dotGradleFileName] =~ update.variableUseMapFormatMatchString()
                 if(variableMatch.size() == 1) {
                     String variableName = ((List)variableMatch[0])[1]
                     if(versionVariables.containsKey(variableName) && versionVariables[variableName] != update.newVersion) {

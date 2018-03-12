@@ -59,6 +59,35 @@ class VariableUpdatesFunctionalTest extends BaseFunctionalTest {
         updatedBuildFile.contains("junit_version = \"$CurrentVersions.junit\"")
     }
 
+    def "an outdated map notation module dependency based on a variable can be updated"() {
+        given:
+        buildFile << """
+            plugins {
+                id 'se.patrikerdes.use-latest-versions'
+                id 'com.github.ben-manes.versions' version '$CurrentVersions.versions'
+            }
+            
+            apply plugin: 'java'
+            
+            repositories {
+                mavenCentral()
+            }
+            
+            def junit_version = "4.0"
+            
+            dependencies {
+                testCompile group: 'junit', name: 'junit', version: junit_version
+            }
+        """
+
+        when:
+        useLatestVersions()
+        def updatedBuildFile = buildFile.getText('UTF-8')
+
+        then:
+        updatedBuildFile.contains("junit_version = \"$CurrentVersions.junit\"")
+    }
+
     def "Extra properties extensions can be updated"() {
         // Taken from https://kotlinlang.org/docs/reference/using-gradle.html
         given:
