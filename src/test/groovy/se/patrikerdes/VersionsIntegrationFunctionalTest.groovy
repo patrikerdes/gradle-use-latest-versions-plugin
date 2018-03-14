@@ -68,4 +68,40 @@ class VersionsIntegrationFunctionalTest extends BaseFunctionalTest {
         result.task(":dependencyUpdates").outcome == SUCCESS
         result.task(":useLatestVersionsCheck").outcome == SUCCESS
     }
+
+    def "versions plugin versions"() {
+        given:
+        buildFile << """
+            plugins {
+                id 'se.patrikerdes.use-latest-versions'
+                id 'com.github.ben-manes.versions' version '$versionsVersion'
+            }
+
+            apply plugin: 'java'
+            
+            repositories {
+                mavenCentral()
+            }
+            
+            dependencies {
+                testCompile 'junit:junit:4.0'
+            }
+        """
+
+        when:
+        useLatestVersions(gradleVersion)
+        def updatedBuildFile = buildFile.getText('UTF-8')
+
+        then:
+        updatedBuildFile.contains("junit:junit:$CurrentVersions.junit")
+
+        where:
+        versionsVersion | gradleVersion
+        '0.17.0'        | '4.6'
+        '0.16.0'        | '4.2'
+        '0.15.0'        | '4.0'
+        '0.14.0'        | '3.4'
+        '0.13.0'        | '3.4'
+        '0.12.0'        | '3.4'
+    }
 }

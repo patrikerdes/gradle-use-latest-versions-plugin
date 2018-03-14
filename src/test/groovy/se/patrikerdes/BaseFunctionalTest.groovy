@@ -23,6 +23,15 @@ class BaseFunctionalTest extends Specification {
                 .build()
     }
 
+    BuildResult useLatestVersions(String gradleVersion) {
+        GradleRunner.create()
+                .withProjectDir(testProjectDir.root)
+                .withArguments('useLatestVersions')
+                .withPluginClasspath()
+                .withGradleVersion(gradleVersion)
+                .build()
+    }
+
     BuildResult useLatestVersionsAndFail() {
         GradleRunner.create()
                 .withProjectDir(testProjectDir.root)
