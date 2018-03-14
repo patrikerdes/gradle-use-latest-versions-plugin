@@ -70,39 +70,44 @@ class VersionsIntegrationFunctionalTest extends BaseFunctionalTest {
     }
 
     def "versions plugin versions"() {
-        println("Testing versions plugin version $versionsVersion")
+        if (Integer.parseInt(System.getProperty("java.version").split("\\.")[1]) >= 9) {
+            println("Skipping on JDK 9, since it is only supported since gradle 4.2.1")
+        } else {
+            println("Testing versions plugin version $versionsVersion")
+            given:
+            buildFile << """
+                plugins {
+                    id 'se.patrikerdes.use-latest-versions'
+                    id 'com.github.ben-manes.versions' version '$versionsVersion'
+                }
+    
+                apply plugin: 'java'
+                
+                repositories {
+                    mavenCentral()
+                }
+                
+                dependencies {
+                    testCompile 'junit:junit:4.0'
+                }
+            """
 
-        given:
-        buildFile << """
-            plugins {
-                id 'se.patrikerdes.use-latest-versions'
-                id 'com.github.ben-manes.versions' version '$versionsVersion'
-            }
+            when:
+            useLatestVersions(gradleVersion)
+            def updatedBuildFile = buildFile.getText('UTF-8')
 
-            apply plugin: 'java'
-            
-            repositories {
-                mavenCentral()
-            }
-            
-            dependencies {
-                testCompile 'junit:junit:4.0'
-            }
-        """
+            then:
+            updatedBuildFile.contains("junit:junit:$CurrentVersions.junit")
 
-        when:
-        useLatestVersions(gradleVersion)
-        def updatedBuildFile = buildFile.getText('UTF-8')
+            where:
+            versionsVersion | gradleVersion
+            '0.17.0'        | '4.6'
+            '0.16.0'        | '4.2'
+            '0.15.0'        | '4.0'
+            '0.14.0'        | '3.4'
+            '0.13.0'        | '3.4'
+            '0.12.0'        | '3.4'
+        }
 
-        then:
-        updatedBuildFile.contains("junit:junit:$CurrentVersions.junit")
-
-        where:
-        versionsVersion | gradleVersion
-        '0.17.0'        | '4.6'
-        '0.16.0'        | '4.2'
-        '0.15.0'        | '4.0'
-        '0.14.0'        | '3.4'
-        '0.13.0'        | '3.4'
     }
 }
