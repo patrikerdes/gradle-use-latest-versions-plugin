@@ -104,6 +104,5 @@ class VersionsIntegrationFunctionalTest extends BaseFunctionalTest {
         '0.15.0'        | '4.0'
         '0.14.0'        | '3.4'
         '0.13.0'        | '3.4'
-        '0.12.0'        | '3.4'
     }
 }
