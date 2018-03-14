@@ -2,6 +2,8 @@ package se.patrikerdes
 
 class GradleVersionFunctionalTest extends BaseFunctionalTest {
     def "Gradle versions"() {
+        println("Testing Gradle version $gradleVersion")
+
         given:
         buildFile << """
             plugins {

@@ -70,6 +70,8 @@ class VersionsIntegrationFunctionalTest extends BaseFunctionalTest {
     }
 
     def "versions plugin versions"() {
+        println("Testing versions plugin version $versionsVersion")
+
         given:
         buildFile << """
             plugins {
