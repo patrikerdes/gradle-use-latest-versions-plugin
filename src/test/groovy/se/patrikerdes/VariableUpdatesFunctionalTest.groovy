@@ -89,27 +89,24 @@ class VariableUpdatesFunctionalTest extends BaseFunctionalTest {
     }
 
     def "Extra properties extensions can be updated"() {
-        // Taken from https://kotlinlang.org/docs/reference/using-gradle.html
         given:
         buildFile << """
-            buildscript {
-                ext.kotlin_version = '1.2.21'
-            
-                repositories {
-                    mavenCentral()
-                }
-            
-                dependencies {
-                    classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:\$kotlin_version"
-                }
-            }
-
             plugins {
                 id 'se.patrikerdes.use-latest-versions'
                 id 'com.github.ben-manes.versions' version '$CurrentVersions.versions'
             }
-
-            apply plugin: 'kotlin'
+            
+            apply plugin: 'java'
+            
+            repositories {
+                mavenCentral()
+            }
+            
+            ext.junit_version = "4.0"
+            
+            dependencies {
+                testCompile group: 'junit', name: 'junit', version: junit_version
+            }
         """
 
         when:
@@ -117,7 +114,7 @@ class VariableUpdatesFunctionalTest extends BaseFunctionalTest {
         def updatedBuildFile = buildFile.getText('UTF-8')
 
         then:
-        updatedBuildFile.contains("ext.kotlin_version = '$CurrentVersions.kotlin'")
+        updatedBuildFile.contains("ext.junit_version = '$CurrentVersions.junit'")
     }
 
     // It might make sense to update these expressions as well, but this is the current behavior
@@ -280,8 +277,8 @@ class VariableUpdatesFunctionalTest extends BaseFunctionalTest {
         def updatedSecondFile = secondFile.getText('UTF-8')
 
         then:
-        !updatedBuildFile.contains("kotlin_version = '$CurrentVersions.kotlin'")
-        !updatedSecondFile.contains("kotlin_version = '$CurrentVersions.kotlin'")
+        !updatedBuildFile.contains("junit_version = '$CurrentVersions.junit'")
+        !updatedSecondFile.contains("junit_version = '$CurrentVersions.junit'")
         result.output.contains("A problem was detected")
     }
 }
