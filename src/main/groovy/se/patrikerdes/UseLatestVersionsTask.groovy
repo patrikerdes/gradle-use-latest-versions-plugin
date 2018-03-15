@@ -79,27 +79,17 @@ class UseLatestVersionsTask extends DefaultTask {
 
         for(String dotGradleFileName in dotGradleFileNames) {
             for(DependencyUpdate update in dependecyUpdates + dependencyStables) {
-                Matcher variableMatch = gradleFileContents[dotGradleFileName] =~ update.variableUseStringFormatMatchString()
-                if(variableMatch.size() == 1) {
-                    String variableName = ((List)variableMatch[0])[1]
-                    if(versionVariables.containsKey(variableName) && versionVariables[variableName] != update.newVersion) {
-                        println("A problem was detected: $variableName is supposed to be updated to both ${versionVariables[variableName]} and ${update.newVersion}, it won't be changed.")
-                        problemVariables.add(variableName)
-                    } else {
-                        versionVariables.put(variableName, update.newVersion)
-                    }
-                }
+                // Variable in string format with string interpolation
+                Matcher variableMatch = gradleFileContents[dotGradleFileName] =~ update.variableUseStringFormatInterpolationMatchString()
+                getVariablesFromMatches(variableMatch, versionVariables, update, problemVariables)
 
+                // Variable in string format with plus
+                variableMatch = gradleFileContents[dotGradleFileName] =~ update.variableUseStringFormatPlusMatchString()
+                getVariablesFromMatches(variableMatch, versionVariables, update, problemVariables)
+
+                // Variable in map format
                 variableMatch = gradleFileContents[dotGradleFileName] =~ update.variableUseMapFormatMatchString()
-                if(variableMatch.size() == 1) {
-                    String variableName = ((List)variableMatch[0])[1]
-                    if(versionVariables.containsKey(variableName) && versionVariables[variableName] != update.newVersion) {
-                        println("A problem was detected: $variableName is supposed to be updated to both ${versionVariables[variableName]} and ${update.newVersion}, it won't be changed.")
-                        problemVariables.add(variableName)
-                    } else {
-                        versionVariables.put(variableName, update.newVersion)
-                    }
-                }
+                getVariablesFromMatches(variableMatch, versionVariables, update, problemVariables)
             }
         }
 
@@ -144,6 +134,18 @@ class UseLatestVersionsTask extends DefaultTask {
         // Pass 7: Write all files back
         for(dotGradleFileName in dotGradleFileNames) {
             new File(dotGradleFileName).setText(gradleFileContents[dotGradleFileName], 'UTF-8')
+        }
+    }
+
+    def getVariablesFromMatches(Matcher variableMatch, Map<String, String> versionVariables, DependencyUpdate update, Set problemVariables) {
+        if (variableMatch.size() == 1) {
+            String variableName = ((List) variableMatch[0])[1]
+            if (versionVariables.containsKey(variableName) && versionVariables[variableName] != update.newVersion) {
+                println("A problem was detected: $variableName is supposed to be updated to both ${versionVariables[variableName]} and ${update.newVersion}, it won't be changed.")
+                problemVariables.add(variableName)
+            } else {
+                versionVariables.put(variableName, update.newVersion)
+            }
         }
     }
 }

@@ -28,9 +28,12 @@ class DependencyUpdate {
     String newVersionString() {
         return '$1' + this.newVersion + '$2'
     }
-    String variableUseStringFormatMatchString() {
+    String variableUseStringFormatInterpolationMatchString() {
         // Capture variables starting with $, but not expresions starting with ${
         return "[\"']" + this.group + ":" + this.name + ":[\$]([^{].*?)[\"']"
+    }
+    String variableUseStringFormatPlusMatchString() {
+        return "[\"']" + this.group + ":" + this.name + ":[\"'][ \\t]*\\+[ \\t]*([a-zA-Z\$_][a-zA-Z\$_0-9\\.]*)[^a-zA-Z\$_0-9\\.]"
     }
     String variableUseMapFormatMatchString() {
         return "group[ \\t]*:[ \\t]*[\"']" + this.group + "[\"'][ \\t]*,[ \\t]*name[ \\t]*:[ \\t]*[\"']" + this.name + "[\"'][ \\t]*,[ \\t]*version[ \\t]*:[ \\t]*([^\\s\"']+?)[\\s)]"
