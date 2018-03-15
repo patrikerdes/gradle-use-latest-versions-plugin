@@ -10,32 +10,35 @@ class DependencyUpdate {
     String name
     String oldVersion
     String newVersion
-    DependencyUpdate(group, name, oldVersion, newVersion) {
+    DependencyUpdate(String group, String name, String oldVersion, String newVersion) {
         this.group = group
         this.name = name
         this.oldVersion = oldVersion
         this.newVersion = newVersion
     }
     String oldModuleVersionStringFormatMatchString() {
-        return "([\"']" + this.group + ":" + this.name + ":)[^\$].*?([\"'])"
+        "([\"']" + this.group + ':' + this.name + ":)[^\$].*?([\"'])"
     }
     String oldModuleVersionMapFormatMatchString() {
-        return "(group[ \\t]*:[ \\t]*[\"']" + this.group + "[\"'][ \\t]*,[ \\t]*name[ \\t]*:[ \\t]*[\"']" + this.name + "[\"'][ \\t]*,[ \\t]*version[ \\t]*:[ \\t]*[\"']).*?([\"'])"
+        "(group[ \\t]*:[ \\t]*[\"']" + this.group + "[\"'][ \\t]*,[ \\t]*name[ \\t]*:[ \\t]*[\"']" + this.name +
+                "[\"'][ \\t]*,[ \\t]*version[ \\t]*:[ \\t]*[\"']).*?([\"'])"
     }
     String oldPluginVersionMatchString() {
-        return "(id[ \\t]+[\"']" + this.group + "[\"'][ \\t]+version[ \\t]+[\"'])" + this.oldVersion + "([\"'])"
+        "(id[ \\t]+[\"']" + this.group + "[\"'][ \\t]+version[ \\t]+[\"'])" + this.oldVersion + "([\"'])"
     }
     String newVersionString() {
-        return '$1' + this.newVersion + '$2'
+        '$1' + this.newVersion + '$2'
     }
     String variableUseStringFormatInterpolationMatchString() {
         // Capture variables starting with $, but not expresions starting with ${
-        return "[\"']" + this.group + ":" + this.name + ":[\$]([^{].*?)[\"']"
+        "[\"']" + this.group + ':' + this.name + ":[\$]([^{].*?)[\"']"
     }
     String variableUseStringFormatPlusMatchString() {
-        return "[\"']" + this.group + ":" + this.name + ":[\"'][ \\t]*\\+[ \\t]*([a-zA-Z\$_][a-zA-Z\$_0-9\\.]*)[^a-zA-Z\$_0-9\\.]"
+        "[\"']" + this.group + ':' + this.name +
+                ":[\"'][ \\t]*\\+[ \\t]*([a-zA-Z\$_][a-zA-Z\$_0-9\\.]*)[^a-zA-Z\$_0-9\\.]"
     }
     String variableUseMapFormatMatchString() {
-        return "group[ \\t]*:[ \\t]*[\"']" + this.group + "[\"'][ \\t]*,[ \\t]*name[ \\t]*:[ \\t]*[\"']" + this.name + "[\"'][ \\t]*,[ \\t]*version[ \\t]*:[ \\t]*([^\\s\"']+?)[\\s)]"
+        "group[ \\t]*:[ \\t]*[\"']" + this.group + "[\"'][ \\t]*,[ \\t]*name[ \\t]*:[ \\t]*[\"']" + this.name +
+                "[\"'][ \\t]*,[ \\t]*version[ \\t]*:[ \\t]*([^\\s\"']+?)[\\s)]"
     }
 }

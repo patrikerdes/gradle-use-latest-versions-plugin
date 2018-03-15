@@ -45,7 +45,7 @@ class UseLatestVersionsTask extends DefaultTask {
         def currentDependencies = dependencyUpdatesJson['current']['dependencies']
         def dependencyStables = []
         for(currentDependency in currentDependencies) {
-            dependencyStables.add(new DependencyUpdate(currentDependency['group'], currentDependency['name'], currentDependency['version'], currentDependency['version']))
+            dependencyStables.add(new DependencyUpdate((String)currentDependency['group'], (String)currentDependency['name'], (String)currentDependency['version'], (String)currentDependency['version']))
         }
 
         Map<String, String> gradleFileContents = [:]

@@ -1,6 +1,7 @@
 apply plugin: 'groovy'
 apply plugin: 'maven'
 apply plugin: 'java-gradle-plugin'
+//apply plugin: 'codenarc'
 
 repositories {
     mavenCentral()
@@ -23,3 +24,13 @@ test {
         events "STARTED", "PASSED", "FAILED", "SKIPPED", "STANDARD_ERROR", "STANDARD_OUT"
     }
 }
+
+/*
+codenarcMain {
+    configFile = rootProject.file("config/codenarc/StarterRuleSet-AllRulesByCategory.groovy")
+}
+
+codenarcTest {
+    configFile = rootProject.file("config/codenarc/StarterRuleSet-AllRulesByCategory.groovy")
+}
+*/
