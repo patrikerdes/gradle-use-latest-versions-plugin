@@ -3,6 +3,10 @@ package se.patrikerdes
 class GradleVersionFunctionalTest extends BaseFunctionalTest {
     def "Gradle versions"() {
         println("Testing Gradle version $gradleVersion")
+        if(System.getProperty("java.version")[0] == "9" && gradleVersion in unsupportedGradleVersionsJDK9) {
+            println("Skipping this test on JDK 9, since it does not support gradle version $gradleVersion")
+            return
+        }
 
         given:
         buildFile << """
@@ -30,36 +34,26 @@ class GradleVersionFunctionalTest extends BaseFunctionalTest {
         updatedBuildFile.contains("junit:junit:$CurrentVersions.junit")
 
         where:
-        if (Integer.parseInt(System.getProperty("java.version").split("\\.")[1]) >= 9) {
-            // Only test gradle versions supporting JDK 9
-            gradleVersion << [
-                    '4.3',
-                    '4.4',
-                    '4.5',
-                    '4.6',
-            ]
-        } else {
-            gradleVersion << [
-                    '2.8',
-                    '2.9',
-                    '2.10',
-                    '2.11',
-                    '2.13',
-                    '2.14',
-                    '3.0',
-                    '3.1',
-                    '3.2',
-                    '3.3',
-                    '3.4',
-                    '3.5',
-                    '4.0',
-                    '4.1',
-                    '4.2',
-                    '4.3',
-                    '4.4',
-                    '4.5',
-                    '4.6',
-            ]
-        }
+        gradleVersion << [
+                '2.8',
+                '2.9',
+                '2.10',
+                '2.11',
+                '2.13',
+                '2.14',
+                '3.0',
+                '3.1',
+                '3.2',
+                '3.3',
+                '3.4',
+                '3.5',
+                '4.0',
+                '4.1',
+                '4.2',
+                '4.3',
+                '4.4',
+                '4.5',
+                '4.6',
+        ]
     }
 }

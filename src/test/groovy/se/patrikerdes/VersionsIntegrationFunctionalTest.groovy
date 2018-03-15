@@ -70,44 +70,44 @@ class VersionsIntegrationFunctionalTest extends BaseFunctionalTest {
     }
 
     def "versions plugin versions"() {
-        if (Integer.parseInt(System.getProperty("java.version").split("\\.")[1]) >= 9) {
-            println("Skipping on JDK 9, since it is only supported since gradle 4.2.1")
-        } else {
-            println("Testing versions plugin version $versionsVersion")
-            given:
-            buildFile << """
-                plugins {
-                    id 'se.patrikerdes.use-latest-versions'
-                    id 'com.github.ben-manes.versions' version '$versionsVersion'
-                }
-    
-                apply plugin: 'java'
-                
-                repositories {
-                    mavenCentral()
-                }
-                
-                dependencies {
-                    testCompile 'junit:junit:4.0'
-                }
-            """
-
-            when:
-            useLatestVersions(gradleVersion)
-            def updatedBuildFile = buildFile.getText('UTF-8')
-
-            then:
-            updatedBuildFile.contains("junit:junit:$CurrentVersions.junit")
-
-            where:
-            versionsVersion | gradleVersion
-            '0.17.0'        | '4.6'
-            '0.16.0'        | '4.2'
-            '0.15.0'        | '4.0'
-            '0.14.0'        | '3.4'
-            '0.13.0'        | '3.4'
-            '0.12.0'        | '3.4'
+        println("Testing versions plugin version $versionsVersion with gradle version $gradleVersion")
+        if(System.getProperty("java.version")[0] == "9" && gradleVersion in unsupportedGradleVersionsJDK9) {
+            println("Skipping this test on JDK 9, since it does not support gradle version $gradleVersion")
+            return
         }
 
+        given:
+        buildFile << """
+            plugins {
+                id 'se.patrikerdes.use-latest-versions'
+                id 'com.github.ben-manes.versions' version '$versionsVersion'
+            }
+
+            apply plugin: 'java'
+            
+            repositories {
+                mavenCentral()
+            }
+            
+            dependencies {
+                testCompile 'junit:junit:4.0'
+            }
+        """
+
+        when:
+        useLatestVersions(gradleVersion)
+        def updatedBuildFile = buildFile.getText('UTF-8')
+
+        then:
+        updatedBuildFile.contains("junit:junit:$CurrentVersions.junit")
+
+        where:
+        versionsVersion | gradleVersion
+        '0.17.0'        | '4.6'
+        '0.16.0'        | '4.2.1'
+        '0.15.0'        | '4.2.1'
+        '0.14.0'        | '3.4'
+        '0.13.0'        | '3.4'
+        '0.12.0'        | '3.4'
     }
 }
