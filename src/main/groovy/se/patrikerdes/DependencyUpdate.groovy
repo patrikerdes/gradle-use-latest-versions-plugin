@@ -33,6 +33,6 @@ class DependencyUpdate {
         return "[\"']" + this.group + ":" + this.name + ":[\$]([^{].*?)[\"']"
     }
     String variableUseMapFormatMatchString() {
-        return "group[ \\t]*:[ \\t]*[\"']" + this.group + "[\"'][ \\t]*,[ \\t]*name[ \\t]*:[ \\t]*[\"']" + this.name + "[\"'][ \\t]*,[ \\t]*version[ \\t]*:[ \\t]*([^\\s]+?)\\s"
+        return "group[ \\t]*:[ \\t]*[\"']" + this.group + "[\"'][ \\t]*,[ \\t]*name[ \\t]*:[ \\t]*[\"']" + this.name + "[\"'][ \\t]*,[ \\t]*version[ \\t]*:[ \\t]*([^\\s\"']+?)[\\s)]"
     }
 }
