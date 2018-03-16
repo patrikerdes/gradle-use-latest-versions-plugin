@@ -3,13 +3,15 @@ package se.patrikerdes
 import static org.gradle.testkit.runner.TaskOutcome.FAILED
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
 
+import org.gradle.testkit.runner.BuildResult
+
 class CheckFunctionalTest extends BaseFunctionalTest {
-    def "the json file of dependencyUpdates is written by the useLatestVersions task for the check task to consume"() {
+    void "the json file of dependencyUpdates is written by the useLatestVersions task for the check task to consume"() {
         given:
         buildFile << """
             plugins {
                 id 'se.patrikerdes.use-latest-versions'
-                id 'com.github.ben-manes.versions' version '$CurrentVersions.versions'
+                id 'com.github.ben-manes.versions' version '$CurrentVersions.VERSIONS'
             }
 
             apply plugin: 'java'
@@ -25,7 +27,7 @@ class CheckFunctionalTest extends BaseFunctionalTest {
 
         when:
         useLatestVersions()
-        File useLatestVersionsPath = new File(new File(testProjectDir.getRoot(), 'build'), 'useLatestVersions')
+        File useLatestVersionsPath = new File(new File(testProjectDir.root, 'build'), 'useLatestVersions')
         File jsonReport = new File(useLatestVersionsPath, 'latestDependencyUpdatesReport.json')
 
         then:
@@ -34,12 +36,12 @@ class CheckFunctionalTest extends BaseFunctionalTest {
         jsonReport.length() > 500  // Was 859 when the test was developed
     }
 
-    def "the check task fails if useLatestVersions task has not run"() {
+    void "the check task fails if useLatestVersions task has not run"() {
         given:
         buildFile << """
             plugins {
                 id 'se.patrikerdes.use-latest-versions'
-                id 'com.github.ben-manes.versions' version '$CurrentVersions.versions'
+                id 'com.github.ben-manes.versions' version '$CurrentVersions.VERSIONS'
             }
 
             apply plugin: 'java'
@@ -54,19 +56,19 @@ class CheckFunctionalTest extends BaseFunctionalTest {
         """
 
         when:
-        def result = useLatestVersionsCheckAndFail()
+        BuildResult result = useLatestVersionsCheckAndFail()
 
         then:
-        result.task(":useLatestVersionsCheck").outcome == FAILED
+        result.task(':useLatestVersionsCheck').outcome == FAILED
         result.output.contains('No results from useLatestVersions were found, aborting')
     }
 
-    def "the check task fails if clean has run between useLatestVersions and useLatestVersionsCheck"() {
+    void "the check task fails if clean has run between useLatestVersions and useLatestVersionsCheck"() {
         given:
         buildFile << """
             plugins {
                 id 'se.patrikerdes.use-latest-versions'
-                id 'com.github.ben-manes.versions' version '$CurrentVersions.versions'
+                id 'com.github.ben-manes.versions' version '$CurrentVersions.VERSIONS'
             }
 
             apply plugin: 'java'
@@ -83,19 +85,19 @@ class CheckFunctionalTest extends BaseFunctionalTest {
         when:
         useLatestVersions()
         clean()
-        def result = useLatestVersionsCheckAndFail()
+        BuildResult result = useLatestVersionsCheckAndFail()
 
         then:
-        result.task(":useLatestVersionsCheck").outcome == FAILED
+        result.task(':useLatestVersionsCheck').outcome == FAILED
         result.output.contains('No results from useLatestVersions were found, aborting')
     }
 
-    def "useLatestVersionsCheck is successful if it runs after useLatestVersions"() {
+    void "useLatestVersionsCheck is successful if it runs after useLatestVersions"() {
         given:
         buildFile << """
             plugins {
                 id 'se.patrikerdes.use-latest-versions'
-                id 'com.github.ben-manes.versions' version '$CurrentVersions.versions'
+                id 'com.github.ben-manes.versions' version '$CurrentVersions.VERSIONS'
             }
 
             apply plugin: 'java'
@@ -111,18 +113,18 @@ class CheckFunctionalTest extends BaseFunctionalTest {
 
         when:
         useLatestVersions()
-        def result = useLatestVersionsCheck()
+        BuildResult result = useLatestVersionsCheck()
 
         then:
-        result.task(":useLatestVersionsCheck").outcome == SUCCESS
+        result.task(':useLatestVersionsCheck').outcome == SUCCESS
     }
 
-    def "useLatestVersionsCheck outputs success if there is nothing left to update after useLatestVersions"() {
+    void "useLatestVersionsCheck outputs success if there is nothing left to update after useLatestVersions"() {
         given:
         buildFile << """
             plugins {
                 id 'se.patrikerdes.use-latest-versions'
-                id 'com.github.ben-manes.versions' version '$CurrentVersions.versions'
+                id 'com.github.ben-manes.versions' version '$CurrentVersions.VERSIONS'
             }
 
             apply plugin: 'java'
@@ -138,19 +140,19 @@ class CheckFunctionalTest extends BaseFunctionalTest {
 
         when:
         useLatestVersions()
-        def result = useLatestVersionsCheck()
+        BuildResult result = useLatestVersionsCheck()
 
         then:
-        result.task(":useLatestVersionsCheck").outcome == SUCCESS
-        result.output.contains("successfully upgraded all dependencies")
+        result.task(':useLatestVersionsCheck').outcome == SUCCESS
+        result.output.contains('successfully upgraded all dependencies')
     }
 
-    def "useLatestVersionsCheck fails if there is anything left to update after useLatestVersions"() {
+    void "useLatestVersionsCheck fails if there is anything left to update after useLatestVersions"() {
         given:
         buildFile << """
             plugins {
                 id 'se.patrikerdes.use-latest-versions'
-                id 'com.github.ben-manes.versions' version '$CurrentVersions.versions'
+                id 'com.github.ben-manes.versions' version '$CurrentVersions.VERSIONS'
             }
 
             apply plugin: 'java'
@@ -169,10 +171,10 @@ class CheckFunctionalTest extends BaseFunctionalTest {
 
         when:
         useLatestVersions()
-        def result = useLatestVersionsCheckAndFail()
+        BuildResult result = useLatestVersionsCheckAndFail()
 
         then:
-        result.task(":useLatestVersionsCheck").outcome == FAILED
-        result.output.contains("failed to update at least one dependency")
+        result.task(':useLatestVersionsCheck').outcome == FAILED
+        result.output.contains('failed to update at least one dependency')
     }
 }

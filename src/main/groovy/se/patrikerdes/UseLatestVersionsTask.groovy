@@ -55,17 +55,6 @@ class UseLatestVersionsTask extends DefaultTask {
         }
     }
 
-    void updatePluginVersions(Map<String, String> gradleFileContents, List<String> dotGradleFileNames,
-                              List<DependencyUpdate> dependecyUpdates) {
-        for (String dotGradleFileName in dotGradleFileNames) {
-            for (DependencyUpdate update in dependecyUpdates) {
-                gradleFileContents[dotGradleFileName] =
-                        gradleFileContents[dotGradleFileName].replaceAll(
-                                update.oldPluginVersionMatchString(), update.newVersionString())
-            }
-        }
-    }
-
     void updateModuleVersions(Map<String, String> gradleFileContents, List<String> dotGradleFileNames,
                               List<DependencyUpdate> dependecyUpdates) {
         for (String dotGradleFileName in dotGradleFileNames) {
@@ -78,6 +67,17 @@ class UseLatestVersionsTask extends DefaultTask {
                 gradleFileContents[dotGradleFileName] =
                         gradleFileContents[dotGradleFileName].replaceAll(
                                 update.oldModuleVersionMapFormatMatchString(), update.newVersionString())
+            }
+        }
+    }
+
+    void updatePluginVersions(Map<String, String> gradleFileContents, List<String> dotGradleFileNames,
+                              List<DependencyUpdate> dependecyUpdates) {
+        for (String dotGradleFileName in dotGradleFileNames) {
+            for (DependencyUpdate update in dependecyUpdates) {
+                gradleFileContents[dotGradleFileName] =
+                        gradleFileContents[dotGradleFileName].replaceAll(
+                                update.oldPluginVersionMatchString(), update.newVersionString())
             }
         }
     }

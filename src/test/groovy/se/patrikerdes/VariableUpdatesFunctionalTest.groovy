@@ -1,12 +1,14 @@
 package se.patrikerdes
 
+import org.gradle.testkit.runner.BuildResult
+
 class VariableUpdatesFunctionalTest extends BaseFunctionalTest {
-    def "an outdated module dependency based on a variable can be updated, single quotes"() {
+    void "an outdated module dependency based on a variable can be updated, single quotes"() {
         given:
         buildFile << """
             plugins {
                 id 'se.patrikerdes.use-latest-versions'
-                id 'com.github.ben-manes.versions' version '$CurrentVersions.versions'
+                id 'com.github.ben-manes.versions' version '$CurrentVersions.VERSIONS'
             }
 
             apply plugin: 'java'
@@ -24,18 +26,18 @@ class VariableUpdatesFunctionalTest extends BaseFunctionalTest {
 
         when:
         useLatestVersions()
-        def updatedBuildFile = buildFile.getText('UTF-8')
+        String updatedBuildFile = buildFile.getText('UTF-8')
 
         then:
-        updatedBuildFile.contains("junit_version = '$CurrentVersions.junit'")
+        updatedBuildFile.contains("junit_version = '$CurrentVersions.JUNIT'")
     }
 
-    def "an outdated module dependency based on a variable can be updated, double quotes"() {
+    void "an outdated module dependency based on a variable can be updated, double quotes"() {
         given:
         buildFile << """
             plugins {
                 id 'se.patrikerdes.use-latest-versions'
-                id 'com.github.ben-manes.versions' version '$CurrentVersions.versions'
+                id 'com.github.ben-manes.versions' version '$CurrentVersions.VERSIONS'
             }
 
             apply plugin: 'java'
@@ -53,18 +55,18 @@ class VariableUpdatesFunctionalTest extends BaseFunctionalTest {
 
         when:
         useLatestVersions()
-        def updatedBuildFile = buildFile.getText('UTF-8')
+        String updatedBuildFile = buildFile.getText('UTF-8')
 
         then:
-        updatedBuildFile.contains("junit_version = \"$CurrentVersions.junit\"")
+        updatedBuildFile.contains("junit_version = \"$CurrentVersions.JUNIT\"")
     }
 
-    def "an outdated module dependency based on a variable can be updated, plus"() {
+    void "an outdated module dependency based on a variable can be updated, plus"() {
         given:
         buildFile << """
             plugins {
                 id 'se.patrikerdes.use-latest-versions'
-                id 'com.github.ben-manes.versions' version '$CurrentVersions.versions'
+                id 'com.github.ben-manes.versions' version '$CurrentVersions.VERSIONS'
             }
 
             apply plugin: 'java'
@@ -82,18 +84,18 @@ class VariableUpdatesFunctionalTest extends BaseFunctionalTest {
 
         when:
         useLatestVersions()
-        def updatedBuildFile = buildFile.getText('UTF-8')
+        String updatedBuildFile = buildFile.getText('UTF-8')
 
         then:
-        updatedBuildFile.contains("junit_version = '$CurrentVersions.junit'")
+        updatedBuildFile.contains("junit_version = '$CurrentVersions.JUNIT'")
     }
 
-    def "an outdated map notation module dependency based on a variable can be updated"() {
+    void "an outdated map notation module dependency based on a variable can be updated"() {
         given:
         buildFile << """
             plugins {
                 id 'se.patrikerdes.use-latest-versions'
-                id 'com.github.ben-manes.versions' version '$CurrentVersions.versions'
+                id 'com.github.ben-manes.versions' version '$CurrentVersions.VERSIONS'
             }
             
             apply plugin: 'java'
@@ -111,18 +113,18 @@ class VariableUpdatesFunctionalTest extends BaseFunctionalTest {
 
         when:
         useLatestVersions()
-        def updatedBuildFile = buildFile.getText('UTF-8')
+        String updatedBuildFile = buildFile.getText('UTF-8')
 
         then:
-        updatedBuildFile.contains("junit_version = \"$CurrentVersions.junit\"")
+        updatedBuildFile.contains("junit_version = \"$CurrentVersions.JUNIT\"")
     }
 
-    def "Extra properties extensions can be updated"() {
+    void "Extra properties extensions can be updated"() {
         given:
         buildFile << """
             plugins {
                 id 'se.patrikerdes.use-latest-versions'
-                id 'com.github.ben-manes.versions' version '$CurrentVersions.versions'
+                id 'com.github.ben-manes.versions' version '$CurrentVersions.VERSIONS'
             }
             
             apply plugin: 'java'
@@ -140,19 +142,19 @@ class VariableUpdatesFunctionalTest extends BaseFunctionalTest {
 
         when:
         useLatestVersions()
-        def updatedBuildFile = buildFile.getText('UTF-8')
+        String updatedBuildFile = buildFile.getText('UTF-8')
 
         then:
-        updatedBuildFile.contains("ext.junit_version = '$CurrentVersions.junit'")
+        updatedBuildFile.contains("ext.junit_version = '$CurrentVersions.JUNIT'")
     }
 
     // It might make sense to update these expressions as well, but this is the current behavior
-    def "an expression with \${x} won't be updated"() {
+    void "an expression with \${x} won't be updated"() {
         given:
         buildFile << """
             plugins {
                 id 'se.patrikerdes.use-latest-versions'
-                id 'com.github.ben-manes.versions' version '$CurrentVersions.versions'
+                id 'com.github.ben-manes.versions' version '$CurrentVersions.VERSIONS'
             }
 
             apply plugin: 'java'
@@ -171,7 +173,7 @@ class VariableUpdatesFunctionalTest extends BaseFunctionalTest {
 
         when:
         useLatestVersions()
-        def updatedBuildFile = buildFile.getText('UTF-8')
+        String updatedBuildFile = buildFile.getText('UTF-8')
 
         then:
         updatedBuildFile.contains('commons = "1.0"')
@@ -179,12 +181,12 @@ class VariableUpdatesFunctionalTest extends BaseFunctionalTest {
         updatedBuildFile.contains('${"1.0"}')
     }
 
-    def "a variable used for multiple dependencies with different latest versions won't be updated"() {
+    void "a variable used for multiple dependencies with different latest versions won't be updated"() {
         given:
         buildFile << """
             plugins {
                 id 'se.patrikerdes.use-latest-versions'
-                id 'com.github.ben-manes.versions' version '$CurrentVersions.versions'
+                id 'com.github.ben-manes.versions' version '$CurrentVersions.VERSIONS'
             }
 
             apply plugin: 'java'
@@ -202,20 +204,20 @@ class VariableUpdatesFunctionalTest extends BaseFunctionalTest {
         """
 
         when:
-        def result = useLatestVersions()
-        def updatedBuildFile = buildFile.getText('UTF-8')
+        BuildResult result = useLatestVersions()
+        String updatedBuildFile = buildFile.getText('UTF-8')
 
         then:
         updatedBuildFile.contains('commons = "1.0"')
-        result.output.contains("A problem was detected")
+        result.output.contains('A problem was detected')
     }
 
-    def "a variable used for multiple dependencies with different latest versions where one dependency is at its latest version won't be updated"() {
+    void "a variable for deps with different latest versions where one dependency is current won't be updated"() {
         given:
         buildFile << """
             plugins {
                 id 'se.patrikerdes.use-latest-versions'
-                id 'com.github.ben-manes.versions' version '$CurrentVersions.versions'
+                id 'com.github.ben-manes.versions' version '$CurrentVersions.VERSIONS'
             }
 
             apply plugin: 'java'
@@ -233,20 +235,20 @@ class VariableUpdatesFunctionalTest extends BaseFunctionalTest {
         """
 
         when:
-        def result = useLatestVersions()
-        def updatedBuildFile = buildFile.getText('UTF-8')
+        BuildResult result = useLatestVersions()
+        String updatedBuildFile = buildFile.getText('UTF-8')
 
         then:
         updatedBuildFile.contains('commons = "1.2"')
-        result.output.contains("A problem was detected")
+        result.output.contains('A problem was detected')
     }
 
-    def "a variable defined more than once won't be updated"() {
+    void "a variable defined more than once won't be updated"() {
         given:
         buildFile << """
             plugins {
                 id 'se.patrikerdes.use-latest-versions'
-                id 'com.github.ben-manes.versions' version '$CurrentVersions.versions'
+                id 'com.github.ben-manes.versions' version '$CurrentVersions.VERSIONS'
             }
 
             def junit_version = '3.7'
@@ -265,20 +267,20 @@ class VariableUpdatesFunctionalTest extends BaseFunctionalTest {
         """
 
         when:
-        def result = useLatestVersions()
-        def updatedBuildFile = buildFile.getText('UTF-8')
+        BuildResult result = useLatestVersions()
+        String updatedBuildFile = buildFile.getText('UTF-8')
 
         then:
-        !updatedBuildFile.contains("junit_version = '$CurrentVersions.junit'")
-        result.output.contains("A problem was detected")
+        !updatedBuildFile.contains("junit_version = '$CurrentVersions.JUNIT'")
+        result.output.contains('A problem was detected')
     }
 
-    def "a variable assigned to in more than one file won't be updated"() {
+    void "a variable assigned to in more than one file won't be updated"() {
         given:
         buildFile << """
             plugins {
                 id 'se.patrikerdes.use-latest-versions'
-                id 'com.github.ben-manes.versions' version '$CurrentVersions.versions'
+                id 'com.github.ben-manes.versions' version '$CurrentVersions.VERSIONS'
             }
 
             project.ext.junit_version = '3.7'
@@ -301,13 +303,13 @@ class VariableUpdatesFunctionalTest extends BaseFunctionalTest {
         """
 
         when:
-        def result = useLatestVersions()
-        def updatedBuildFile = buildFile.getText('UTF-8')
-        def updatedSecondFile = secondFile.getText('UTF-8')
+        BuildResult result = useLatestVersions()
+        String updatedBuildFile = buildFile.getText('UTF-8')
+        String updatedSecondFile = secondFile.getText('UTF-8')
 
         then:
-        !updatedBuildFile.contains("junit_version = '$CurrentVersions.junit'")
-        !updatedSecondFile.contains("junit_version = '$CurrentVersions.junit'")
-        result.output.contains("A problem was detected")
+        !updatedBuildFile.contains("junit_version = '$CurrentVersions.JUNIT'")
+        !updatedSecondFile.contains("junit_version = '$CurrentVersions.JUNIT'")
+        result.output.contains('A problem was detected')
     }
 }

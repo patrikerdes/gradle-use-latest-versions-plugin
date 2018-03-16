@@ -2,8 +2,10 @@ package se.patrikerdes
 
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
 
+import org.gradle.testkit.runner.BuildResult
+
 class VersionsIntegrationFunctionalTest extends BaseFunctionalTest {
-    def "the useLatestVersions task won't run if the versions plugin has not been applied"() {
+    void "the useLatestVersions task won't run if the versions plugin has not been applied"() {
         given:
         buildFile << """
             plugins {
@@ -12,66 +14,66 @@ class VersionsIntegrationFunctionalTest extends BaseFunctionalTest {
         """
 
         when:
-        def result = useLatestVersionsAndFail()
+        BuildResult result = useLatestVersionsAndFail()
 
         then:
         result.output.contains('Task with path \'dependencyUpdates\' not found in root project')
     }
 
-    def "the useLatestVersions task depends on the dependencyUpdates task"() {
+    void "the useLatestVersions task depends on the dependencyUpdates task"() {
         given:
         buildFile << """
             plugins {
                 id 'se.patrikerdes.use-latest-versions'
-                id 'com.github.ben-manes.versions' version '$CurrentVersions.versions'
+                id 'com.github.ben-manes.versions' version '$CurrentVersions.VERSIONS'
             }
         """
 
         when:
-        def result = useLatestVersions()
+        BuildResult result = useLatestVersions()
 
         then:
-        result.task(":dependencyUpdates").outcome == SUCCESS
-        result.task(":useLatestVersions").outcome == SUCCESS
+        result.task(':dependencyUpdates').outcome == SUCCESS
+        result.task(':useLatestVersions').outcome == SUCCESS
     }
 
-    def "the dependencyUpdates task outputs json"() {
+    void "the dependencyUpdates task outputs json"() {
         given:
         buildFile << """
             plugins {
                 id 'se.patrikerdes.use-latest-versions'
-                id 'com.github.ben-manes.versions' version '$CurrentVersions.versions'
+                id 'com.github.ben-manes.versions' version '$CurrentVersions.VERSIONS'
             }
         """
 
         when:
-        def result = useLatestVersions()
+        BuildResult result = useLatestVersions()
 
         then:
         result.output.contains('Generated report file build/dependencyUpdates/report.json')
     }
 
-    def "the useLatestVersionsCheck task depends on the dependencyUpdates task"() {
+    void "the useLatestVersionsCheck task depends on the dependencyUpdates task"() {
         given:
         buildFile << """
             plugins {
                 id 'se.patrikerdes.use-latest-versions'
-                id 'com.github.ben-manes.versions' version '$CurrentVersions.versions'
+                id 'com.github.ben-manes.versions' version '$CurrentVersions.VERSIONS'
             }
         """
 
         when:
         useLatestVersions()
-        def result = useLatestVersionsCheck()
+        BuildResult result = useLatestVersionsCheck()
 
         then:
-        result.task(":dependencyUpdates").outcome == SUCCESS
-        result.task(":useLatestVersionsCheck").outcome == SUCCESS
+        result.task(':dependencyUpdates').outcome == SUCCESS
+        result.task(':useLatestVersionsCheck').outcome == SUCCESS
     }
 
-    def "versions plugin versions"() {
+    void "versions plugin versions"() {
         println("Testing versions plugin version $versionsVersion with gradle version $gradleVersion")
-        if(System.getProperty("java.version")[0] == "9" && gradleVersion in unsupportedGradleVersionsJDK9) {
+        if (System.getProperty('java.version')[0] == '9' && gradleVersion in GRADLE_VERSIONS_NOT_JDK9) {
             println("Skipping this test on JDK 9, since it does not support gradle version $gradleVersion")
             return
         }
@@ -96,10 +98,10 @@ class VersionsIntegrationFunctionalTest extends BaseFunctionalTest {
 
         when:
         useLatestVersions(gradleVersion)
-        def updatedBuildFile = buildFile.getText('UTF-8')
+        String updatedBuildFile = buildFile.getText('UTF-8')
 
         then:
-        updatedBuildFile.contains("junit:junit:$CurrentVersions.junit")
+        updatedBuildFile.contains("junit:junit:$CurrentVersions.JUNIT")
 
         where:
         versionsVersion | gradleVersion
