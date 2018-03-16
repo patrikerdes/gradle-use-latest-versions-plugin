@@ -1,3 +1,7 @@
+plugins {
+    id "com.gradle.plugin-publish" version "0.9.10"
+}
+
 apply plugin: 'groovy'
 apply plugin: 'maven'
 apply plugin: 'java-gradle-plugin'
@@ -14,7 +18,7 @@ dependencies {
 }
 
 group = 'se.patrikerdes'
-version = '0.0.1'
+version = '0.1.0'
 
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
@@ -35,4 +39,18 @@ codenarcTest {
 
 codenarc {
     toolVersion = "1.1"
+}
+
+pluginBundle {
+    website = 'https://github.com/patrikerdes/gradle-use-latest-versions-plugin/blob/master/README.md'
+    vcsUrl = 'https://github.com/patrikerdes/gradle-use-latest-versions-plugin'
+    plugins {
+        useLatestVersionsPlugin {
+            id = 'se.patrikerdes.use-latest-versions'
+            displayName = 'Use Latest Versions'
+            description = 'A plugin that updates module and plugin versions in your *.gradle files to the latest ' +
+                    'available versions. This plugin depends on the Gradle Versions Plugin.'
+            tags = ['version','versions','dependency','dependencies','update','updates','upgrade','upgrades']
+        }
+    }
 }
