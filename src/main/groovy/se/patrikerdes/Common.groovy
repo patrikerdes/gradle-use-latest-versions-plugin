@@ -15,5 +15,17 @@ class Common {
         }
         dependecyUpdates
     }
+
+    static List<DependencyUpdate> getCurrentDependencies(Object dependencyUpdatesJson) {
+        Object currentDependencies = dependencyUpdatesJson['current']['dependencies']
+        List<DependencyUpdate> dependencyStables = []
+        for (currentDependency in currentDependencies) {
+            dependencyStables.add(new DependencyUpdate((String) currentDependency['group'],
+                    (String) currentDependency['name'],
+                    (String) currentDependency['version'],
+                    (String) currentDependency['version']))
+        }
+        dependencyStables
+    }
 }
 

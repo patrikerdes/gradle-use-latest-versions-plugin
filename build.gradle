@@ -1,7 +1,7 @@
 apply plugin: 'groovy'
 apply plugin: 'maven'
 apply plugin: 'java-gradle-plugin'
-//apply plugin: 'codenarc'
+apply plugin: 'codenarc'
 
 repositories {
     mavenCentral()
@@ -25,7 +25,7 @@ test {
     }
 }
 
-/*
+
 codenarcMain {
     configFile = rootProject.file("config/codenarc/StarterRuleSet-AllRulesByCategory.groovy")
 }
@@ -33,4 +33,7 @@ codenarcMain {
 codenarcTest {
     configFile = rootProject.file("config/codenarc/StarterRuleSet-AllRulesByCategory.groovy")
 }
-*/
+
+codenarc {
+    toolVersion = "1.1"
+}

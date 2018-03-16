@@ -10,7 +10,7 @@ import org.gradle.api.tasks.TaskAction
 @CompileStatic
 class UseLatestVersionsCheckTask extends DefaultTask {
     @TaskAction
-    void useLatestVersions() {
+    void useLatestVersionsCheckTask() {
         File previousDependencyUpdatesReport =
                 new File(new File(project.rootDir, 'build' + File.separator + 'useLatestVersions'),
                         'latestDependencyUpdatesReport.json')

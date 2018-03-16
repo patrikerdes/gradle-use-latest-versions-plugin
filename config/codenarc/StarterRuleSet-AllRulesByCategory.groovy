@@ -113,7 +113,6 @@ ruleset {
     ImplementationAsType
     Instanceof
     LocaleSetDefault
-    NestedForLoop
     PrivateFieldCouldBeFinal
     PublicInstanceField
     ReturnsNullInsteadOfEmptyArray
@@ -126,11 +125,6 @@ ruleset {
     DuplicateListLiteral
     DuplicateMapLiteral
     DuplicateNumberLiteral
-
-    // rulesets/enhanced.xml
-    CloneWithoutCloneable
-    JUnitAssertEqualsConstantActualValue
-    UnsafeImplementationAsMap
 
     // rulesets/exceptions.xml
     CatchArrayIndexOutOfBoundsException
@@ -326,7 +320,7 @@ ruleset {
     // rulesets/size.xml
     ClassSize
     MethodCount
-    MethodSize
+    MethodSize { maxLines=75 }
     NestedBlockDepth
     ParameterCount
 
