@@ -87,15 +87,20 @@ ruleset {
     ConfusingTernary
     CouldBeElvis
     CouldBeSwitchStatement
+    FieldTypeRequired
     HashtableIsObsolete
     IfStatementCouldBeTernary
+    InvertedCondition
     InvertedIfElse
     LongLiteralWithLowerCaseL
+    MethodParameterTypeRequired
+    MethodReturnTypeRequired
     NoDef
     NoTabCharacter
     ParameterReassignment
     TernaryCouldBeElvis
     TrailingComma
+    VariableTypeRequired
     VectorIsObsolete
 
     // rulesets/design.xml
@@ -113,6 +118,7 @@ ruleset {
     ImplementationAsType
     Instanceof
     LocaleSetDefault
+    //NestedForLoop
     PrivateFieldCouldBeFinal
     PublicInstanceField
     ReturnsNullInsteadOfEmptyArray
@@ -125,6 +131,9 @@ ruleset {
     DuplicateListLiteral
     DuplicateMapLiteral
     DuplicateNumberLiteral
+    //DuplicateStringLiteral
+
+    // rulesets/enhanced.xml
 
     // rulesets/exceptions.xml
     CatchArrayIndexOutOfBoundsException
@@ -150,14 +159,18 @@ ruleset {
 
     // rulesets/formatting.xml
     BlankLineBeforePackage
+    BlockEndsWithBlankLine
+    BlockStartsWithBlankLine
     BracesForClass
     BracesForForLoop
     BracesForIfElse
     BracesForMethod
     BracesForTryCatchFinally
+    //ClassJavadoc
     ClosureStatementOnOpeningLineOfMultipleLineClosure
     ConsecutiveBlankLines
     FileEndsWithoutNewline
+    Indentation
     LineLength
     MissingBlankLineAfterImports
     MissingBlankLineAfterPackage
@@ -171,6 +184,7 @@ ruleset {
     SpaceAfterSwitch
     SpaceAfterWhile
     SpaceAroundClosureArrow
+    //SpaceAroundMapEntryColon
     SpaceAroundOperator
     SpaceBeforeClosingBrace
     SpaceBeforeOpeningBrace
@@ -280,6 +294,7 @@ ruleset {
     LoggingSwallowsStacktrace
     MultipleLoggers
     PrintStackTrace
+    //Println
     SystemErrPrint
     SystemOutPrint
 
@@ -304,6 +319,7 @@ ruleset {
     // rulesets/security.xml
     FileCreateTempFile
     InsecureRandom
+    //JavaIoPackageAccess
     NonFinalPublicField
     NonFinalSubclassOfSensitiveInterface
     ObjectFinalize
@@ -318,7 +334,10 @@ ruleset {
     SerializableClassMustDefineSerialVersionUID
 
     // rulesets/size.xml
+    //AbcMetric   // Requires the GMetrics jar
     ClassSize
+    //CrapMetric   // Requires the GMetrics jar and a Cobertura coverage file
+    //CyclomaticComplexity   // Requires the GMetrics jar
     MethodCount
     MethodSize { maxLines=75 }
     NestedBlockDepth
@@ -381,4 +400,6 @@ ruleset {
     UnusedPrivateMethod
     UnusedPrivateMethodParameter
     UnusedVariable
+
+
 }
