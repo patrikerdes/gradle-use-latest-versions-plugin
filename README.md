@@ -22,17 +22,20 @@ or
 ```groovy
 buildscript {
     repositories {
-        mavenCentral()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
         jcenter()
     }
     dependencies {
-        classpath 'se.patrikerdes:gradle-use-latest-versions-plugin:0.1.0'
+        classpath "gradle.plugin.se.patrikerdes:gradle-use-latest-versions-plugin:0.1.0"
         classpath 'com.github.ben-manes:gradle-versions-plugin:0.17.0'
     }
 }
 
 apply plugin: 'com.github.ben-manes.versions'
 apply plugin: 'se.patrikerdes.use-latest-versions'
+
 ```
 
 ## Example
