@@ -42,7 +42,7 @@ Given this build.gradle file:
 ```groovy
 plugins {
     id 'se.patrikerdes.use-latest-versions' version '0.1.0'
-    id 'com.github.ben-manes.versions' version '0.17.0'
+    id 'com.github.ben-manes.versions' version '0.16.0'
 }
 
 apply plugin: 'java'
@@ -54,7 +54,7 @@ repositories {
 ext.log4jversion = '1.2.16'
 
 dependencies {
-    testCompile 'junit:junit:4.12'
+    testCompile 'junit:junit:4.0'
     compile "log4j:log4j:$log4jversion"
 }
 ```
