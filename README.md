@@ -55,10 +55,15 @@ repositories {
 }
 
 ext.log4jversion = '1.2.16'
+ext.codecVersion = '1.9'
+def commonsLoggingVersion = "1.1.2"
 
 dependencies {
     testCompile 'junit:junit:4.0'
     compile "log4j:log4j:$log4jversion"
+    compile "commons-codec:commons-codec:" + codecVersion
+    compile group: 'commons-lang', name: 'commons-lang', version: '2.4'
+    compile group: 'commons-logging', name: 'commons-logging', version: commonsLoggingVersion
 }
 ```
 
@@ -83,9 +88,14 @@ repositories {
 }
 
 ext.log4jversion = '1.2.17'
+ext.codecVersion = '1.11'
+def commonsLoggingVersion = "1.2"
 
 dependencies {
     testCompile 'junit:junit:4.12'
     compile "log4j:log4j:$log4jversion"
+    compile "commons-codec:commons-codec:" + codecVersion
+    compile group: 'commons-lang', name: 'commons-lang', version: '2.6'
+    compile group: 'commons-logging', name: 'commons-logging', version: commonsLoggingVersion
 }
 ```
