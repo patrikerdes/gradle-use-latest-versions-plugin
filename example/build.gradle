@@ -1,6 +1,6 @@
 plugins {
     id 'se.patrikerdes.use-latest-versions' version '0.1.0'
-    id 'com.github.ben-manes.versions' version '0.16.0'
+    id 'com.github.ben-manes.versions' version '0.17.0'
 }
 
 apply plugin: 'java'
@@ -10,8 +10,13 @@ repositories {
 }
 
 ext.log4jversion = '1.2.16'
+ext.codedVersion = '1.9'
+def commonsLoggingVersion = "1.1.2"
 
 dependencies {
     testCompile 'junit:junit:4.0'
     compile "log4j:log4j:$log4jversion"
+    compile "commons-codec:commons-codec" + codedVersion
+    compile group: 'commons-lang', name: 'commons-lang', version: '2.4'
+    compile group: 'commons-logging', name: 'commons-logging', version: commonsLoggingVersion
 }
