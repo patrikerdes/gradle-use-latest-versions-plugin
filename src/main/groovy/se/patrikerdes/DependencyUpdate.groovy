@@ -23,9 +23,6 @@ class DependencyUpdate {
         "(group[ \\t]*:[ \\t]*[\"']" + this.group + "[\"'][ \\t]*,[ \\t]*name[ \\t]*:[ \\t]*[\"']" + this.name +
                 "[\"'][ \\t]*,[ \\t]*version[ \\t]*:[ \\t]*[\"']).*?([\"'])"
     }
-    String oldPluginVersionMatchString() {
-        "(id[ \\t]+[\"']" + this.group + "[\"'][ \\t]+version[ \\t]+[\"'])" + this.oldVersion + "([\"'])"
-    }
     String newVersionString() {
         '$1' + this.newVersion + '$2'
     }

@@ -48,8 +48,8 @@ pluginBundle {
         useLatestVersionsPlugin {
             id = 'se.patrikerdes.use-latest-versions'
             displayName = 'Use Latest Versions'
-            description = 'A plugin that updates module and plugin versions in your *.gradle files to the latest ' +
-                    'available versions. This plugin depends on the Gradle Versions Plugin.'
+            description = 'A plugin that updates the versions of your dependencies in your *.gradle files to the ' +
+                    'latest available versions. This plugin depends on the Gradle Versions Plugin.'
             tags = ['version','versions','dependency','dependencies','update','updates','upgrade','upgrades']
         }
     }
