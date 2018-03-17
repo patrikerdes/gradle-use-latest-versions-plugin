@@ -18,7 +18,7 @@ dependencies {
 }
 
 group = 'se.patrikerdes'
-version = '0.2.1'
+version = '0.1.0'
 
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
@@ -44,8 +44,8 @@ codenarc {
 pluginBundle {
     website = 'https://github.com/patrikerdes/gradle-use-latest-versions-plugin/blob/master/README.md'
     vcsUrl = 'https://github.com/patrikerdes/gradle-use-latest-versions-plugin'
-    description = 'A plugin that updates the versions of your dependencies in your *.gradle files to the ' +
-            'latest available versions. This plugin depends on the Gradle Versions Plugin.'
+    description = 'A plugin that updates the versions of your dependencies in your gradle project to the ' +
+            'latest available versions.'
     plugins {
         useLatestVersionsPlugin {
             id = 'se.patrikerdes.use-latest-versions'
