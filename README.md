@@ -73,7 +73,8 @@ If you run
 gradle useLatestVersions
 ```
 
-Your plugin and module dependencies in build.gradle will be updated - both inline version number and versions based on variables - and you build.gradle file will look like this:
+Your plugin and module dependencies in build.gradle will be updated – both inline version number and versions based on
+variables – and you build.gradle file will look like this:
 
 ```groovy
 plugins {
@@ -99,3 +100,30 @@ dependencies {
     compile group: 'commons-logging', name: 'commons-logging', version: commonsLoggingVersion
 }
 ```
+
+## Tasks
+
+### useLatestVersions
+
+```bash
+# gradle useLatestVersions
+```
+
+Updates module and plugin versions in all *.gradle files in the project root folder or any subfolder to the latest
+available versions.This task depends on the `dependencyUpdates` task in the
+[Gradle Versions Plugin](https://github.com/ben-manes/gradle-versions-plugin) to know which dependencies can be updated.
+
+### useLatestVersionsCheck
+
+```bash
+# gradle useLatestVersions && gradle useLatestVersionsCheck
+```
+
+This task will succeed if all available updates are successfully applied, and it will fail if any of the updates were
+not successfully applied. This task depends on the `dependencyUpdates` task in the
+[Gradle Versions Plugin](https://github.com/ben-manes/gradle-versions-plugin) to know which dependencies were
+successfully updated.
+
+`useLatestVersionsCheck` can not run in the same gradle run as `useLatestVersions`, since the `dependencyUpdates` task
+will check the *.gradle files as they were when the gradle build started, which means that it can not pick up the
+changes applied by `useLatestVersions`.
