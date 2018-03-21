@@ -128,6 +128,12 @@ successfully updated.
 will check the *.gradle files as they were when the gradle build started, which means that it can not pick up the
 changes applied by `useLatestVersions`.
 
+## Compatibility
+
+**Gradle version:** 2.8 - 4.6<br/>
+**Versions Plugin version:** 0.12.0 - 0.17.0<br/>
+**JDK version:** 7 - 9 (7 is targeted but not tested)
+
 ## FAQ
 
 #### How do I exclude alpha/beta/rc versions?
