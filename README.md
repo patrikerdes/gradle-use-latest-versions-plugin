@@ -12,7 +12,7 @@ Apply this plugin and the [Gradle Versions Plugin](https://github.com/ben-manes/
 
 ```groovy
 plugins {
-  id 'se.patrikerdes.use-latest-versions' version '0.1.0'
+  id 'se.patrikerdes.use-latest-versions' version '0.2.0'
   id 'com.github.ben-manes.versions' version '0.17.0'
 }
 ```
@@ -28,7 +28,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath "gradle.plugin.se.patrikerdes:gradle-use-latest-versions-plugin:0.1.0"
+        classpath "gradle.plugin.se.patrikerdes:gradle-use-latest-versions-plugin:0.2.0"
         classpath 'com.github.ben-manes:gradle-versions-plugin:0.17.0'
     }
 }
@@ -44,7 +44,7 @@ Given this build.gradle file:
 
 ```groovy
 plugins {
-    id 'se.patrikerdes.use-latest-versions' version '0.1.0'
+    id 'se.patrikerdes.use-latest-versions' version '0.2.0'
     id 'com.github.ben-manes.versions' version '0.16.0'
 }
 
@@ -78,8 +78,8 @@ variables – and you build.gradle file will look like this:
 
 ```groovy
 plugins {
-    id 'se.patrikerdes.use-latest-versions' version '0.1.0'
-    id 'com.github.ben-manes.versions' version '0.17.0'
+    id 'se.patrikerdes.use-latest-versions' version '0.2.0'
+    id 'com.github.ben-manes.versions' version '0.17.0' // <- Updated
 }
 
 apply plugin: 'java'
@@ -88,16 +88,16 @@ repositories {
     mavenCentral()
 }
 
-ext.log4jversion = '1.2.17'
-ext.codecVersion = '1.11'
-def commonsLoggingVersion = "1.2"
+ext.log4jversion = '1.2.17' // <- Updated
+ext.codecVersion = '1.11' // <- Updated
+def commonsLoggingVersion = "1.2" // <- Updated
 
 dependencies {
-    testCompile 'junit:junit:4.12'
-    compile "log4j:log4j:$log4jversion"
-    compile "commons-codec:commons-codec:" + codecVersion
-    compile group: 'commons-lang', name: 'commons-lang', version: '2.6'
-    compile group: 'commons-logging', name: 'commons-logging', version: commonsLoggingVersion
+    testCompile 'junit:junit:4.12' // <- Updated
+    compile "log4j:log4j:$log4jversion" // <- The variable above was updated
+    compile "commons-codec:commons-codec:" + codecVersion // <- The variable above was updated
+    compile group: 'commons-lang', name: 'commons-lang', version: '2.6' // <- Updated
+    compile group: 'commons-logging', name: 'commons-logging', version: commonsLoggingVersion // <- The variable above was updated
 }
 ```
 
