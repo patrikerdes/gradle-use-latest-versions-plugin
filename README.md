@@ -127,3 +127,15 @@ successfully updated.
 `useLatestVersionsCheck` can not run in the same gradle run as `useLatestVersions`, since the `dependencyUpdates` task
 will check the *.gradle files as they were when the gradle build started, which means that it can not pick up the
 changes applied by `useLatestVersions`.
+
+## FAQ
+
+#### How do I exclude alpha/beta/rc versions?
+
+The Versions plugin can be configured to achieve this, it is documented in
+[the Versions plugin README](https://github.com/ben-manes/gradle-versions-plugin/blob/master/README.md#revisions)
+
+#### Where does the name "Use Latest Versions" come from?
+
+From the [Maven Versions Plugin](http://www.mojohaus.org/versions-maven-plugin/index.html) goal called
+[use-latest-versions](http://www.mojohaus.org/versions-maven-plugin/use-latest-versions-mojo.html)
