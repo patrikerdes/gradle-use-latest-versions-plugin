@@ -128,6 +128,87 @@ successfully updated.
 will check the *.gradle files as they were when the gradle build started, which means that it can not pick up the
 changes applied by `useLatestVersions`.
 
+## Supported dependency formats
+
+Dependencies stated in the following formats should cause the version to be successfully updated by the
+`useLatestVersions` task. (If not, please
+[create an issue](https://github.com/patrikerdes/gradle-use-latest-versions-plugin/issues/new).)
+Single and double quotes are interchangeable in all formats below.
+
+### Plugin dependencies
+
+The plugins DSL only allows a
+[strict format](https://docs.gradle.org/current/userguide/plugins.html#sec:constrained_syntax), e.g. only string
+literals for the version number, so there is basically only one format to support.
+
+```groovy
+plugins {
+    id 'se.patrikerdes.use-latest-versions' version '0.1.0'
+}
+```
+
+### Module dependencies
+
+#### String format
+
+```groovy
+dependencies {
+    compile "log4j:log4j:1.2.15"
+    testCompile 'junit:junit:4.0'
+}
+```
+
+#### Map format
+
+Currently only if the order is `group`, `name`, `version`, without other elements in between.
+
+```groovy
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.0'
+}
+```
+
+### Module dependencies based on variables
+
+`def` and `ext.` (extra properties extensions) can be used interchangeably in all example below.
+
+#### String format
+```groovy
+ext.junit_version = '4.0'
+
+dependencies {
+    testCompile "junit:junit:$junit_version"
+}
+```
+
+```groovy
+def junit_version = '4.0'
+
+dependencies {
+    testCompile "junit:junit:$junit_version"
+}
+```
+
+```groovy
+ext.junit_version = '4.0'
+
+dependencies {
+    testCompile "junit:junit:" + junit_version
+}
+```
+
+#### Map format
+
+Currently only if the order is `group`, `name`, `version`, without other elements in between.
+
+```groovy
+ext.junit_version = '4.0'
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: junit_version
+}
+```
+
 ## Compatibility
 
 **Gradle version:** 2.8 - 4.6<br/>
