@@ -63,7 +63,11 @@ class UseLatestVersionsCheckTask extends DefaultTask {
             }
         }
 
-        if (leftToUpdate.size() > 0) {
+        if (updatedCount == 0 && failedCount == 0) {
+            println('useLatestVersions successfully did nothing; there was nothing to update')
+        }
+
+        if (failedCount > 0) {
             throw new GradleException('useLatestVersions failed')
         }
     }

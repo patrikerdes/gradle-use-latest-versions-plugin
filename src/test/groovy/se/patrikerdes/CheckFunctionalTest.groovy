@@ -119,7 +119,7 @@ class CheckFunctionalTest extends BaseFunctionalTest {
         result.task(':useLatestVersionsCheck').outcome == SUCCESS
     }
 
-    void "useLatestVersionsCheck outputs success if there is nothing left to update after useLatestVersions"() {
+    void "useLatestVersionsCheck outputs success if all updates were successful"() {
         given:
         buildFile << """
             plugins {
@@ -148,7 +148,7 @@ class CheckFunctionalTest extends BaseFunctionalTest {
         result.output.contains(" - junit:junit [4.0 -> $CurrentVersions.JUNIT]")
     }
 
-    void "useLatestVersionsCheck fails if there is anything left to update after useLatestVersions"() {
+    void "useLatestVersionsCheck fails if any update failed"() {
         given:
         buildFile << """
             plugins {
@@ -215,5 +215,33 @@ class CheckFunctionalTest extends BaseFunctionalTest {
             useLatestVersions successfully updated 1 dependency to the latest version:
              - log4j:log4j [1.2.16 -> $CurrentVersions.LOG4J]
         """.stripIndent())
+    }
+
+    void "useLatestVersionsCheck outputs a special message when there was nothing to update"() {
+        given:
+        buildFile << """
+            plugins {
+                id 'se.patrikerdes.use-latest-versions'
+                id 'com.github.ben-manes.versions' version '$CurrentVersions.VERSIONS'
+            }
+
+            apply plugin: 'java'
+            
+            repositories {
+                mavenCentral()
+            }
+            
+            dependencies {
+                testCompile 'junit:junit:$CurrentVersions.JUNIT'
+            }
+        """
+
+        when:
+        useLatestVersions()
+        BuildResult result = useLatestVersionsCheck()
+
+        then:
+        result.task(':useLatestVersionsCheck').outcome == SUCCESS
+        result.output.contains('useLatestVersions successfully did something nothing')
     }
 }
