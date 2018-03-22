@@ -242,6 +242,6 @@ class CheckFunctionalTest extends BaseFunctionalTest {
 
         then:
         result.task(':useLatestVersionsCheck').outcome == SUCCESS
-        result.output.contains('useLatestVersions successfully did something nothing')
+        result.output.contains('useLatestVersions successfully did nothing')
     }
 }
