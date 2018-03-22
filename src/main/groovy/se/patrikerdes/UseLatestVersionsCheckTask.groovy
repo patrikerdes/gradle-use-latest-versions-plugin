@@ -22,15 +22,52 @@ class UseLatestVersionsCheckTask extends DefaultTask {
             throw new GradleException('No results from useLatestVersions were found, aborting')
         }
 
-        //def previousDependencyUpdatesJson = new JsonSlurper().parse(previousDependencyUpdatesReport)
+        Object previousDependencyUpdatesJson = new JsonSlurper().parse(previousDependencyUpdatesReport)
         Object currentDependencyUpdatesJson = new JsonSlurper().parse(currentDependencyUpdatesReport)
 
+        List<DependencyUpdate> wasUpdateable = getOutDatedDependencies(previousDependencyUpdatesJson)
         List<DependencyUpdate> leftToUpdate = getOutDatedDependencies(currentDependencyUpdatesJson)
 
-        if (leftToUpdate.size() == 0) {
-            println('useLatestVersions successfully upgraded all dependencies to their latest version')
+        int failedCount = leftToUpdate.size()
+        if (failedCount > 0) {
+            println("useLatestVersions failed to update $failedCount ${deps(failedCount)} " +
+                    'to the latest version:')
+            for (dependencyUpdate in leftToUpdate) {
+                println(' - ' + dependencyUpdate)
+            }
+        }
+
+        int updatedCount = wasUpdateable.size() - leftToUpdate.size()
+        if (updatedCount < 0) {
+            updatedCount = 0
+        }
+
+        if (updatedCount > 0) {
+            println("useLatestVersions successfully updated $updatedCount ${deps(updatedCount)} " +
+                    'to the latest version:')
+            for (dependencyWasUpdateable in wasUpdateable) {
+                boolean wasUpdated = true
+                for (dependencyLeftToUpdate in leftToUpdate) {
+                    if (dependencyWasUpdateable.groupAndName() == dependencyLeftToUpdate.groupAndName()) {
+                        wasUpdated = false
+                    }
+                }
+                if (wasUpdated) {
+                    println(' - ' + dependencyWasUpdateable)
+                }
+            }
+        }
+
+        if (leftToUpdate.size() > 0) {
+            throw new GradleException('useLatestVersions failed')
+        }
+    }
+
+    static String deps(int i) {
+        if (i == 1) {
+            'dependency'
         } else {
-            throw new GradleException('useLatestVersions failed to update at least one dependency')
+            'dependencies'
         }
     }
 }

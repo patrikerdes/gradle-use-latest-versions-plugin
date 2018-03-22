@@ -170,6 +170,6 @@ class ModuleUpdatesFunctionalTest extends BaseFunctionalTest {
 
         then:
         updatedBuildFile.contains('junit:junit:4.12')
-        updatedSecondFile.contains('log4j:log4j:1.2.17')
+        updatedSecondFile.contains("log4j:log4j:$CurrentVersions.LOG4J")
     }
 }

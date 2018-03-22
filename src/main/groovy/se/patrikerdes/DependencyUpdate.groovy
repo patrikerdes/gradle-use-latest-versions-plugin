@@ -41,4 +41,10 @@ class DependencyUpdate {
         "group[ \\t]*:[ \\t]*[\"']" + this.group + "[\"'][ \\t]*,[ \\t]*name[ \\t]*:[ \\t]*[\"']" + this.name +
                 "[\"'][ \\t]*,[ \\t]*version[ \\t]*:[ \\t]*([^\\s\"']+?)[\\s)]"
     }
+    String toString() {
+        "${this.group}:${this.name} [${this.oldVersion} -> ${this.newVersion}]"
+    }
+    String groupAndName() {
+        "${this.group}:${this.name}"
+    }
 }

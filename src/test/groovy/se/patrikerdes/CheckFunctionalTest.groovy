@@ -144,7 +144,8 @@ class CheckFunctionalTest extends BaseFunctionalTest {
 
         then:
         result.task(':useLatestVersionsCheck').outcome == SUCCESS
-        result.output.contains('successfully upgraded all dependencies')
+        result.output.contains('successfully updated 1 dependency')
+        result.output.contains(" - junit:junit [4.0 -> $CurrentVersions.JUNIT]")
     }
 
     void "useLatestVersionsCheck fails if there is anything left to update after useLatestVersions"() {
@@ -175,6 +176,44 @@ class CheckFunctionalTest extends BaseFunctionalTest {
 
         then:
         result.task(':useLatestVersionsCheck').outcome == FAILED
-        result.output.contains('failed to update at least one dependency')
+        result.output.contains('failed to update 1 dependency')
+        result.output.contains(" - junit:junit [4.0 -> $CurrentVersions.JUNIT]")
+    }
+
+    void "useLatestVersionsCheck correctly prints one successful and one unsuccessful update"() {
+        given:
+        buildFile << """
+            plugins {
+                id 'se.patrikerdes.use-latest-versions'
+                id 'com.github.ben-manes.versions' version '$CurrentVersions.VERSIONS'
+            }
+
+            apply plugin: 'java'
+            
+            repositories {
+                mavenCentral()
+            }
+            
+            def junit_version = '3.0'
+            junit_version = '4.0'
+            
+            dependencies {
+                compile "log4j:log4j:1.2.16"
+                testCompile "junit:junit:\$junit_version"
+            }
+        """
+
+        when:
+        useLatestVersions()
+        BuildResult result = useLatestVersionsCheckAndFail()
+
+        then:
+        result.task(':useLatestVersionsCheck').outcome == FAILED
+        result.output.contains("""\
+            useLatestVersions failed to update 1 dependency to the latest version:
+             - junit:junit [4.0 -> $CurrentVersions.JUNIT]
+            useLatestVersions successfully updated 1 dependency to the latest version:
+             - log4j:log4j [1.2.16 -> $CurrentVersions.LOG4J]
+        """.stripIndent())
     }
 }
