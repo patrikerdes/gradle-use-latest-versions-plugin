@@ -78,6 +78,12 @@ class VersionsIntegrationFunctionalTest extends BaseFunctionalTest {
             return
         }
 
+        if (System.getenv('SKIP_SLOW_INTEGRATION_TESTS') != null) {
+            println("Found environment variable SKIP_SLOW_INTEGRATION_TESTS, won't test Versions " +
+                    "version $versionsVersion")
+            return
+        }
+
         given:
         buildFile << """
             plugins {
