@@ -14,6 +14,11 @@ import java.util.regex.Matcher
 
 @CompileStatic
 class UseLatestVersionsTask extends DefaultTask {
+    UseLatestVersionsTask() {
+        description = 'Updates module and plugin versions in all *.gradle files to the latest available versions.'
+        group = 'Help'
+    }
+
     String variablDefinitionMatchString(String variable) {
         '(' + variable + "[ \\t]+=[ \t]*?[\"'])(.*)([\"'])"
     }

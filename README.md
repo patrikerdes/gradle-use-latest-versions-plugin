@@ -110,7 +110,7 @@ dependencies {
 ```
 
 Updates module and plugin versions in all *.gradle files in the project root folder or any subfolder to the latest
-available versions.This task depends on the `dependencyUpdates` task in the
+available versions. This task depends on the `dependencyUpdates` task in the
 [Gradle Versions Plugin](https://github.com/ben-manes/gradle-versions-plugin) to know which dependencies can be updated.
 
 ### useLatestVersionsCheck
@@ -119,8 +119,8 @@ available versions.This task depends on the `dependencyUpdates` task in the
 # gradle useLatestVersions && gradle useLatestVersionsCheck
 ```
 
-This task will succeed if all available updates are successfully applied, and it will fail if any of the updates were
-not successfully applied. This task depends on the `dependencyUpdates` task in the
+This task will succeed if all available updates were successfully applied by `useLatestVersions`, and it will fail if
+any of the updates were not successfully applied. This task depends on the `dependencyUpdates` task in the
 [Gradle Versions Plugin](https://github.com/ben-manes/gradle-versions-plugin) to know which dependencies were
 successfully updated.
 

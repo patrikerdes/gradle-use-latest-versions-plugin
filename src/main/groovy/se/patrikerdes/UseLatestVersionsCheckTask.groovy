@@ -9,6 +9,11 @@ import org.gradle.api.tasks.TaskAction
 
 @CompileStatic
 class UseLatestVersionsCheckTask extends DefaultTask {
+    UseLatestVersionsCheckTask() {
+        description = 'Check if all available updates were successfully applied by the useLatestVersions task.'
+        group = 'Help'
+    }
+
     @TaskAction
     void useLatestVersionsCheckTask() {
         File previousDependencyUpdatesReport =
