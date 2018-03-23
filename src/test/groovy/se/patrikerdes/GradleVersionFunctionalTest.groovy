@@ -1,6 +1,9 @@
 package se.patrikerdes
 
 class GradleVersionFunctionalTest extends BaseFunctionalTest {
+    private static final List<String> PLUGIN_UPDATE_NOT_SUPPORTED = ['2.8', '2.14', '3.0', '3.5',
+                                                                     '4.0', '4.1', '4.2', '4.3']
+
     void "Gradle versions"() {
         println("Testing Gradle version $gradleVersion")
         if (System.getProperty('java.version')[0] == '9' && gradleVersion in GRADLE_VERSIONS_NOT_JDK9) {
@@ -17,7 +20,7 @@ class GradleVersionFunctionalTest extends BaseFunctionalTest {
         buildFile << """
             plugins {
                 id 'se.patrikerdes.use-latest-versions'
-                id 'com.github.ben-manes.versions' version '$CurrentVersions.VERSIONS'
+                id 'com.github.ben-manes.versions' version '0.16.0'
             }
 
             apply plugin: 'java'
@@ -37,6 +40,8 @@ class GradleVersionFunctionalTest extends BaseFunctionalTest {
 
         then:
         updatedBuildFile.contains("junit:junit:$CurrentVersions.JUNIT")
+        gradleVersion in PLUGIN_UPDATE_NOT_SUPPORTED ||
+                updatedBuildFile.contains("'com.github.ben-manes.versions' version '$CurrentVersions.VERSIONS'")
 
         where:
         gradleVersion << [

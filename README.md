@@ -137,6 +137,8 @@ Single and double quotes are interchangeable in all formats below.
 
 ### Plugin dependencies
 
+*Plugin dependencies can only be updated in Gradle 4.4 - 4.6.*
+
 The plugins DSL only allows a
 [strict format](https://docs.gradle.org/current/userguide/plugins.html#sec:constrained_syntax), e.g. only string
 literals for the version number, so there is basically only one format to support.
@@ -211,7 +213,7 @@ dependencies {
 
 ## Compatibility
 
-**Gradle version:** 2.8 - 4.6<br/>
+**Gradle version:** 2.8 - 4.6 (Updating plugin dependencies only work in 4.4 - 4.6)<br/>
 **Versions Plugin version:** 0.12.0 - 0.17.0<br/>
 **JDK version:** 7 - 9 (7 is targeted but not tested)
 
