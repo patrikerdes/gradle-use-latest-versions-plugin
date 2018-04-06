@@ -252,6 +252,29 @@ dependencies {
 **Versions Plugin version:** 0.12.0 - 0.17.0<br/>
 **JDK version:** 7 - 9 (7 is targeted but not tested)
 
+## Instructions for building this plugin from source
+* Clone or download this project.
+* Open the project, for example in IntelliJ open the `build.gradle` file.
+* You can build the jar with the Gradle `assemble` task, it will be in `build/libs/`.
+* If you want to use the plugin locally, first publish to your local Maven repository with the Gradle `publishToMavenLocal` task.
+* To use it in a different project, add to your `build.gradle` file
+
+```groovy
+buildscript {
+    repositories {
+        mavenLocal()
+    }
+    dependencies{
+        classpath group: 'se.patrikerdes',
+				name: 'gradle-use-latest-versions-plugin',
+				version: '0.2.1'
+    }
+}
+
+apply plugin: se.patrikerdes.UseLatestVersionsPlugin
+
+```
+
 ## FAQ
 
 #### How do I exclude alpha/beta/rc versions?
