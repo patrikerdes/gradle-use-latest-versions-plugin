@@ -33,9 +33,11 @@ class UseLatestVersionsTask extends DefaultTask {
                 'dependencyUpdates' + File.separator + 'report.json')
         saveDependencyUpdatesReport(dependencyUpdatesJsonReportFile)
 
-        // TODO: Also get *.gradle.kts files
         List<String> dotGradleFileNames =
                 new FileNameFinder().getFileNames(project.rootDir.absolutePath, '**/*.gradle')
+
+        // Also add Gradle Kotlin DSL files.
+        dotGradleFileNames += new FileNameFinder().getFileNames(project.rootDir.absolutePath, '**/*.gradle.kts')
 
         Object dependencyUpdatesJson = new JsonSlurper().parse(dependencyUpdatesJsonReportFile)
 
