@@ -2,13 +2,15 @@
 
 [![Build Status](https://travis-ci.org/patrikerdes/gradle-use-latest-versions-plugin.svg?branch=master)](https://travis-ci.org/patrikerdes/gradle-use-latest-versions-plugin)
 
-A Gradle plugin that updates module and plugin versions in your *.gradle files to the latest available versions.
+A Gradle plugin that updates module and plugin versions in your *.gradle or *.gradle.kts files to the latest available versions.
 
 This plugin depends on the [Gradle Versions Plugin](https://github.com/ben-manes/gradle-versions-plugin).
 
 ## Usage
 
 Apply this plugin and the [Gradle Versions Plugin](https://github.com/ben-manes/gradle-versions-plugin).
+
+Include in your `build.gradle`
 
 ```groovy
 plugins {
@@ -35,6 +37,39 @@ buildscript {
 
 apply plugin: 'com.github.ben-manes.versions'
 apply plugin: 'se.patrikerdes.use-latest-versions'
+
+```
+
+### Usage for Gradle Kotlin DSL
+
+Include in your `build.gradle.kts`
+```groovy
+plugins {
+  id("se.patrikerdes.use-latest-versions") version "0.2.0"
+  id("com.github.ben-manes.versions") version "0.17.0"
+}
+```
+
+or 
+
+```groovy
+buildscript {
+    repositories {
+        maven {
+            maven { url = uri("https://plugins.gradle.org/m2/") }
+        }
+        jcenter()
+    }
+    dependencies {
+        classpath("gradle.plugin.se.patrikerdes:gradle-use-latest-versions-plugin:0.2.1")
+        classpath("com.github.ben-manes:gradle-versions-plugin:0.17.0")
+    }
+}
+
+apply {
+    plugin("com.github.ben-manes.versions")
+    plugin("se.patrikerdes.use-latest-versions")
+}
 
 ```
 
