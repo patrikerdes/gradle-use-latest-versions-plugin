@@ -12,7 +12,7 @@ Apply this plugin and the [Gradle Versions Plugin](https://github.com/ben-manes/
 
 ```groovy
 plugins {
-  id 'se.patrikerdes.use-latest-versions' version '0.2.0'
+  id 'se.patrikerdes.use-latest-versions' version '0.2.1'
   id 'com.github.ben-manes.versions' version '0.17.0'
 }
 ```
