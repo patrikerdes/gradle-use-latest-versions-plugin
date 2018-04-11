@@ -1,10 +1,10 @@
 package se.patrikerdes.kotlindsl
 
-import org.gradle.testkit.runner.BuildResult
-import se.patrikerdes.CurrentVersions
-
 import static org.gradle.testkit.runner.TaskOutcome.FAILED
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
+
+import org.gradle.testkit.runner.BuildResult
+import se.patrikerdes.CurrentVersions
 
 class KotlinCheckFunctionalTest extends KotlinBaseFunctionalTest {
     void "the json file of dependencyUpdates is written by the useLatestVersions task for the check task to consume"() {
