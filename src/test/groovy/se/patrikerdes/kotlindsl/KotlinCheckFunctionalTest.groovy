@@ -12,14 +12,9 @@ class KotlinCheckFunctionalTest extends KotlinBaseFunctionalTest {
         buildFile << """
             plugins {
                 application
-                kotlin("jvm")
                 java
                 id("se.patrikerdes.use-latest-versions")
                 id("com.github.ben-manes.versions") version "$CurrentVersions.VERSIONS"
-            }
-
-            apply {
-                plugin("org.junit.platform.gradle.plugin")
             }
             
             repositories {
@@ -47,14 +42,9 @@ class KotlinCheckFunctionalTest extends KotlinBaseFunctionalTest {
         buildFile << """
             plugins {
                 application
-                kotlin("jvm")
                 java
                 id("se.patrikerdes.use-latest-versions")
                 id("com.github.ben-manes.versions") version "$CurrentVersions.VERSIONS"
-            }
-
-            apply {
-                plugin("org.junit.platform.gradle.plugin")
             }
             
             repositories {
@@ -79,16 +69,11 @@ class KotlinCheckFunctionalTest extends KotlinBaseFunctionalTest {
         buildFile << """
             plugins {
                 application
-                kotlin("jvm")
                 java
                 id("se.patrikerdes.use-latest-versions")
                 id("com.github.ben-manes.versions") version "$CurrentVersions.VERSIONS"
             }
 
-            apply {
-                plugin("org.junit.platform.gradle.plugin")
-            }
-            
             repositories {
                 mavenCentral()
             }
@@ -113,14 +98,9 @@ class KotlinCheckFunctionalTest extends KotlinBaseFunctionalTest {
         buildFile << """
             plugins {
                 application
-                kotlin("jvm")
                 java
                 id("se.patrikerdes.use-latest-versions")
                 id("com.github.ben-manes.versions") version "$CurrentVersions.VERSIONS"
-            }
-
-            apply {
-                plugin("org.junit.platform.gradle.plugin")
             }
             
             repositories {
@@ -145,16 +125,11 @@ class KotlinCheckFunctionalTest extends KotlinBaseFunctionalTest {
         buildFile << """
             plugins {
                 application
-                kotlin("jvm")
                 java
                 id("se.patrikerdes.use-latest-versions")
                 id("com.github.ben-manes.versions") version "$CurrentVersions.VERSIONS"
             }
 
-            apply {
-                plugin("org.junit.platform.gradle.plugin")
-            }
-            
             repositories {
                 mavenCentral()
             }
@@ -174,93 +149,16 @@ class KotlinCheckFunctionalTest extends KotlinBaseFunctionalTest {
         result.output.contains(" - junit:junit [4.0 -> $CurrentVersions.JUNIT]")
     }
 
-    void "useLatestVersionsCheck fails if any update failed"() {
-        given:
-        buildFile << """
-            plugins {
-                application
-                kotlin("jvm")
-                java
-                id("se.patrikerdes.use-latest-versions")
-                id("com.github.ben-manes.versions") version "$CurrentVersions.VERSIONS"
-            }
-
-            apply {
-                plugin("org.junit.platform.gradle.plugin")
-            }
-            
-            repositories {
-                mavenCentral()
-            }
-            
-            dependencies {
-                testCompile("junit:junit:4.0")
-            }
-        """
-
-        when:
-        useLatestVersions()
-        BuildResult result = useLatestVersionsCheckAndFail()
-
-        then:
-        result.task(':useLatestVersionsCheck').outcome == FAILED
-        result.output.contains('failed to update 1 dependency')
-        result.output.contains(" - junit:junit [4.0 -> $CurrentVersions.JUNIT]")
-    }
-
-    void "useLatestVersionsCheck correctly prints one successful and one unsuccessful update"() {
-        given:
-        buildFile << """
-            plugins {
-                application
-                kotlin("jvm")
-                java
-                id("se.patrikerdes.use-latest-versions")
-                id("com.github.ben-manes.versions") version "$CurrentVersions.VERSIONS"
-            }
-
-            apply {
-                plugin("org.junit.platform.gradle.plugin")
-            }
-            
-            repositories {
-                mavenCentral()
-            }
-            
-            dependencies {
-                testCompile("junit:junit:4.0")
-            }
-        """
-
-        when:
-        useLatestVersions()
-        BuildResult result = useLatestVersionsCheckAndFail()
-
-        then:
-        result.task(':useLatestVersionsCheck').outcome == FAILED
-        result.output.contains("""\
-            useLatestVersions failed to update 1 dependency to the latest version:
-             - junit:junit [4.0 -> $CurrentVersions.JUNIT]
-            useLatestVersions successfully updated 1 dependency to the latest version:
-             - log4j:log4j [1.2.16 -> $CurrentVersions.LOG4J]
-        """.stripIndent())
-    }
-
     void "useLatestVersionsCheck outputs a special message when there was nothing to update"() {
         given:
         buildFile << """
             plugins {
                 application
-                kotlin("jvm")
                 java
                 id("se.patrikerdes.use-latest-versions")
                 id("com.github.ben-manes.versions") version "$CurrentVersions.VERSIONS"
             }
 
-            apply {
-                plugin("org.junit.platform.gradle.plugin")
-            }
-            
             repositories {
                 mavenCentral()
             }
