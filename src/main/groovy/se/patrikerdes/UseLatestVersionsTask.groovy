@@ -15,7 +15,8 @@ import java.util.regex.Matcher
 @CompileStatic
 class UseLatestVersionsTask extends DefaultTask {
     UseLatestVersionsTask() {
-        description = 'Updates module and plugin versions in all *.gradle and *.gradle.kts files to the latest available versions.'
+        description = 'Updates module and plugin versions in all *.gradle and *.gradle.kts files to the latest ' +
+                'available versions.'
         group = 'Help'
     }
 
@@ -173,7 +174,8 @@ class UseLatestVersionsTask extends DefaultTask {
                                  Set problemVariables) {
         if (variableMatch.size() == 1) {
             String variableName = ((List) variableMatch[0])[1]
-            if (versionVariables.containsKey(variableName) && versionVariables[variableName as String] != update.newVersion) {
+            if (versionVariables.containsKey(variableName) &&
+                    versionVariables[variableName as String] != update.newVersion) {
                 println("A problem was detected: $variableName is supposed to be updated to both " +
                         "${versionVariables[variableName as String]} and ${update.newVersion}, it won't be changed.")
                 problemVariables.add(variableName)
