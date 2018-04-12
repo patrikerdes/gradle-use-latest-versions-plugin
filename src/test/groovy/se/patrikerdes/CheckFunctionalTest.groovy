@@ -209,12 +209,10 @@ class CheckFunctionalTest extends BaseFunctionalTest {
 
         then:
         result.task(':useLatestVersionsCheck').outcome == FAILED
-        result.output.contains("""\
-            useLatestVersions failed to update 1 dependency to the latest version:
-             - junit:junit [4.0 -> $CurrentVersions.JUNIT]
-            useLatestVersions successfully updated 1 dependency to the latest version:
-             - log4j:log4j [1.2.16 -> $CurrentVersions.LOG4J]
-        """.stripIndent())
+        result.output.contains('useLatestVersions failed to update 1 dependency to the latest version:')
+        result.output.contains("- junit:junit [4.0 -> $CurrentVersions.JUNIT]")
+        result.output.contains('useLatestVersions successfully updated 1 dependency to the latest version:')
+        result.output.contains("- log4j:log4j [1.2.16 -> $CurrentVersions.LOG4J]")
     }
 
     void "useLatestVersionsCheck outputs a special message when there was nothing to update"() {
