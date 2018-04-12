@@ -50,7 +50,9 @@ class VersionsIntegrationFunctionalTest extends BaseFunctionalTest {
         BuildResult result = useLatestVersions()
 
         then:
-        result.output.contains('Generated report file build/dependencyUpdates/report.json')
+        // Path may be prefixed by a local path.
+        result.output.contains('Generated report file')
+        result.output.contains('report.json')
     }
 
     void "the useLatestVersionsCheck task depends on the dependencyUpdates task"() {
