@@ -15,11 +15,11 @@ import java.util.regex.Matcher
 @CompileStatic
 class UseLatestVersionsTask extends DefaultTask {
     UseLatestVersionsTask() {
-        description = 'Updates module and plugin versions in all *.gradle files to the latest available versions.'
+        description = 'Updates module and plugin versions in all *.gradle and *.gradle.kts files to the latest available versions.'
         group = 'Help'
     }
 
-    String variablDefinitionMatchString(String variable) {
+    String variableDefinitionMatchString(String variable) {
         '(' + variable + "[ \\t]+=[ \t]*?[\"'])(.*)([\"'])"
     }
 
@@ -63,9 +63,9 @@ class UseLatestVersionsTask extends DefaultTask {
     }
 
     void updateModuleVersions(Map<String, String> gradleFileContents, List<String> dotGradleFileNames,
-                              List<DependencyUpdate> dependecyUpdates) {
+                              List<DependencyUpdate> dependencyUpdates) {
         for (String dotGradleFileName in dotGradleFileNames) {
-            for (DependencyUpdate update in dependecyUpdates) {
+            for (DependencyUpdate update in dependencyUpdates) {
                 // String notation
                 gradleFileContents[dotGradleFileName] =
                         gradleFileContents[dotGradleFileName].replaceAll(
@@ -79,9 +79,9 @@ class UseLatestVersionsTask extends DefaultTask {
     }
 
     void updatePluginVersions(Map<String, String> gradleFileContents, List<String> dotGradleFileNames,
-                              List<DependencyUpdate> dependecyUpdates) {
+                              List<DependencyUpdate> dependencyUpdates) {
         for (String dotGradleFileName in dotGradleFileNames) {
-            for (DependencyUpdate update in dependecyUpdates) {
+            for (DependencyUpdate update in dependencyUpdates) {
                 gradleFileContents[dotGradleFileName] =
                         gradleFileContents[dotGradleFileName].replaceAll(
                                 update.oldPluginVersionMatchString(), update.newVersionString())
@@ -90,13 +90,13 @@ class UseLatestVersionsTask extends DefaultTask {
     }
 
     void updateVariables(Map<String, String> gradleFileContents, List<String> dotGradleFileNames,
-                         List<DependencyUpdate> dependecyUpdates, List<DependencyUpdate> dependencyStables) {
+                         List<DependencyUpdate> dependencyUpdates, List<DependencyUpdate> dependencyStables) {
         // Find variables with version numbers
         Map<String, String> versionVariables = [:]
         Set problemVariables = []
 
         for (String dotGradleFileName in dotGradleFileNames) {
-            for (DependencyUpdate update in dependecyUpdates + dependencyStables) {
+            for (DependencyUpdate update in dependencyUpdates + dependencyStables) {
                 // Variable in string format with string interpolation
                 Matcher variableMatch = gradleFileContents[dotGradleFileName] =~
                         update.variableUseStringFormatInterpolationMatchString()
@@ -125,7 +125,7 @@ class UseLatestVersionsTask extends DefaultTask {
         for (String dotGradleFileName in dotGradleFileNames) {
             for (variableName in versionVariables.keySet()) {
                 Matcher variableDefinitionMatch = gradleFileContents[dotGradleFileName] =~
-                        variablDefinitionMatchString(variableName)
+                        variableDefinitionMatchString(variableName)
                 if (variableDefinitionMatch.size() == 1) {
                     if (variableDefinitions.contains(variableName)) {
                         // The variable is assigned to in more than one file
@@ -153,7 +153,7 @@ class UseLatestVersionsTask extends DefaultTask {
             for (versionVariable in versionVariables) {
                 gradleFileContents[dotGradleFileName] =
                         gradleFileContents[dotGradleFileName].replaceAll(
-                                variablDefinitionMatchString(versionVariable.key),
+                                variableDefinitionMatchString(versionVariable.key),
                                 newVariableDefinitionString(versionVariable.value))
             }
         }
@@ -173,12 +173,12 @@ class UseLatestVersionsTask extends DefaultTask {
                                  Set problemVariables) {
         if (variableMatch.size() == 1) {
             String variableName = ((List) variableMatch[0])[1]
-            if (versionVariables.containsKey(variableName) && versionVariables[variableName] != update.newVersion) {
+            if (versionVariables.containsKey(variableName) && versionVariables[variableName as String] != update.newVersion) {
                 println("A problem was detected: $variableName is supposed to be updated to both " +
-                        "${versionVariables[variableName]} and ${update.newVersion}, it won't be changed.")
+                        "${versionVariables[variableName as String]} and ${update.newVersion}, it won't be changed.")
                 problemVariables.add(variableName)
             } else {
-                versionVariables.put(variableName, update.newVersion)
+                versionVariables.put(variableName as String, update.newVersion)
             }
         }
     }

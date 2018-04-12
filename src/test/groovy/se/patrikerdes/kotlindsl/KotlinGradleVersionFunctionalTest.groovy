@@ -22,16 +22,11 @@ class KotlinGradleVersionFunctionalTest extends KotlinBaseFunctionalTest {
         buildFile << '''
             plugins {
                 application
-                kotlin("jvm")
                 java
                 id("se.patrikerdes.use-latest-versions")
                 id("com.github.ben-manes.versions") version "0.16.0"
             }
 
-            apply {
-                plugin("org.junit.platform.gradle.plugin")
-            }
-            
             repositories {
                 mavenCentral()
             }
@@ -48,7 +43,7 @@ class KotlinGradleVersionFunctionalTest extends KotlinBaseFunctionalTest {
         then:
         updatedBuildFile.contains("junit:junit:$CurrentVersions.JUNIT")
         gradleVersion in PLUGIN_UPDATE_NOT_SUPPORTED ||
-                updatedBuildFile.contains("\"com.github.ben-manes.versions\" version \"$CurrentVersions.VERSIONS\"")
+                updatedBuildFile.contains("id(\"com.github.ben-manes.versions\") version \"$CurrentVersions.VERSIONS\"")
 
         where:
         gradleVersion << [
