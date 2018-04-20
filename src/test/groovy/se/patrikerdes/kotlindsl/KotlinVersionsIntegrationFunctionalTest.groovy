@@ -116,7 +116,7 @@ class KotlinVersionsIntegrationFunctionalTest extends KotlinBaseFunctionalTest {
         where:
         versionsVersion | gradleVersion
         '0.17.0'        | '4.6'
-        '0.16.0'        | '4.2.1'
-        '0.15.0'        | '4.2.1'
+        //'0.16.0'        | '4.2.1'
+        //'0.15.0'        | '4.2.1'
     }
 }
