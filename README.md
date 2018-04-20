@@ -30,7 +30,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath "gradle.plugin.se.patrikerdes:gradle-use-latest-versions-plugin:0.2.0"
+        classpath "gradle.plugin.se.patrikerdes:gradle-use-latest-versions-plugin:0.2.1"
         classpath 'com.github.ben-manes:gradle-versions-plugin:0.17.0'
     }
 }
@@ -45,7 +45,7 @@ apply plugin: 'se.patrikerdes.use-latest-versions'
 Include in your `build.gradle.kts`
 ```groovy
 plugins {
-  id("se.patrikerdes.use-latest-versions") version "0.2.0"
+  id("se.patrikerdes.use-latest-versions") version "0.2.1"
   id("com.github.ben-manes.versions") version "0.17.0"
 }
 ```
@@ -79,7 +79,7 @@ Given this build.gradle file:
 
 ```groovy
 plugins {
-    id 'se.patrikerdes.use-latest-versions' version '0.2.0'
+    id 'se.patrikerdes.use-latest-versions' version '0.2.1'
     id 'com.github.ben-manes.versions' version '0.16.0'
 }
 
@@ -113,7 +113,7 @@ variables – and you build.gradle file will look like this:
 
 ```groovy
 plugins {
-    id 'se.patrikerdes.use-latest-versions' version '0.2.0'
+    id 'se.patrikerdes.use-latest-versions' version '0.2.1'
     id 'com.github.ben-manes.versions' version '0.17.0' // <- Updated
 }
 
