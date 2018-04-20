@@ -1,27 +1,28 @@
-package se.patrikerdes
+package se.patrikerdes.kotlindsl
 
 import static org.gradle.testkit.runner.TaskOutcome.FAILED
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
 
 import org.gradle.testkit.runner.BuildResult
+import se.patrikerdes.CurrentVersions
 
-class CheckFunctionalTest extends BaseFunctionalTest {
+class KotlinCheckFunctionalTest extends KotlinBaseFunctionalTest {
     void "the json file of dependencyUpdates is written by the useLatestVersions task for the check task to consume"() {
         given:
         buildFile << """
             plugins {
-                id 'se.patrikerdes.use-latest-versions'
-                id 'com.github.ben-manes.versions' version '$CurrentVersions.VERSIONS'
+                application
+                java
+                id("se.patrikerdes.use-latest-versions")
+                id("com.github.ben-manes.versions") version "$CurrentVersions.VERSIONS"
             }
-
-            apply plugin: 'java'
             
             repositories {
                 mavenCentral()
             }
             
             dependencies {
-                testCompile 'junit:junit:4.0'
+                testCompile("junit:junit:4.0")
             }
         """
 
@@ -40,18 +41,18 @@ class CheckFunctionalTest extends BaseFunctionalTest {
         given:
         buildFile << """
             plugins {
-                id 'se.patrikerdes.use-latest-versions'
-                id 'com.github.ben-manes.versions' version '$CurrentVersions.VERSIONS'
+                application
+                java
+                id("se.patrikerdes.use-latest-versions")
+                id("com.github.ben-manes.versions") version "$CurrentVersions.VERSIONS"
             }
-
-            apply plugin: 'java'
             
             repositories {
                 mavenCentral()
             }
             
             dependencies {
-                testCompile 'junit:junit:4.0'
+                testCompile("junit:junit:4.0")
             }
         """
 
@@ -67,18 +68,18 @@ class CheckFunctionalTest extends BaseFunctionalTest {
         given:
         buildFile << """
             plugins {
-                id 'se.patrikerdes.use-latest-versions'
-                id 'com.github.ben-manes.versions' version '$CurrentVersions.VERSIONS'
+                application
+                java
+                id("se.patrikerdes.use-latest-versions")
+                id("com.github.ben-manes.versions") version "$CurrentVersions.VERSIONS"
             }
 
-            apply plugin: 'java'
-            
             repositories {
                 mavenCentral()
             }
             
             dependencies {
-                testCompile 'junit:junit:4.0'
+                testCompile("junit:junit:4.0")
             }
         """
 
@@ -96,18 +97,18 @@ class CheckFunctionalTest extends BaseFunctionalTest {
         given:
         buildFile << """
             plugins {
-                id 'se.patrikerdes.use-latest-versions'
-                id 'com.github.ben-manes.versions' version '$CurrentVersions.VERSIONS'
+                application
+                java
+                id("se.patrikerdes.use-latest-versions")
+                id("com.github.ben-manes.versions") version "$CurrentVersions.VERSIONS"
             }
-
-            apply plugin: 'java'
             
             repositories {
                 mavenCentral()
             }
             
             dependencies {
-                testCompile 'junit:junit:4.0'
+                testCompile("junit:junit:4.0")
             }
         """
 
@@ -123,18 +124,18 @@ class CheckFunctionalTest extends BaseFunctionalTest {
         given:
         buildFile << """
             plugins {
-                id 'se.patrikerdes.use-latest-versions'
-                id 'com.github.ben-manes.versions' version '$CurrentVersions.VERSIONS'
+                application
+                java
+                id("se.patrikerdes.use-latest-versions")
+                id("com.github.ben-manes.versions") version "$CurrentVersions.VERSIONS"
             }
 
-            apply plugin: 'java'
-            
             repositories {
                 mavenCentral()
             }
             
             dependencies {
-                testCompile 'junit:junit:4.0'
+                testCompile("junit:junit:4.0")
             }
         """
 
@@ -148,89 +149,22 @@ class CheckFunctionalTest extends BaseFunctionalTest {
         result.output.contains(" - junit:junit [4.0 -> $CurrentVersions.JUNIT]")
     }
 
-    void "useLatestVersionsCheck fails if any update failed"() {
-        given:
-        buildFile << """
-            plugins {
-                id 'se.patrikerdes.use-latest-versions'
-                id 'com.github.ben-manes.versions' version '$CurrentVersions.VERSIONS'
-            }
-
-            apply plugin: 'java'
-            
-            repositories {
-                mavenCentral()
-            }
-            
-            def junit_version = '3.0'
-            junit_version = '4.0'
-            
-            dependencies {
-                testCompile "junit:junit:\$junit_version"
-            }
-        """
-
-        when:
-        useLatestVersions()
-        BuildResult result = useLatestVersionsCheckAndFail()
-
-        then:
-        result.task(':useLatestVersionsCheck').outcome == FAILED
-        result.output.contains('failed to update 1 dependency')
-        result.output.contains(" - junit:junit [4.0 -> $CurrentVersions.JUNIT]")
-    }
-
-    void "useLatestVersionsCheck correctly prints one successful and one unsuccessful update"() {
-        given:
-        buildFile << """
-            plugins {
-                id 'se.patrikerdes.use-latest-versions'
-                id 'com.github.ben-manes.versions' version '$CurrentVersions.VERSIONS'
-            }
-
-            apply plugin: 'java'
-            
-            repositories {
-                mavenCentral()
-            }
-            
-            def junit_version = '3.0'
-            junit_version = '4.0'
-            
-            dependencies {
-                compile "log4j:log4j:1.2.16"
-                testCompile "junit:junit:\$junit_version"
-            }
-        """
-
-        when:
-        useLatestVersions()
-        BuildResult result = useLatestVersionsCheckAndFail()
-
-        then:
-        result.task(':useLatestVersionsCheck').outcome == FAILED
-        result.output.contains('useLatestVersions failed to update 1 dependency to the latest version:')
-        result.output.contains("- junit:junit [4.0 -> $CurrentVersions.JUNIT]")
-        result.output.contains('useLatestVersions successfully updated 1 dependency to the latest version:')
-        result.output.contains("- log4j:log4j [1.2.16 -> $CurrentVersions.LOG4J]")
-    }
-
     void "useLatestVersionsCheck outputs a special message when there was nothing to update"() {
         given:
         buildFile << """
             plugins {
-                id 'se.patrikerdes.use-latest-versions'
-                id 'com.github.ben-manes.versions' version '$CurrentVersions.VERSIONS'
+                application
+                java
+                id("se.patrikerdes.use-latest-versions")
+                id("com.github.ben-manes.versions") version "$CurrentVersions.VERSIONS"
             }
 
-            apply plugin: 'java'
-            
             repositories {
                 mavenCentral()
             }
             
             dependencies {
-                testCompile 'junit:junit:$CurrentVersions.JUNIT'
+                testCompile("junit:junit:$CurrentVersions.JUNIT")
             }
         """
 

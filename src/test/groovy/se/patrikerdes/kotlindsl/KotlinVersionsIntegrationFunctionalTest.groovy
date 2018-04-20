@@ -1,17 +1,18 @@
-package se.patrikerdes
+package se.patrikerdes.kotlindsl
 
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
 
 import org.gradle.testkit.runner.BuildResult
+import se.patrikerdes.CurrentVersions
 
-class VersionsIntegrationFunctionalTest extends BaseFunctionalTest {
+class KotlinVersionsIntegrationFunctionalTest extends KotlinBaseFunctionalTest {
     void "the useLatestVersions task won't run if the versions plugin has not been applied"() {
         given:
-        buildFile << """
+        buildFile << '''
             plugins {
-                id 'se.patrikerdes.use-latest-versions'
+                id("se.patrikerdes.use-latest-versions")
             }
-        """
+        '''
 
         when:
         BuildResult result = useLatestVersionsAndFail()
@@ -24,8 +25,8 @@ class VersionsIntegrationFunctionalTest extends BaseFunctionalTest {
         given:
         buildFile << """
             plugins {
-                id 'se.patrikerdes.use-latest-versions'
-                id 'com.github.ben-manes.versions' version '$CurrentVersions.VERSIONS'
+                id("se.patrikerdes.use-latest-versions")
+                id("com.github.ben-manes.versions") version "$CurrentVersions.VERSIONS"
             }
         """
 
@@ -41,8 +42,8 @@ class VersionsIntegrationFunctionalTest extends BaseFunctionalTest {
         given:
         buildFile << """
             plugins {
-                id 'se.patrikerdes.use-latest-versions'
-                id 'com.github.ben-manes.versions' version '$CurrentVersions.VERSIONS'
+                id("se.patrikerdes.use-latest-versions")
+                id("com.github.ben-manes.versions") version "$CurrentVersions.VERSIONS"
             }
         """
 
@@ -50,6 +51,7 @@ class VersionsIntegrationFunctionalTest extends BaseFunctionalTest {
         BuildResult result = useLatestVersions()
 
         then:
+        println(result.output)
         // Path may be prefixed by a local path.
         result.output.contains('Generated report file')
         result.output.contains('report.json')
@@ -59,8 +61,8 @@ class VersionsIntegrationFunctionalTest extends BaseFunctionalTest {
         given:
         buildFile << """
             plugins {
-                id 'se.patrikerdes.use-latest-versions'
-                id 'com.github.ben-manes.versions' version '$CurrentVersions.VERSIONS'
+                id("se.patrikerdes.use-latest-versions")
+                id("com.github.ben-manes.versions") version "$CurrentVersions.VERSIONS"
             }
         """
 
@@ -89,18 +91,18 @@ class VersionsIntegrationFunctionalTest extends BaseFunctionalTest {
         given:
         buildFile << """
             plugins {
-                id 'se.patrikerdes.use-latest-versions'
-                id 'com.github.ben-manes.versions' version '$versionsVersion'
+                application
+                java
+                id("se.patrikerdes.use-latest-versions")
+                id("com.github.ben-manes.versions") version "$CurrentVersions.VERSIONS"
             }
-
-            apply plugin: 'java'
             
             repositories {
                 mavenCentral()
             }
             
             dependencies {
-                testCompile 'junit:junit:4.0'
+                testCompile("junit:junit:4.0")
             }
         """
 
@@ -116,8 +118,5 @@ class VersionsIntegrationFunctionalTest extends BaseFunctionalTest {
         '0.17.0'        | '4.6'
         '0.16.0'        | '4.2.1'
         '0.15.0'        | '4.2.1'
-        '0.14.0'        | '3.4'
-        '0.13.0'        | '3.4'
-        '0.12.0'        | '3.4'
     }
 }

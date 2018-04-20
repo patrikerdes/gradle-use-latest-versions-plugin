@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/patrikerdes/gradle-use-latest-versions-plugin.svg?branch=master)](https://travis-ci.org/patrikerdes/gradle-use-latest-versions-plugin)
 
-A Gradle plugin that updates module and plugin versions in your *.gradle files to the latest available versions.
+A Gradle plugin that updates module and plugin versions in your *.gradle or *.gradle.kts files to the latest available versions.
 
 This plugin depends on the [Gradle Versions Plugin](https://github.com/ben-manes/gradle-versions-plugin).
 
@@ -10,9 +10,11 @@ This plugin depends on the [Gradle Versions Plugin](https://github.com/ben-manes
 
 Apply this plugin and the [Gradle Versions Plugin](https://github.com/ben-manes/gradle-versions-plugin).
 
+Include in your `build.gradle`
+
 ```groovy
 plugins {
-  id 'se.patrikerdes.use-latest-versions' version '0.2.0'
+  id 'se.patrikerdes.use-latest-versions' version '0.2.1'
   id 'com.github.ben-manes.versions' version '0.17.0'
 }
 ```
@@ -35,6 +37,39 @@ buildscript {
 
 apply plugin: 'com.github.ben-manes.versions'
 apply plugin: 'se.patrikerdes.use-latest-versions'
+
+```
+
+### Usage for Gradle Kotlin DSL
+
+Include in your `build.gradle.kts`
+```groovy
+plugins {
+  id("se.patrikerdes.use-latest-versions") version "0.2.0"
+  id("com.github.ben-manes.versions") version "0.17.0"
+}
+```
+
+or 
+
+```groovy
+buildscript {
+    repositories {
+        maven {
+            maven { url = uri("https://plugins.gradle.org/m2/") }
+        }
+        jcenter()
+    }
+    dependencies {
+        classpath("gradle.plugin.se.patrikerdes:gradle-use-latest-versions-plugin:0.2.1")
+        classpath("com.github.ben-manes:gradle-versions-plugin:0.17.0")
+    }
+}
+
+apply {
+    plugin("com.github.ben-manes.versions")
+    plugin("se.patrikerdes.use-latest-versions")
+}
 
 ```
 
@@ -216,6 +251,29 @@ dependencies {
 **Gradle version:** 2.8 - 4.6 (Updating plugin dependencies only work in 4.4 - 4.6)<br/>
 **Versions Plugin version:** 0.12.0 - 0.17.0<br/>
 **JDK version:** 7 - 9 (7 is targeted but not tested)
+
+## Instructions for building this plugin from source
+* Clone or download this project.
+* Open the project, for example in IntelliJ open the `build.gradle` file.
+* You can build the jar with the Gradle `assemble` task, it will be in `build/libs/`.
+* If you want to use the plugin locally, first publish to your local Maven repository with the Gradle `publishToMavenLocal` task.
+* To use it in a different project, add to your `build.gradle` file
+
+```groovy
+buildscript {
+    repositories {
+        mavenLocal()
+    }
+    dependencies{
+        classpath group: 'se.patrikerdes',
+				name: 'gradle-use-latest-versions-plugin',
+				version: '0.2.1'
+    }
+}
+
+apply plugin: se.patrikerdes.UseLatestVersionsPlugin
+
+```
 
 ## FAQ
 
