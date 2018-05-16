@@ -11,7 +11,7 @@ buildscript {
         mavenLocal()
     }
     dependencies {
-        classpath 'se.patrikerdes:gradle-use-latest-versions-plugin:0.2.1'
+        classpath 'se.patrikerdes:gradle-use-latest-versions-plugin:0.2.2'
     }
 }
 

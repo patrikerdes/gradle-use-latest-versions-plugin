@@ -14,7 +14,7 @@ Include in your `build.gradle`
 
 ```groovy
 plugins {
-  id 'se.patrikerdes.use-latest-versions' version '0.2.1'
+  id 'se.patrikerdes.use-latest-versions' version '0.2.2'
   id 'com.github.ben-manes.versions' version '0.17.0'
 }
 ```
@@ -30,7 +30,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath "gradle.plugin.se.patrikerdes:gradle-use-latest-versions-plugin:0.2.1"
+        classpath "gradle.plugin.se.patrikerdes:gradle-use-latest-versions-plugin:0.2.2"
         classpath 'com.github.ben-manes:gradle-versions-plugin:0.17.0'
     }
 }
@@ -45,7 +45,7 @@ apply plugin: 'se.patrikerdes.use-latest-versions'
 Include in your `build.gradle.kts`
 ```groovy
 plugins {
-  id("se.patrikerdes.use-latest-versions") version "0.2.1"
+  id("se.patrikerdes.use-latest-versions") version "0.2.2"
   id("com.github.ben-manes.versions") version "0.17.0"
 }
 ```
@@ -61,7 +61,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath("gradle.plugin.se.patrikerdes:gradle-use-latest-versions-plugin:0.2.1")
+        classpath("gradle.plugin.se.patrikerdes:gradle-use-latest-versions-plugin:0.2.2")
         classpath("com.github.ben-manes:gradle-versions-plugin:0.17.0")
     }
 }
@@ -79,7 +79,7 @@ Given this build.gradle file:
 
 ```groovy
 plugins {
-    id 'se.patrikerdes.use-latest-versions' version '0.2.1'
+    id 'se.patrikerdes.use-latest-versions' version '0.2.2'
     id 'com.github.ben-manes.versions' version '0.16.0'
 }
 
@@ -113,7 +113,7 @@ variables – and you build.gradle file will look like this:
 
 ```groovy
 plugins {
-    id 'se.patrikerdes.use-latest-versions' version '0.2.1'
+    id 'se.patrikerdes.use-latest-versions' version '0.2.2'
     id 'com.github.ben-manes.versions' version '0.17.0' // <- Updated
 }
 
@@ -267,7 +267,7 @@ buildscript {
     dependencies{
         classpath group: 'se.patrikerdes',
 				name: 'gradle-use-latest-versions-plugin',
-				version: '0.2.1'
+				version: '0.2.2'
     }
 }
 
@@ -286,3 +286,13 @@ The Versions plugin can be configured to achieve this, it is documented in
 
 From the [Maven Versions Plugin](http://www.mojohaus.org/versions-maven-plugin/index.html) goal called
 [use-latest-versions](http://www.mojohaus.org/versions-maven-plugin/use-latest-versions-mojo.html)
+
+## Changelog
+
+### 0.2.2
+
+Fixed [issue 2](https://github.com/patrikerdes/gradle-use-latest-versions-plugin/issues/2), Hardcoded Milestone Usage.
+
+### 0.2.1
+
+Added support for Gradle Kotlin DSL build files. ([Thomas Schouten](https://github.com/PHPirates))
