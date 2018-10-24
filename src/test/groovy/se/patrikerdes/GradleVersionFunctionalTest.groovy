@@ -56,6 +56,12 @@ class GradleVersionFunctionalTest extends BaseFunctionalTest {
                 '4.4',
                 '4.5',
                 '4.6',
+                '4.7',
+                '4.8',
+                '4.8.1',
+                '4.9',
+                '4.10',
+                '4.10.1',
         ]
     }
 }

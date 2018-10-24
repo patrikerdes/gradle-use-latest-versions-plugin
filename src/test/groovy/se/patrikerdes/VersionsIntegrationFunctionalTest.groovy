@@ -113,6 +113,9 @@ class VersionsIntegrationFunctionalTest extends BaseFunctionalTest {
 
         where:
         versionsVersion | gradleVersion
+        '0.20.0'        | '4.9'
+        '0.19.0'        | '4.8'
+        '0.18.0'        | '4.7'
         '0.17.0'        | '4.6'
         '0.16.0'        | '4.2.1'
         '0.15.0'        | '4.2.1'
