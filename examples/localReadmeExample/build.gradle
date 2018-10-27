@@ -31,7 +31,7 @@ ext.codecVersion = '1.9'
 def commonsLoggingVersion = "1.1.2"
 
 dependencies {
-    testCompile 'junit:junit:4.0'
+    testCompile "junit:junit:$junitVersion"
     compile "log4j:log4j:$log4jversion"
     compile "commons-codec:commons-codec:" + codecVersion
     compile group: 'commons-lang', name: 'commons-lang', version: '2.4'

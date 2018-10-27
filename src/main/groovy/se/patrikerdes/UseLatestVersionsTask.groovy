@@ -40,9 +40,8 @@ class UseLatestVersionsTask extends DefaultTask {
 
         List<String> dotGradleFileNames =
                 new FileNameFinder().getFileNames(project.rootDir.absolutePath, '**/*.gradle')
-
-        // Also add Gradle Kotlin DSL files.
         dotGradleFileNames += new FileNameFinder().getFileNames(project.rootDir.absolutePath, '**/*.gradle.kts')
+        dotGradleFileNames += new FileNameFinder().getFileNames(project.rootDir.absolutePath, '**/gradle.properties')
 
         Object dependencyUpdatesJson = new JsonSlurper().parse(dependencyUpdatesJsonReportFile)
 
@@ -130,7 +129,7 @@ class UseLatestVersionsTask extends DefaultTask {
         for (String dotGradleFileName in dotGradleFileNames) {
             for (variableName in versionVariables.keySet()) {
                 Matcher variableDefinitionMatch = gradleFileContents[dotGradleFileName] =~
-                        variableDefinitionMatchString(variableName)
+                        variableDefinitionMatchStringForFileName(variableName, dotGradleFileName)
                 if (variableDefinitionMatch.size() == 1) {
                     if (variableDefinitions.contains(variableName)) {
                         // The variable is assigned to in more than one file
@@ -158,10 +157,17 @@ class UseLatestVersionsTask extends DefaultTask {
             for (versionVariable in versionVariables) {
                 gradleFileContents[dotGradleFileName] =
                         gradleFileContents[dotGradleFileName].replaceAll(
-                                variableDefinitionMatchString(versionVariable.key),
+                                variableDefinitionMatchStringForFileName(versionVariable.key, dotGradleFileName),
                                 newVariableDefinitionString(versionVariable.value))
             }
         }
+    }
+
+    String variableDefinitionMatchStringForFileName(String variable, String fileName) {
+        if (fileName.split(File.separator).last() == 'gradle.properties') {
+            gradlePropertiesVariableDefinitionMatchString(variable)
+        }
+        variableDefinitionMatchString(variable)
     }
 
     void saveDependencyUpdatesReport(File dependencyUpdatesJsonReportFile) {
