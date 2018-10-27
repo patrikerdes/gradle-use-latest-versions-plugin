@@ -1,5 +1,5 @@
 plugins {
-    id "com.gradle.plugin-publish" version "0.9.10"
+    id "com.gradle.plugin-publish" version "0.10.0"
 }
 
 apply plugin: 'groovy'
@@ -18,7 +18,7 @@ dependencies {
 }
 
 group = 'se.patrikerdes'
-version = '0.2.3'
+version = '0.2.4'
 
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
