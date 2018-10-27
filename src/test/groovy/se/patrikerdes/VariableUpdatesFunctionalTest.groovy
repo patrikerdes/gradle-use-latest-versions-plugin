@@ -61,6 +61,64 @@ class VariableUpdatesFunctionalTest extends BaseFunctionalTest {
         updatedBuildFile.contains("junit_version = \"$CurrentVersions.JUNIT\"")
     }
 
+    void "an outdated module dependency based on a variable can be updated, no spacing around the ="() {
+        given:
+        buildFile << """
+            plugins {
+                id 'se.patrikerdes.use-latest-versions'
+                id 'com.github.ben-manes.versions' version '$CurrentVersions.VERSIONS'
+            }
+
+            apply plugin: 'java'
+            
+            repositories {
+                mavenCentral()
+            }
+            
+            def junit_version='4.0'
+            
+            dependencies {
+                testCompile "junit:junit:\$junit_version"
+            }
+        """
+
+        when:
+        useLatestVersions()
+        String updatedBuildFile = buildFile.getText('UTF-8')
+
+        then:
+        updatedBuildFile.contains("junit_version='$CurrentVersions.JUNIT'")
+    }
+
+    void "an outdated module dependency based on a variable can be updated, tabs around the ="() {
+        given:
+        buildFile << """
+            plugins {
+                id 'se.patrikerdes.use-latest-versions'
+                id 'com.github.ben-manes.versions' version '$CurrentVersions.VERSIONS'
+            }
+
+            apply plugin: 'java'
+            
+            repositories {
+                mavenCentral()
+            }
+            
+            def junit_version\t=\t'4.0'
+            
+            dependencies {
+                testCompile "junit:junit:\$junit_version"
+            }
+        """
+
+        when:
+        useLatestVersions()
+        String updatedBuildFile = buildFile.getText('UTF-8')
+
+        then:
+        updatedBuildFile.contains("junit_version\t=\t'$CurrentVersions.JUNIT'")
+    }
+
     void "an outdated module dependency based on a variable can be updated, plus"() {
         given:
         buildFile << """

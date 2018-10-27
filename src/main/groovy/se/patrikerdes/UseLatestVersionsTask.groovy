@@ -21,7 +21,11 @@ class UseLatestVersionsTask extends DefaultTask {
     }
 
     String variableDefinitionMatchString(String variable) {
-        '(' + variable + "[ \\t]+=[ \t]*?[\"'])(.*)([\"'])"
+        '(' + variable + "[ \t]*=[ \t]*[\"'])(.*)([\"'])"
+    }
+
+    String gradlePropertiesVariableDefinitionMatchString(String variable) {
+        '(' + variable + "[ \t]*=[ \t]*)(.*)([ \t]*\$)"
     }
 
     String newVariableDefinitionString(String newVersion) {
