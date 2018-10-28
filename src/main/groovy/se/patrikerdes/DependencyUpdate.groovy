@@ -30,8 +30,8 @@ class DependencyUpdate {
         '$1' + this.newVersion + '$2'
     }
     String variableUseStringFormatInterpolationMatchString() {
-        // Capture variables starting with $, but not expresions starting with ${
-        "[\"']" + this.group + ':' + this.name + ":[\$]([^{].*?)[\"']"
+        // Capture variables of type $var and ${var}
+        "[\"']" + this.group + ':' + this.name + ":[\$]\\{?([^{}].*?)\\}?[\"']"
     }
     String variableUseStringFormatPlusMatchString() {
         "[\"']" + this.group + ':' + this.name +

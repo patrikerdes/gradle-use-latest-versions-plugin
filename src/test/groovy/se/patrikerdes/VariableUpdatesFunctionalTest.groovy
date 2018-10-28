@@ -206,8 +206,7 @@ class VariableUpdatesFunctionalTest extends BaseFunctionalTest {
         updatedBuildFile.contains("ext.junit_version = '$CurrentVersions.JUNIT'")
     }
 
-    // It might make sense to update these expressions as well, but this is the current behavior
-    void "an expression with \${x} won't be updated"() {
+    void "an expression with \${x} will be updated"() {
         given:
         buildFile << """
             plugins {
@@ -221,11 +220,10 @@ class VariableUpdatesFunctionalTest extends BaseFunctionalTest {
                 mavenCentral()
             }
             
-            def commons = "1.0"
+            def junit_version = '4.0'
             
             dependencies {
-                compile "commons-lang:commons-lang:\${commons}"
-                compile "commons-logging:commons-logging:\${"1.0"}"
+                testCompile "junit:junit:\${junit_version}"
             }
         """
 
@@ -234,9 +232,7 @@ class VariableUpdatesFunctionalTest extends BaseFunctionalTest {
         String updatedBuildFile = buildFile.getText('UTF-8')
 
         then:
-        updatedBuildFile.contains('commons = "1.0"')
-        updatedBuildFile.contains('${commons}')
-        updatedBuildFile.contains('${"1.0"}')
+        updatedBuildFile.contains("junit_version = '$CurrentVersions.JUNIT'")
     }
 
     void "a variable used for multiple dependencies with different latest versions won't be updated"() {
