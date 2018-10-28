@@ -15,7 +15,7 @@ Include in your `build.gradle`
 ```groovy
 plugins {
   id 'se.patrikerdes.use-latest-versions' version '0.2.5'
-  id 'com.github.ben-manes.versions' version '0.17.0'
+  id 'com.github.ben-manes.versions' version '0.20.0'
 }
 ```
 
@@ -31,7 +31,7 @@ buildscript {
     }
     dependencies {
         classpath "gradle.plugin.se.patrikerdes:gradle-use-latest-versions-plugin:0.2.5"
-        classpath 'com.github.ben-manes:gradle-versions-plugin:0.17.0'
+        classpath 'com.github.ben-manes:gradle-versions-plugin:0.20.0'
     }
 }
 
@@ -46,7 +46,7 @@ Include in your `build.gradle.kts`
 ```groovy
 plugins {
   id("se.patrikerdes.use-latest-versions") version "0.2.5"
-  id("com.github.ben-manes.versions") version "0.17.0"
+  id("com.github.ben-manes.versions") version "0.20.0"
 }
 ```
 
@@ -62,7 +62,7 @@ buildscript {
     }
     dependencies {
         classpath("gradle.plugin.se.patrikerdes:gradle-use-latest-versions-plugin:0.2.5")
-        classpath("com.github.ben-manes:gradle-versions-plugin:0.17.0")
+        classpath("com.github.ben-manes:gradle-versions-plugin:0.20.0")
     }
 }
 
@@ -80,7 +80,7 @@ Given this build.gradle file:
 ```groovy
 plugins {
     id 'se.patrikerdes.use-latest-versions' version '0.2.5'
-    id 'com.github.ben-manes.versions' version '0.16.0'
+    id 'com.github.ben-manes.versions' version '0.19.0'
 }
 
 apply plugin: 'java'
@@ -114,7 +114,7 @@ variables – and you build.gradle file will look like this:
 ```groovy
 plugins {
     id 'se.patrikerdes.use-latest-versions' version '0.2.5'
-    id 'com.github.ben-manes.versions' version '0.17.0' // <- Updated
+    id 'com.github.ben-manes.versions' version '0.20.0' // <- Updated
 }
 
 apply plugin: 'java'
@@ -172,7 +172,7 @@ Single and double quotes are interchangeable in all formats below.
 
 ### Plugin dependencies
 
-*Plugin dependencies can only be updated in Gradle 4.4 - 4.6.*
+*Plugin dependencies can only be updated in Gradle 4.4+.*
 
 The plugins DSL only allows a
 [strict format](https://docs.gradle.org/current/userguide/plugins.html#sec:constrained_syntax), e.g. only string
@@ -222,7 +222,7 @@ dependencies {
 def junit_version = '4.0'
 
 dependencies {
-    testCompile "junit:junit:$junit_version"
+    testCompile "junit:junit:${junit_version}"
 }
 ```
 
@@ -248,9 +248,9 @@ dependencies {
 
 ## Compatibility
 
-**Gradle version:** 2.8 - 4.6 (Updating plugin dependencies only work in 4.4 - 4.6)<br/>
-**Versions Plugin version:** 0.12.0 - 0.17.0<br/>
-**JDK version:** 7 - 9 (7 is targeted but not tested)
+**Gradle version:** 2.8 - 4.10.2 (Updating plugin dependencies only work in 4.4+)<br/>
+**Versions Plugin version:** 0.12.0 - 0.20.0<br/>
+**JDK version:** 7 - 11 (7 is targeted but not tested, 11 is currently not tested but is known to work)
 
 ## Instructions for building this plugin from source
 * Clone or download this project.
