@@ -25,7 +25,7 @@ class UseLatestVersionsTask extends DefaultTask {
     }
 
     String gradlePropertiesVariableDefinitionMatchString(String variable) {
-        '(' + variable + "[ \t]*=[ \t]*)(.*)([ \t]*\$)"
+        '(' + variable + "[ \t]*=[ \t]*[\"']?)(.*?)([\"']?[ \t]*\$)"
     }
 
     String newVariableDefinitionString(String newVersion) {
@@ -165,7 +165,7 @@ class UseLatestVersionsTask extends DefaultTask {
 
     String variableDefinitionMatchStringForFileName(String variable, String fileName) {
         if (fileName.split(File.separator).last() == 'gradle.properties') {
-            gradlePropertiesVariableDefinitionMatchString(variable)
+            return gradlePropertiesVariableDefinitionMatchString(variable)
         }
         variableDefinitionMatchString(variable)
     }
