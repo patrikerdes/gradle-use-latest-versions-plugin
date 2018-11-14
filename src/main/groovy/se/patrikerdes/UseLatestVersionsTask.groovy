@@ -115,6 +115,11 @@ class UseLatestVersionsTask extends DefaultTask {
                 variableMatch = gradleFileContents[dotGradleFileName] =~
                         update.variableUseMapFormatMatchString()
                 getVariablesFromMatches(variableMatch, versionVariables, update, problemVariables)
+
+                // Variable in dependencySet format
+                variableMatch = gradleFileContents[dotGradleFileName] =~
+                        update.variableInDependencySetString()
+                getVariablesFromMatches(variableMatch, versionVariables, update, problemVariables)
             }
         }
 
