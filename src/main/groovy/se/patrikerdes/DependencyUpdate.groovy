@@ -17,7 +17,7 @@ class DependencyUpdate {
         this.newVersion = newVersion
     }
     String oldModuleVersionStringFormatMatchString() {
-        "([\"']" + this.group + ':' + this.name + ":)[^\$].*?([\"'])"
+        "([\"']" + this.group + ':' + this.name + ":)[^:\"']*([^\"']*[\"'])"
     }
     String oldModuleVersionMapFormatMatchString() {
         "(group[ \\t]*:[ \\t]*[\"']" + this.group + "[\"'][ \\t]*,[ \\t]*name[ \\t]*:[ \\t]*[\"']" + this.name +
