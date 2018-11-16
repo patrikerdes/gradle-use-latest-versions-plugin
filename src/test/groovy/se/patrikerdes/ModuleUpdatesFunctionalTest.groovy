@@ -172,4 +172,44 @@ class ModuleUpdatesFunctionalTest extends BaseFunctionalTest {
         updatedBuildFile.contains('junit:junit:4.12')
         updatedSecondFile.contains("log4j:log4j:$CurrentVersions.LOG4J")
     }
+
+
+    void "spring gradle dependency management plugin annotation with variable"() {
+        given:
+        buildFile << """
+            plugins {
+                id 'se.patrikerdes.use-latest-versions'
+                id 'com.github.ben-manes.versions' version '$CurrentVersions.VERSIONS'
+                id "io.spring.dependency-management" version "1.0.6.RELEASE"
+            }
+
+            apply plugin: 'java'
+            
+            repositories {
+                mavenCentral()
+            }
+            
+            dependencyManagement {
+                dependencies {
+                    dependency "junit:junit:4.0"
+                    dependencySet(group: 'log4j', version: "1.2.16") {
+                        entry 'log4j'
+                    }
+                }
+            }
+            
+            dependencies {
+                testCompile "junit:junit"
+                compile "log4j:log4j"
+            }
+        """
+
+        when:
+        useLatestVersions()
+        String updatedBuildFile = buildFile.getText('UTF-8')
+
+        then:
+        updatedBuildFile.contains("dependency \"junit:junit:$CurrentVersions.JUNIT\"")
+        updatedBuildFile.contains("dependencySet(group: 'log4j', version: \"$CurrentVersions.LOG4J\")")
+    }
 }

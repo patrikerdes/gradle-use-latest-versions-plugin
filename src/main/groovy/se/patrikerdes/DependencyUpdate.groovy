@@ -23,6 +23,10 @@ class DependencyUpdate {
         "(group[ \\t]*:[ \\t]*[\"']" + this.group + "[\"'][ \\t]*,[ \\t]*name[ \\t]*:[ \\t]*[\"']" + this.name +
                 "[\"'][ \\t]*,[ \\t]*version[ \\t]*:[ \\t]*[\"']).*?([\"'])"
     }
+    String oldModuleVersionDependencySetString() {
+        "(dependencySet\\s*\\(\\s*group\\s*:\\s*[\"']" + this.group +
+                "[\"']\\s*,\\s*version\\s*:\\s*[\"'])[^\\s\"']+?([\"'][\\s)]\\s*\\{[^}]*entry\\s*[\"']" + this.name + "[\"'])"
+    }
     String oldPluginVersionMatchString() {
         "(id[ \\t\\(]+[\"']" + this.group + "[\"'][ \\t\\)]+version[ \\t]+[\"'])" + this.oldVersion + "([\"'])"
     }
