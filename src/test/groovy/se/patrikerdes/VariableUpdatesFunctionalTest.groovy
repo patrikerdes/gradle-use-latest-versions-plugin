@@ -366,4 +366,55 @@ class VariableUpdatesFunctionalTest extends BaseFunctionalTest {
         !updatedSecondFile.contains("junit_version = '$CurrentVersions.JUNIT'")
         result.output.contains('A problem was detected')
     }
+
+    void "spring gradle dependency management plugin annotation"() {
+        given:
+        buildFile << """
+            plugins {
+                id 'se.patrikerdes.use-latest-versions'
+                id 'com.github.ben-manes.versions' version '$CurrentVersions.VERSIONS'
+                id "io.spring.dependency-management" version "1.0.6.RELEASE"
+            }
+
+            apply plugin: 'java'
+            
+            repositories {
+                mavenCentral()
+            }
+            
+            def junit_version = '4.0'
+            def log4j_version = '1.2.16'
+            
+            dependencyManagement {
+                dependencies {
+                    dependency "junit:junit:\$junit_version"
+                    dependencySet(group: 'log4j', version: log4j_version) {
+                        entry 'log4j'
+                    }
+                }
+            }
+            
+            dependencies {
+                testCompile "junit:junit"
+                compile "log4j:log4j"
+            }
+        """
+
+        when:
+        useLatestVersions()
+        String updatedBuildFile = buildFile.getText('UTF-8')
+
+        then:
+        updatedBuildFile.contains("def junit_version = '$CurrentVersions.JUNIT'")
+        updatedBuildFile.contains("def log4j_version = '$CurrentVersions.LOG4J'")
+        updatedBuildFile.contains("""
+            dependencyManagement {
+                dependencies {
+                    dependency "junit:junit:\$junit_version"
+                    dependencySet(group: 'log4j', version: log4j_version) {
+                        entry 'log4j'
+                    }
+                }
+            }""")
+    }
 }

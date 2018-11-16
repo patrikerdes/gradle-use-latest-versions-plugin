@@ -78,6 +78,11 @@ class UseLatestVersionsTask extends DefaultTask {
                 gradleFileContents[dotGradleFileName] =
                         gradleFileContents[dotGradleFileName].replaceAll(
                                 update.oldModuleVersionMapFormatMatchString(), update.newVersionString())
+
+                // dependencySet notation
+                gradleFileContents[dotGradleFileName] =
+                        gradleFileContents[dotGradleFileName].replaceAll(
+                                update.oldModuleVersionDependencySetString(), update.newVersionString())
             }
         }
     }
