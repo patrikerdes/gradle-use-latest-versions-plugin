@@ -173,7 +173,6 @@ class ModuleUpdatesFunctionalTest extends BaseFunctionalTest {
         updatedSecondFile.contains("log4j:log4j:$CurrentVersions.LOG4J")
     }
 
-
     void "spring gradle dependency management plugin annotation with variable"() {
         given:
         buildFile << """

@@ -25,7 +25,8 @@ class DependencyUpdate {
     }
     String oldModuleVersionDependencySetString() {
         "(dependencySet\\s*\\(\\s*group\\s*:\\s*[\"']" + this.group +
-                "[\"']\\s*,\\s*version\\s*:\\s*[\"'])[^\\s\"']+?([\"'][\\s)]\\s*\\{[^}]*entry\\s*[\"']" + this.name + "[\"'])"
+                "[\"']\\s*,\\s*version\\s*:\\s*[\"'])[^\\s\"']+?([\"'][\\s)]\\s*\\{[^}]*entry\\s*[\"']" +
+                this.name + "[\"'])"
     }
     String oldPluginVersionMatchString() {
         "(id[ \\t\\(]+[\"']" + this.group + "[\"'][ \\t\\)]+version[ \\t]+[\"'])" + this.oldVersion + "([\"'])"
