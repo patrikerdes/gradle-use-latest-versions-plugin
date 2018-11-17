@@ -1,6 +1,5 @@
 plugins {
     id "com.gradle.plugin-publish" version "0.10.0"
-    id "com.palantir.idea-test-fix" version "0.1.0"
 }
 
 apply plugin: 'groovy'
@@ -19,7 +18,7 @@ dependencies {
 }
 
 group = 'se.patrikerdes'
-version = '0.2.6.1'
+version = '0.2.6'
 
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
