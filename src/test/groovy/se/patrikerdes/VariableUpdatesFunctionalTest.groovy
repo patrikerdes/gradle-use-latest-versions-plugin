@@ -366,4 +366,38 @@ class VariableUpdatesFunctionalTest extends BaseFunctionalTest {
         !updatedSecondFile.contains("junit_version = '$CurrentVersions.JUNIT'")
         result.output.contains('A problem was detected')
     }
+
+    void "a variable assigned in gradle properties will be updated"() {
+        given:
+        buildFile << """
+            plugins {
+                id 'se.patrikerdes.use-latest-versions'
+                id 'com.github.ben-manes.versions' version '$CurrentVersions.VERSIONS'
+            }
+
+            apply plugin: 'java'
+
+            repositories {
+                mavenCentral()
+            }
+
+            dependencies {
+                testCompile "junit:junit:\$junit_version"
+                compile "log4j:log4j:\$log4j_version"
+            }
+        """
+        File gradlePropertiesFile = testProjectDir.newFile('gradle.properties')
+        gradlePropertiesFile << '''
+            junit_version = 4.0
+            log4j_version=1.2.16
+        '''
+
+        when:
+        useLatestVersions()
+        String updatedGradlePropertiesFile = gradlePropertiesFile.getText('UTF-8')
+
+        then:
+        updatedGradlePropertiesFile.contains("junit_version = $CurrentVersions.JUNIT")
+        updatedGradlePropertiesFile.contains("log4j_version=$CurrentVersions.LOG4J")
+    }
 }

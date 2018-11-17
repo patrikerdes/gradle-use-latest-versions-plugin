@@ -25,7 +25,7 @@ class UseLatestVersionsTask extends DefaultTask {
     }
 
     String gradlePropertiesVariableDefinitionMatchString(String variable) {
-        '(' + variable + "[ \t]*=[ \t]*)(.*)([ \t]*)"
+        '(' + variable + '[ \t]*=[ \t]*)(.*)([ \t]*)'
     }
 
     String newVariableDefinitionString(String newVersion) {
