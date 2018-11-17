@@ -78,6 +78,11 @@ class UseLatestVersionsTask extends DefaultTask {
                 gradleFileContents[dotGradleFileName] =
                         gradleFileContents[dotGradleFileName].replaceAll(
                                 update.oldModuleVersionMapFormatMatchString(), update.newVersionString())
+
+                // dependencySet notation
+                gradleFileContents[dotGradleFileName] =
+                        gradleFileContents[dotGradleFileName].replaceAll(
+                                update.oldModuleVersionDependencySetString(), update.newVersionString())
             }
         }
     }
@@ -114,6 +119,11 @@ class UseLatestVersionsTask extends DefaultTask {
                 // Variable in map format
                 variableMatch = gradleFileContents[dotGradleFileName] =~
                         update.variableUseMapFormatMatchString()
+                getVariablesFromMatches(variableMatch, versionVariables, update, problemVariables)
+
+                // Variable in dependencySet format
+                variableMatch = gradleFileContents[dotGradleFileName] =~
+                        update.variableInDependencySetString()
                 getVariablesFromMatches(variableMatch, versionVariables, update, problemVariables)
             }
         }
