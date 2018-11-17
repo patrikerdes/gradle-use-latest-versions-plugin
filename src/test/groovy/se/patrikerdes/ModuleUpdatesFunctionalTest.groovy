@@ -28,7 +28,7 @@ class ModuleUpdatesFunctionalTest extends BaseFunctionalTest {
         updatedBuildFile.contains("junit:junit:$CurrentVersions.JUNIT")
     }
 
-    void "an outdated module dependency with a fixed version can be updated, string notation with classifier and extension"() {
+    void "string notation with classifier and extension"() {
         given:
         buildFile << """
             plugins {
@@ -86,7 +86,7 @@ class ModuleUpdatesFunctionalTest extends BaseFunctionalTest {
         updatedBuildFile.contains("testCompile \"junit:junit:$CurrentVersions.JUNIT:javadoc\"")
     }
 
-    void "an outdated module dependency with a fixed version can be updated, map notation with classifier and extension"() {
+    void "an outdated dependency with a fixed version can be updated, map notation with classifier and extension"() {
         given:
         buildFile << """
             plugins {
@@ -111,7 +111,8 @@ class ModuleUpdatesFunctionalTest extends BaseFunctionalTest {
         String updatedBuildFile = buildFile.getText('UTF-8')
 
         then:
-        updatedBuildFile.contains("testCompile group: 'junit', name: 'junit', version: '$CurrentVersions.JUNIT', classifier: 'javadoc', ext: 'jar'")
+        updatedBuildFile.contains("testCompile group: 'junit', name: 'junit', version: '$CurrentVersions.JUNIT', " +
+                "classifier: 'javadoc', ext: 'jar'")
         updatedBuildFile.contains("compile \"log4j:log4j:$CurrentVersions.LOG4J\"")
     }
 
