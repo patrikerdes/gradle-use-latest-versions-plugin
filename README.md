@@ -14,7 +14,7 @@ Include in your `build.gradle`
 
 ```groovy
 plugins {
-  id 'se.patrikerdes.use-latest-versions' version '0.2.6'
+  id 'se.patrikerdes.use-latest-versions' version '0.2.7'
   id 'com.github.ben-manes.versions' version '0.20.0'
 }
 ```
@@ -30,7 +30,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath "gradle.plugin.se.patrikerdes:gradle-use-latest-versions-plugin:0.2.6"
+        classpath "gradle.plugin.se.patrikerdes:gradle-use-latest-versions-plugin:0.2.7"
         classpath 'com.github.ben-manes:gradle-versions-plugin:0.20.0'
     }
 }
@@ -45,7 +45,7 @@ apply plugin: 'se.patrikerdes.use-latest-versions'
 Include in your `build.gradle.kts`
 ```groovy
 plugins {
-  id("se.patrikerdes.use-latest-versions") version "0.2.6"
+  id("se.patrikerdes.use-latest-versions") version "0.2.7"
   id("com.github.ben-manes.versions") version "0.20.0"
 }
 ```
@@ -61,7 +61,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath("gradle.plugin.se.patrikerdes:gradle-use-latest-versions-plugin:0.2.6")
+        classpath("gradle.plugin.se.patrikerdes:gradle-use-latest-versions-plugin:0.2.7")
         classpath("com.github.ben-manes:gradle-versions-plugin:0.20.0")
     }
 }
@@ -79,7 +79,7 @@ Given this build.gradle file:
 
 ```groovy
 plugins {
-    id 'se.patrikerdes.use-latest-versions' version '0.2.6'
+    id 'se.patrikerdes.use-latest-versions' version '0.2.7'
     id 'com.github.ben-manes.versions' version '0.19.0'
 }
 
@@ -113,7 +113,7 @@ variables – and you build.gradle file will look like this:
 
 ```groovy
 plugins {
-    id 'se.patrikerdes.use-latest-versions' version '0.2.6'
+    id 'se.patrikerdes.use-latest-versions' version '0.2.7'
     id 'com.github.ben-manes.versions' version '0.20.0' // <- Updated
 }
 
@@ -267,7 +267,7 @@ buildscript {
     dependencies{
         classpath group: 'se.patrikerdes',
 				name: 'gradle-use-latest-versions-plugin',
-				version: '0.2.6'
+				version: '0.2.7'
     }
 }
 
@@ -289,6 +289,13 @@ From the [Maven Versions Plugin](http://www.mojohaus.org/versions-maven-plugin/i
 
 ## Changelog
 
+### 0.2.7
+
+Fixed [issue 10](https://github.com/patrikerdes/gradle-use-latest-versions-plugin/issues/10), Multiple versions in gradle.properties ([Balthasar Biedermann](https://github.com/usr42))
+
+[PR #12](https://github.com/patrikerdes/gradle-use-latest-versions-plugin/pull/12), Support dependencySet of Spring Dependency management plugin. ([Balthasar Biedermann](https://github.com/usr42))
+
+[PR #13](https://github.com/patrikerdes/gradle-use-latest-versions-plugin/pull/13), Support classifier and extension in dependencies. ([Balthasar Biedermann](https://github.com/usr42))
 
 ### 0.2.6
 
