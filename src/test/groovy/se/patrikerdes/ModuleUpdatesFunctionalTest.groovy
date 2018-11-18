@@ -28,6 +28,94 @@ class ModuleUpdatesFunctionalTest extends BaseFunctionalTest {
         updatedBuildFile.contains("junit:junit:$CurrentVersions.JUNIT")
     }
 
+    void "string notation with classifier and extension"() {
+        given:
+        buildFile << """
+            plugins {
+                id 'se.patrikerdes.use-latest-versions'
+                id 'com.github.ben-manes.versions' version '$CurrentVersions.VERSIONS'
+            }
+
+            apply plugin: 'java'
+            
+            repositories {
+                mavenCentral()
+            }
+            
+            dependencies {
+                testCompile "junit:junit:4.0:javadoc@jar"
+                compile "log4j:log4j:1.2.16"
+            }
+        """
+
+        when:
+        useLatestVersions()
+        String updatedBuildFile = buildFile.getText('UTF-8')
+
+        then:
+        updatedBuildFile.contains("testCompile \"junit:junit:$CurrentVersions.JUNIT:javadoc@jar\"")
+        updatedBuildFile.contains("compile \"log4j:log4j:$CurrentVersions.LOG4J\"")
+    }
+
+    void "one outdated and one up-to-date module dependency with a fixed version can be updated, string notation"() {
+        given:
+        buildFile << """
+            plugins {
+                id 'se.patrikerdes.use-latest-versions'
+                id 'com.github.ben-manes.versions' version '$CurrentVersions.VERSIONS'
+            }
+
+            apply plugin: 'java'
+            
+            repositories {
+                mavenCentral()
+            }
+            
+            dependencies {
+                compile "log4j:log4j:1.2.16:javadoc"
+                testCompile "junit:junit:$CurrentVersions.JUNIT:javadoc"
+            }
+        """
+
+        when:
+        useLatestVersions()
+        String updatedBuildFile = buildFile.getText('UTF-8')
+
+        then:
+        updatedBuildFile.contains("compile \"log4j:log4j:$CurrentVersions.LOG4J:javadoc\"")
+        updatedBuildFile.contains("testCompile \"junit:junit:$CurrentVersions.JUNIT:javadoc\"")
+    }
+
+    void "an outdated dependency with a fixed version can be updated, map notation with classifier and extension"() {
+        given:
+        buildFile << """
+            plugins {
+                id 'se.patrikerdes.use-latest-versions'
+                id 'com.github.ben-manes.versions' version '$CurrentVersions.VERSIONS'
+            }
+
+            apply plugin: 'java'
+            
+            repositories {
+                mavenCentral()
+            }
+            
+            dependencies {
+                testCompile group: 'junit', name: 'junit', version: '4.0', classifier: 'javadoc', ext: 'jar'
+                compile "log4j:log4j:1.2.16"
+            }
+        """
+
+        when:
+        useLatestVersions()
+        String updatedBuildFile = buildFile.getText('UTF-8')
+
+        then:
+        updatedBuildFile.contains("testCompile group: 'junit', name: 'junit', version: '$CurrentVersions.JUNIT', " +
+                "classifier: 'javadoc', ext: 'jar'")
+        updatedBuildFile.contains("compile \"log4j:log4j:$CurrentVersions.LOG4J\"")
+    }
+
     void "an outdated module dependency with a fixed version can be updated, map notation, single quotes"() {
         given:
         buildFile << """
