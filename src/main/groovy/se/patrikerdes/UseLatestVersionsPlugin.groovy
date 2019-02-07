@@ -7,7 +7,6 @@ import org.gradle.api.Plugin
 @CompileStatic
 class UseLatestVersionsPlugin implements Plugin<Project> {
     void apply(Project project) {
-        System.setProperty('outputFormatter', 'json,xml,plain')
         project.task('useLatestVersions', type: UseLatestVersionsTask, dependsOn: 'dependencyUpdates')
         project.task('useLatestVersionsCheck', type: UseLatestVersionsCheckTask, dependsOn: 'dependencyUpdates')
     }
