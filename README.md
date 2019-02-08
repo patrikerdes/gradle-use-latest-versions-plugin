@@ -6,6 +6,8 @@ A Gradle plugin that updates module and plugin versions in your *.gradle or *.gr
 
 This plugin depends on the [Gradle Versions Plugin](https://github.com/ben-manes/gradle-versions-plugin).
 
+Maintainer: Patrik Erdes
+
 ## Usage
 
 Apply this plugin and the [Gradle Versions Plugin](https://github.com/ben-manes/gradle-versions-plugin).
