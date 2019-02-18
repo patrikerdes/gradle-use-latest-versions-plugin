@@ -175,7 +175,8 @@ class UseLatestVersionsTask extends DefaultTask {
     }
 
     String variableDefinitionMatchStringForFileName(String variable, String fileName) {
-        if (fileName.split(File.separator).last() == 'gradle.properties') {
+        String splitter = File.separator.replace('\\', '\\\\')
+        if (fileName.split(splitter).last() == 'gradle.properties') {
             return gradlePropertiesVariableDefinitionMatchString(variable)
         }
         variableDefinitionMatchString(variable)

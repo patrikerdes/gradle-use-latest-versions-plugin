@@ -54,7 +54,7 @@ class KotlinModuleUpdatesFunctionalTest extends KotlinBaseFunctionalTest {
         String updatedBuildFile = buildFile.getText('UTF-8')
 
         then:
-        updatedBuildFile.contains("junit:junit:${CurrentVersions.JUNIT}")
+        updatedBuildFile.contains("junit:junit:$CurrentVersions.JUNIT")
     }
 
     void "a module dependency without a fixed version which is up to date is not updated"() {
