@@ -32,7 +32,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath "gradle.plugin.se.patrikerdes:gradle-use-latest-versions-plugin:0.2.7"
+        classpath "se.patrikerdes:gradle-use-latest-versions-plugin:0.2.7"
         classpath 'com.github.ben-manes:gradle-versions-plugin:0.20.0'
     }
 }
