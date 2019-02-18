@@ -42,6 +42,7 @@ class UseLatestVersionsTask extends DefaultTask {
                 new FileNameFinder().getFileNames(project.rootDir.absolutePath, '**/*.gradle')
         dotGradleFileNames += new FileNameFinder().getFileNames(project.rootDir.absolutePath, '**/*.gradle.kts')
         dotGradleFileNames += new FileNameFinder().getFileNames(project.rootDir.absolutePath, '**/gradle.properties')
+        dotGradleFileNames += new FileNameFinder().getFileNames(project.rootDir.absolutePath, 'buildSrc/**/*.kt')
 
         Object dependencyUpdatesJson = new JsonSlurper().parse(dependencyUpdatesJsonReportFile)
 

@@ -83,4 +83,49 @@ class KotlinModuleUpdatesFunctionalTest extends KotlinBaseFunctionalTest {
         then:
         updatedBuildFile.contains('junit:junit:4+')
     }
+
+    void "a variable assigned in a kt file within buildSrc will be updated"() {
+        given:
+        buildFile << """
+            plugins {
+                application
+                java
+                id("se.patrikerdes.use-latest-versions")
+                id("com.github.ben-manes.versions") version "$CurrentVersions.VERSIONS"
+            }
+
+            repositories {
+                mavenCentral()
+            }
+
+            dependencies {
+                testCompile("junit:junit:\$junit_version")
+                compile("log4j:log4j:\$log4j_version")
+            }
+        """
+        testProjectDir.newFolder('buildSrc', 'src', 'main', 'kotlin')
+        File buildSrcBuildGradleFile = testProjectDir.newFile('buildSrc/build.gradle.kts')
+        buildSrcBuildGradleFile << '''
+            plugins {
+                id("org.gradle.kotlin.kotlin-dsl.base") version "1.1.3"
+            }
+            
+            repositories {
+                jcenter()
+            }
+        '''
+        File kotlinVersionsFile = testProjectDir.newFile('buildSrc/src/main/kotlin/versions.kt')
+        kotlinVersionsFile << '''
+            const val junit_version = "4.0"
+            const val log4j_version="1.2.16"
+        '''
+
+        when:
+        useLatestVersions()
+        String updatedKotlinVersionsFile = kotlinVersionsFile.getText('UTF-8')
+
+        then:
+        updatedKotlinVersionsFile.contains("junit_version = \"$CurrentVersions.JUNIT\"")
+        updatedKotlinVersionsFile.contains("log4j_version=\"$CurrentVersions.LOG4J\"")
+    }
 }
