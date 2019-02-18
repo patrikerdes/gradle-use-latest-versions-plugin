@@ -194,7 +194,7 @@ class ModuleUpdatesFunctionalTest extends BaseFunctionalTest {
         String updatedBuildFile = buildFile.getText('UTF-8')
 
         then:
-        updatedBuildFile.contains('junit:junit:4.12')
+        updatedBuildFile.contains("junit:junit:$CurrentVersions.JUNIT")
     }
 
     void "a module dependency without a fixed version which is up to date is not updated"() {
@@ -257,7 +257,7 @@ class ModuleUpdatesFunctionalTest extends BaseFunctionalTest {
         String updatedSecondFile = secondFile.getText('UTF-8')
 
         then:
-        updatedBuildFile.contains('junit:junit:4.12')
+        updatedBuildFile.contains("junit:junit:$CurrentVersions.JUNIT")
         updatedSecondFile.contains("log4j:log4j:$CurrentVersions.LOG4J")
     }
 
