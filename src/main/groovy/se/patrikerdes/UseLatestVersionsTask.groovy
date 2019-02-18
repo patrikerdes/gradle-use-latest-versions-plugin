@@ -131,6 +131,11 @@ class UseLatestVersionsTask extends DefaultTask {
                 variableMatch = gradleFileContents[dotGradleFileName] =~
                         update.variableInDependencySetString()
                 getVariablesFromMatches(variableMatch, versionVariables, update, problemVariables)
+
+                // Variable in Kotlin notation
+                variableMatch = gradleFileContents[dotGradleFileName] =~
+                        update.variableKotlinUnnamedParametersMatchString()
+                getVariablesFromMatches(variableMatch, versionVariables, update, problemVariables)
             }
         }
 

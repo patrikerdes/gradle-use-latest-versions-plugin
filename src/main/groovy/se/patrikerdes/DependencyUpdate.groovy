@@ -39,7 +39,7 @@ class DependencyUpdate {
                 'testCompile|testCompileClasspath|testCompileOnly|testCompileOnlyDependenciesMetadata|' +
                 'testImplementation|testImplementationDependenciesMetadata|testKotlinScriptDef|' +
                 'testKotlinScriptDefExtensions|testRuntime|testRuntimeClasspath|testRuntimeOnlyDependenciesMetadata)' +
-                "\\s*\\(\\s*\"${this.group}\"\\s*,\\s*\"${this.name}\"\\s*,\\s*\")${this.oldVersion}*(\"\\s*\\))"
+                "\\s*\\(\\s*\"${this.group}\"\\s*,\\s*\"${this.name}\"\\s*,\\s*\")${this.oldVersion}(\"\\s*\\))"
     }
     String newVersionString() {
         '$1' + this.newVersion + '$2'
@@ -59,6 +59,16 @@ class DependencyUpdate {
     String variableInDependencySetString() {
         "dependencySet\\s*\\(\\s*group\\s*:\\s*[\"']" + this.group +
                 "[\"']\\s*,\\s*version\\s*:\\s*([^\\s\"']+?)[\\s)]\\s*\\{[^}]*entry\\s*[\"']" + this.name + "[\"']"
+    }
+    String variableKotlinUnnamedParametersMatchString() {
+        '(?:testRuntimeOnly|implementation|annotationProcessor|api|apiDependenciesMetadata|apiElements|compile|' +
+                'compileClasspath|compileOnly|compileOnlyDependenciesMetadata|implementation|' +
+                'implementationDependenciesMetadata|runtime|runtimeClasspath|runtimeElements|runtimeOnly|' +
+                'runtimeOnlyDependenciesMetadata|testAnnotationProcessor|testApi|testApiDependenciesMetadata|' +
+                'testCompile|testCompileClasspath|testCompileOnly|testCompileOnlyDependenciesMetadata|' +
+                'testImplementation|testImplementationDependenciesMetadata|testKotlinScriptDef|' +
+                'testKotlinScriptDefExtensions|testRuntime|testRuntimeClasspath|testRuntimeOnlyDependenciesMetadata)' +
+                "\\s*\\(\\s*\"${this.group}\"\\s*,\\s*\"${this.name}\"\\s*,\\s*([^\\s\"']+)\\s*\\)"
     }
     String toString() {
         "${this.group}:${this.name} [${this.oldVersion} -> ${this.newVersion}]"
