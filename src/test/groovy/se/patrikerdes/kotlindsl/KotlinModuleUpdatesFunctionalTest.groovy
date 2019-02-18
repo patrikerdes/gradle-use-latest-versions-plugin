@@ -128,4 +128,33 @@ class KotlinModuleUpdatesFunctionalTest extends KotlinBaseFunctionalTest {
         updatedKotlinVersionsFile.contains("junit_version = \"$CurrentVersions.JUNIT\"")
         updatedKotlinVersionsFile.contains("log4j_version=\"$CurrentVersions.LOG4J\"")
     }
+
+    void "version delegate and separate, unnamed group, name and version parameter can be updated"() {
+        given:
+        buildFile << """
+            plugins {
+                application
+                java
+                id("se.patrikerdes.use-latest-versions")
+                id("com.github.ben-manes.versions") version "$CurrentVersions.VERSIONS"
+            }
+            
+            repositories {
+                mavenCentral()
+            }
+            
+            val junitVersion: String by project
+
+            dependencies {
+                testCompile("junit", "junit", "4.0")
+            }
+        """
+
+        when:
+        useLatestVersions()
+        String updatedBuildFile = buildFile.getText('UTF-8')
+
+        then:
+        updatedBuildFile.contains("""testCompile("junit", "junit", "$CurrentVersions.JUNIT")""")
+    }
 }

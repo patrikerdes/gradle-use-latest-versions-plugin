@@ -31,6 +31,16 @@ class DependencyUpdate {
     String oldPluginVersionMatchString() {
         "(id[ \\t\\(]+[\"']" + this.group + "[\"'][ \\t\\)]+version[ \\t]+[\"'])" + this.oldVersion + "([\"'])"
     }
+    String oldModuleVersionKotlinUnnamedParametersMatchString() {
+        '((?:testRuntimeOnly|implementation|annotationProcessor|api|apiDependenciesMetadata|apiElements|compile|' +
+                'compileClasspath|compileOnly|compileOnlyDependenciesMetadata|implementation|' +
+                'implementationDependenciesMetadata|runtime|runtimeClasspath|runtimeElements|runtimeOnly|' +
+                'runtimeOnlyDependenciesMetadata|testAnnotationProcessor|testApi|testApiDependenciesMetadata|' +
+                'testCompile|testCompileClasspath|testCompileOnly|testCompileOnlyDependenciesMetadata|' +
+                'testImplementation|testImplementationDependenciesMetadata|testKotlinScriptDef|' +
+                'testKotlinScriptDefExtensions|testRuntime|testRuntimeClasspath|testRuntimeOnlyDependenciesMetadata)' +
+                "\\s*\\(\\s*\"${this.group}\"\\s*,\\s*\"${this.name}\"\\s*,\\s*\")${this.oldVersion}*(\"\\s*\\))"
+    }
     String newVersionString() {
         '$1' + this.newVersion + '$2'
     }
