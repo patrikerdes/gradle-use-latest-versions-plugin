@@ -56,15 +56,25 @@ class DependencyUpdateTest extends Specification {
         String parameterValueWithoutQuotes = '[^\"\\s]+'
         String parameterValue = "(?:$parameterValueWithQuotes|$parameterValueWithoutQuotes)"
         String additionalParameter = "(?:\\s*$parameterName\\s*=\\s*$parameterValue\\s*,?\\s*)"
+        String versionParameter = "version\\s*=\\s*$parameterValue\\s*,?\\s*"
+        String parameterAppendix = "\\s*=\\s*$parameterValue\\s*,?\\s*"
+        String groupParameter = "group$parameterAppendix"
+        String nameParameter = "name$parameterAppendix"
+        String groupAndNameParameter = "(?:" +
+                "(?:$groupParameter|$nameParameter)" +
+                "(?!.*\\1)){2}"
         String regex =
                 "\\(" +
                     "\\s*$additionalParameter*" +
                         "(?:" +
-                            "(?:" +
-                                "(?:group|name)\\s*=\\s*$parameterValue\\s*,?\\s*|" +
-                                     "version\\s*=\\s*$parameterValue\\s*,?\\s*" +
-                            ")" +
-                        "(?!.*\\1)){3}" +
+                            // Permutations
+                            "$groupParameter$nameParameter$versionParameter|" +
+                            "$groupParameter$versionParameter$nameParameter|" +
+                            "$nameParameter$groupParameter$versionParameter|" +
+                            "$nameParameter$versionParameter$groupParameter|" +
+                            "$versionParameter$groupParameter$nameParameter|" +
+                            "$versionParameter$nameParameter$groupParameter" +
+                        ")" +
                     "$additionalParameter*" +
                 "\\)"
 
@@ -79,10 +89,10 @@ class DependencyUpdateTest extends Specification {
         // Variables instead of string values
         '(group = group, name = name, version = oldVersion)'                           | true
         '(group = "group", name = name, version = "oldVersion")'                       | true
-        // Missing matching quote
+        // Missing matching quote not allowed
         '(group = "group, name = name, version = oldVersion)'                          | false
         '(group = group, name = name, version = oldVersion")'                          | false
-        // Parameter name in quotes
+        // Parameter name in quotes not allowed
         '("group" = group, name = name, version = oldVersion)'                         | false
         // Missing parameter
         '(name = name, version = oldVersion)'                                          | false
@@ -90,16 +100,19 @@ class DependencyUpdateTest extends Specification {
         '(group = group, name = name)'                                                 | false
         // Additional parameter (first, last, middle)
         '(ext = "ext", group = group, name = name, version = oldVersion)'              | true
-        // NOT WORKING: Additional parameter in between
+        // TODO NOT WORKING: Additional parameter in between
         //'(group = group, name = name, ext = "ext", version = oldVersion)'              | true
         '(group = group, name = name, version = oldVersion, ext = "ext")'              | true
         // Permutations
+        '(group = group, name = name, version = oldVersion)'                           | true
         '(group = group, version = oldVersion, name = name)'                           | true
-        '(version = oldVersion, name = name, group = group)'                           | true
-        '(version = oldVersion, group = group, name = name)'                           | true
         '(name = name, version = oldVersion, group = group)'                           | true
         '(name = name, group = group, version = oldVersion)'                           | true
-        // NOT WORKING: 2 groups with different values, no name
-        //'(group = group, group = name, version = oldVersion)'                          | false
+        '(version = oldVersion, name = name, group = group)'                           | true
+        '(version = oldVersion, group = group, name = name)'                           | true
+        // 2 groups with different values, no name is forbidden
+        '(group = group, group = name, version = oldVersion)'                          | false
+        // version parameter is mandatory
+        '(group = group, group = name, name = name)'                                   | false
     }
 }
