@@ -52,9 +52,9 @@ class DependencyUpdateTest extends Specification {
         expect:
 
         String parameterName = '\\w*'
-        String valueWithQuotes = '\"[^\"]*\"'
-        String valueWithoutQuotes = '[^\"\\s]+'
-        String parameterValue = "(?:$valueWithQuotes|$valueWithoutQuotes)"
+        String parameterValueWithQuotes = '\"[^\"]*\"'
+        String parameterValueWithoutQuotes = '[^\"\\s]+'
+        String parameterValue = "(?:$parameterValueWithQuotes|$parameterValueWithoutQuotes)"
         String additionalParameter = "(?:\\s*$parameterName\\s*=\\s*$parameterValue\\s*,?\\s*)"
         String regex =
                 "\\(" +
