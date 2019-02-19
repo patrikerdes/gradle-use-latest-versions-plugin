@@ -51,7 +51,22 @@ class DependencyUpdateTest extends Specification {
     def "Regex to match Kotlin named parameters"(String input, boolean matches) {
         expect:
 
-        String regex = "\\(\\s*(\\s*\\w*\\s*=\\s*(\"[^\"]*\"|[^\"\\s]+)\\s*,?\\s*)*(?:(group\\s*=\\s*(\"[^\"]*\"|[^\"\\s]+)\\s*,?\\s*|name\\s*=\\s*(\"[^\"]*\"|[^\"\\s]+)\\s*,?\\s*|version\\s*=\\s*(\"[^\"]*\"|[^\"\\s]+)?\\s*,?\\s*)(?!.*\\1)){3}(\\s*\\w*\\s*=\\s*(\"[^\"]*\"|[^\"\\s]+)\\s*,?)*\\)"
+        String parameterName = '\\w*'
+        String valueWithQuotes = '\"[^\"]*\"'
+        String valueWithoutQuotes = '[^\"\\s]+'
+        String parameterValue = "($valueWithQuotes|$valueWithoutQuotes)"
+        String additionalParameter = "(\\s*$parameterName\\s*=\\s*$parameterValue\\s*,?\\s*)"
+        String regex =
+                "\\(" +
+                    "\\s*$additionalParameter*" +
+                        "(?:" +
+                            "(" +
+                                "(group|name)\\s*=\\s*$parameterValue\\s*,?\\s*|" +
+                                     "version\\s*=\\s*$parameterValue\\s*,?\\s*" +
+                            ")" +
+                        "(?!.*\\1)){3}" +
+                    "$additionalParameter*" +
+                "\\)"
 
         input.matches(regex) == matches
 
@@ -75,7 +90,7 @@ class DependencyUpdateTest extends Specification {
         '(group = group, name = name)'                                                 | false
         // Additional parameter (first, last, middle)
         '(ext = "ext", group = group, name = name, version = oldVersion)'              | true
-        // NOT POSSIBLE: Additional parameter in between
+        // NOT WORKING: Additional parameter in between
         //'(group = group, name = name, ext = "ext", version = oldVersion)'              | true
         '(group = group, name = name, version = oldVersion, ext = "ext")'              | true
         // Permutations
@@ -84,5 +99,7 @@ class DependencyUpdateTest extends Specification {
         '(version = oldVersion, group = group, name = name)'                           | true
         '(name = name, version = oldVersion, group = group)'                           | true
         '(name = name, group = group, version = oldVersion)'                           | true
+        // NOT WORKING: 2 groups with different values, no name
+        //'(group = group, group = name, version = oldVersion)'                          | false
     }
 }
