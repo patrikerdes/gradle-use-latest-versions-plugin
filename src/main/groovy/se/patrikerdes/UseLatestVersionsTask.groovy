@@ -85,10 +85,17 @@ class UseLatestVersionsTask extends DefaultTask {
                         gradleFileContents[dotGradleFileName].replaceAll(
                                 update.oldModuleVersionDependencySetString(), update.newVersionString())
 
-                // Kotlin notation
+                // Kotlin unnamed notation
                 gradleFileContents[dotGradleFileName] =
                         gradleFileContents[dotGradleFileName].replaceAll(
                                 update.oldModuleVersionKotlinUnnamedParametersMatchString(), update.newVersionString())
+
+                // Kotlin named notation
+                update.oldModuleVersionKotlinSeparateNamedParametersMatchString().forEach { String it ->
+                    gradleFileContents[dotGradleFileName] =
+                            gradleFileContents[dotGradleFileName].replaceAll(
+                                    it, update.newVersionString())
+                }
             }
         }
     }

@@ -95,7 +95,7 @@ class DependencyUpdateTest extends Specification {
         '(name = name, version = oldVersion)'                                          | false
         '(group = group, version = oldVersion)'                                        | false
         '(group = group, name = name)'                                                 | false
-        // Additional parameter (first, last, middle)
+        // Additional parameter
         '(ext = "ext", group = group, name = name, version = oldVersion)'              | true
         // TODO NOT WORKING: Additional parameter in between
         //'(group = group, name = name, ext = "ext", version = oldVersion)'              | true
@@ -112,4 +112,34 @@ class DependencyUpdateTest extends Specification {
         // version parameter is mandatory
         '(group = group, group = name, name = name)'                                   | false
     }
+
+    void "oldModuleVersionKotlinSepareteNamedParametersMatchString"(String input) {
+        expect:
+        String output = ""
+        update.oldModuleVersionKotlinSeparateNamedParametersMatchString().forEach {
+            output = input.replaceAll(it, update.newVersionString())
+            input = output
+        }
+        output == input.replace('oldVersion', 'newVersion')
+
+        where:
+        input                                                                          | _
+        // Allowed whitespaces
+        '(group = "group", name = "name", version = "oldVersion")'                     | _
+        '(group="group",name="name",version="oldVersion")'                             | _
+        '(   group    ="group"     ,    name   =  "name" ,version =  "oldVersion"   )' | _
+        // Variables for group and name instead of string
+        '(group = group, name = name, version = "oldVersion")'                         | _
+        // Additional parameter
+        '(ext = "ext", group = group, name = name, version = "oldVersion")'            | _
+        '(group = group, name = name, version = "oldVersion", ext = "ext")'            | _
+        // Permutations
+        '(group = group, name = name, version = "oldVersion")'                         | _
+        '(group = group, version = "oldVersion", name = name)'                         | _
+        '(name = name, version = "oldVersion", group = group)'                         | _
+        '(name = name, group = group, version = "oldVersion")'                         | _
+        '(version = "oldVersion", name = name, group = group)'                         | _
+        '(version = "oldVersion", group = group, name = name)'                         | _
+    }
+
 }
