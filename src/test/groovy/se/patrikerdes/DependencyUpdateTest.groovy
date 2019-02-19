@@ -54,14 +54,14 @@ class DependencyUpdateTest extends Specification {
         String parameterName = '\\w*'
         String valueWithQuotes = '\"[^\"]*\"'
         String valueWithoutQuotes = '[^\"\\s]+'
-        String parameterValue = "($valueWithQuotes|$valueWithoutQuotes)"
-        String additionalParameter = "(\\s*$parameterName\\s*=\\s*$parameterValue\\s*,?\\s*)"
+        String parameterValue = "(?:$valueWithQuotes|$valueWithoutQuotes)"
+        String additionalParameter = "(?:\\s*$parameterName\\s*=\\s*$parameterValue\\s*,?\\s*)"
         String regex =
                 "\\(" +
                     "\\s*$additionalParameter*" +
                         "(?:" +
-                            "(" +
-                                "(group|name)\\s*=\\s*$parameterValue\\s*,?\\s*|" +
+                            "(?:" +
+                                "(?:group|name)\\s*=\\s*$parameterValue\\s*,?\\s*|" +
                                      "version\\s*=\\s*$parameterValue\\s*,?\\s*" +
                             ")" +
                         "(?!.*\\1)){3}" +
