@@ -57,8 +57,32 @@ class DependencyUpdateTest extends Specification {
 
         where:
         input                                                                          | matches
+        // Allowed whitespaces
         '(group = "group", name = "name", version = "oldVersion")'                     | true
         '(group="group",name="name",version="oldVersion")'                             | true
         '(   group    ="group"     ,    name   =  "name" ,version =  "oldVersion"   )' | true
+        // Variables instead of string values
+        '(group = group, name = name, version = oldVersion)'                           | true
+        '(group = "group", name = name, version = "oldVersion")'                       | true
+        // Missing matching quote
+        '(group = "group, name = name, version = oldVersion)'                          | false
+        '(group = group, name = name, version = oldVersion")'                          | false
+        // Parameter name in quotes
+        '("group" = group, name = name, version = oldVersion)'                         | false
+        // Missing parameter
+        '(name = name, version = oldVersion)'                                          | false
+        '(group = group, version = oldVersion)'                                        | false
+        '(group = group, name = name)'                                                 | false
+        // Additional parameter (first, last, middle)
+        '(ext = "ext", group = group, name = name, version = oldVersion)'              | true
+        // NOT POSSIBLE: Additional parameter in between
+        //'(group = group, name = name, ext = "ext", version = oldVersion)'              | true
+        '(group = group, name = name, version = oldVersion, ext = "ext")'              | true
+        // Permutations
+        '(group = group, version = oldVersion, name = name)'                           | true
+        '(version = oldVersion, name = name, group = group)'                           | true
+        '(version = oldVersion, group = group, name = name)'                           | true
+        '(name = name, version = oldVersion, group = group)'                           | true
+        '(name = name, group = group, version = oldVersion)'                           | true
     }
 }
