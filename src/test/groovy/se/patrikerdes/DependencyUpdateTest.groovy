@@ -60,9 +60,6 @@ class DependencyUpdateTest extends Specification {
         String parameterAppendix = "\\s*=\\s*$parameterValue\\s*,?\\s*"
         String groupParameter = "group$parameterAppendix"
         String nameParameter = "name$parameterAppendix"
-        String groupAndNameParameter = "(?:" +
-                "(?:$groupParameter|$nameParameter)" +
-                "(?!.*\\1)){2}"
         String regex =
                 "\\(" +
                     "\\s*$additionalParameter*" +
