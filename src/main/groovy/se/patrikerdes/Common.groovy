@@ -2,6 +2,8 @@ package se.patrikerdes
 
 import groovy.transform.CompileStatic
 
+import java.util.regex.Matcher
+
 @CompileStatic
 class Common {
     static List<DependencyUpdate> getOutDatedDependencies(Object dependencyUpdatesJson) {
@@ -36,6 +38,63 @@ class Common {
                     (String) currentDependency['version']))
         }
         dependencyStables
+    }
+
+    static void getVariablesFromMatches(Matcher variableMatch, Map<String, String> versionVariables,
+                                        DependencyUpdate update, Set problemVariables) {
+        if (variableMatch.size() == 1) {
+            String variableName = ((List) variableMatch[0])[1]
+            if (versionVariables.containsKey(variableName) &&
+                    versionVariables[variableName as String] != update.newVersion) {
+                println("A problem was detected: $variableName is supposed to be updated to both " +
+                        "${versionVariables[variableName as String]} and ${update.newVersion}, it won't be changed.")
+                problemVariables.add(variableName)
+            } else {
+                versionVariables.put(variableName as String, update.newVersion)
+            }
+        }
+    }
+
+    static Map<String, String> findVariables(List<String> dotGradleFileNames,
+                                             List<DependencyUpdate> dependencyUpdates,
+                                             Map<String, String> gradleFileContents,
+                                             Set problemVariables) {
+        Map<String, String> versionVariables = [:]
+        for (String dotGradleFileName in dotGradleFileNames) {
+            for (DependencyUpdate update in dependencyUpdates) {
+                // Variable in string format with string interpolation
+                Matcher variableMatch = gradleFileContents[dotGradleFileName] =~
+                        update.variableUseStringFormatInterpolationMatchString()
+                getVariablesFromMatches(variableMatch, versionVariables, update, problemVariables)
+
+                // Variable in string format with plus
+                variableMatch = gradleFileContents[dotGradleFileName] =~
+                        update.variableUseStringFormatPlusMatchString()
+                getVariablesFromMatches(variableMatch, versionVariables, update, problemVariables)
+
+                // Variable in map format
+                variableMatch = gradleFileContents[dotGradleFileName] =~
+                        update.variableUseMapFormatMatchString()
+                getVariablesFromMatches(variableMatch, versionVariables, update, problemVariables)
+
+                // Variable in dependencySet format
+                variableMatch = gradleFileContents[dotGradleFileName] =~
+                        update.variableInDependencySetString()
+                getVariablesFromMatches(variableMatch, versionVariables, update, problemVariables)
+
+                // Variable in unnamed Kotlin notation
+                variableMatch = gradleFileContents[dotGradleFileName] =~
+                        update.variableKotlinUnnamedParametersMatchString()
+                getVariablesFromMatches(variableMatch, versionVariables, update, problemVariables)
+
+                // Variable in named Kotlin notation
+                update.variableKotlinSeparateNamedParametersMatchString().each { String it ->
+                    variableMatch = gradleFileContents[dotGradleFileName] =~ it
+                    getVariablesFromMatches(variableMatch, versionVariables, update, problemVariables)
+                }
+            }
+        }
+        versionVariables
     }
 }
 
