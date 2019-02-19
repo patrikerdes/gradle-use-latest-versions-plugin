@@ -190,4 +190,67 @@ class KotlinModuleUpdatesFunctionalTest extends KotlinBaseFunctionalTest {
         then:
         updatedGradlePropertiesFile.contains("junitVersion=$CurrentVersions.JUNIT")
     }
+
+    void "version delegate and separate, named group, name and version parameter can be updated"() {
+        given:
+        buildFile << """
+            plugins {
+                application
+                java
+                id("se.patrikerdes.use-latest-versions")
+                id("com.github.ben-manes.versions") version "$CurrentVersions.VERSIONS"
+            }
+            
+            repositories {
+                mavenCentral()
+            }
+            
+            val junitVersion: String by project
+
+            dependencies {
+                testCompile(group = "junit", name = "junit", version = "4.0")
+            }
+        """
+
+        when:
+        useLatestVersions()
+        String updatedBuildFile = buildFile.getText('UTF-8')
+
+        then:
+        updatedBuildFile.contains('testCompile(group = "junit", name = "junit", version = "' +
+                CurrentVersions.JUNIT + '")')
+    }
+
+    void "version delegate and separate, named group, name and version variable can be updated"() {
+        given:
+        buildFile << """
+            plugins {
+                application
+                java
+                id("se.patrikerdes.use-latest-versions")
+                id("com.github.ben-manes.versions") version "$CurrentVersions.VERSIONS"
+            }
+
+            repositories {
+                mavenCentral()
+            }
+
+            val junitVersion: String by project
+
+            dependencies {
+                testCompile(group = "junit", name = "junit", version = junitVersion)
+            }
+        """
+        File gradlePropertiesFile = testProjectDir.newFile('gradle.properties')
+        gradlePropertiesFile << '''
+            junitVersion=4.0
+        '''
+
+        when:
+        useLatestVersions()
+        String updatedGradlePropertiesFile = gradlePropertiesFile.getText('UTF-8')
+
+        then:
+        updatedGradlePropertiesFile.contains("junitVersion=$CurrentVersions.JUNIT")
+    }
 }

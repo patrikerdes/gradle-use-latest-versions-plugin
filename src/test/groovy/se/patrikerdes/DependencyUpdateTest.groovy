@@ -2,6 +2,8 @@ package se.patrikerdes
 
 import spock.lang.Specification
 
+import java.util.regex.Matcher
+
 class DependencyUpdateTest extends Specification {
     private final DependencyUpdate update = new DependencyUpdate('group', 'name', 'oldVersion', 'newVersion')
 
@@ -48,77 +50,13 @@ class DependencyUpdateTest extends Specification {
         '''testRuntimeOnlyDependenciesMetadata("group", "name", "oldVersion")'''    | _
     }
 
-    def "Regex to match Kotlin named parameters"(String input, boolean matches) {
-        expect:
-
-        String parameterName = '\\w*'
-        String parameterValueWithQuotes = '\"[^\"]*\"'
-        String parameterValueWithoutQuotes = '[^\"\\s]+'
-        String parameterValue = "(?:$parameterValueWithQuotes|$parameterValueWithoutQuotes)"
-        String additionalParameter = "(?:\\s*$parameterName\\s*=\\s*$parameterValue\\s*,?\\s*)"
-        String versionParameter = "version\\s*=\\s*$parameterValue\\s*,?\\s*"
-        String parameterAppendix = "\\s*=\\s*$parameterValue\\s*,?\\s*"
-        String groupParameter = "group$parameterAppendix"
-        String nameParameter = "name$parameterAppendix"
-        String regex =
-                "\\(" +
-                    "\\s*$additionalParameter*" +
-                        "(?:" +
-                            // Permutations
-                            "$groupParameter$nameParameter$versionParameter|" +
-                            "$groupParameter$versionParameter$nameParameter|" +
-                            "$nameParameter$groupParameter$versionParameter|" +
-                            "$nameParameter$versionParameter$groupParameter|" +
-                            "$versionParameter$groupParameter$nameParameter|" +
-                            "$versionParameter$nameParameter$groupParameter" +
-                        ")" +
-                    "$additionalParameter*" +
-                "\\)"
-
-        input.matches(regex) == matches
-
-        where:
-        input                                                                          | matches
-        // Allowed whitespaces
-        '(group = "group", name = "name", version = "oldVersion")'                     | true
-        '(group="group",name="name",version="oldVersion")'                             | true
-        '(   group    ="group"     ,    name   =  "name" ,version =  "oldVersion"   )' | true
-        // Variables instead of string values
-        '(group = group, name = name, version = oldVersion)'                           | true
-        '(group = "group", name = name, version = "oldVersion")'                       | true
-        // Missing matching quote not allowed
-        '(group = "group, name = name, version = oldVersion)'                          | false
-        '(group = group, name = name, version = oldVersion")'                          | false
-        // Parameter name in quotes not allowed
-        '("group" = group, name = name, version = oldVersion)'                         | false
-        // Missing parameter
-        '(name = name, version = oldVersion)'                                          | false
-        '(group = group, version = oldVersion)'                                        | false
-        '(group = group, name = name)'                                                 | false
-        // Additional parameter
-        '(ext = "ext", group = group, name = name, version = oldVersion)'              | true
-        // TODO NOT WORKING: Additional parameter in between
-        //'(group = group, name = name, ext = "ext", version = oldVersion)'              | true
-        '(group = group, name = name, version = oldVersion, ext = "ext")'              | true
-        // Permutations
-        '(group = group, name = name, version = oldVersion)'                           | true
-        '(group = group, version = oldVersion, name = name)'                           | true
-        '(name = name, version = oldVersion, group = group)'                           | true
-        '(name = name, group = group, version = oldVersion)'                           | true
-        '(version = oldVersion, name = name, group = group)'                           | true
-        '(version = oldVersion, group = group, name = name)'                           | true
-        // 2 groups with different values, no name is forbidden
-        '(group = group, group = name, version = oldVersion)'                          | false
-        // version parameter is mandatory
-        '(group = group, group = name, name = name)'                                   | false
-    }
-
     void "oldModuleVersionKotlinSepareteNamedParametersMatchString"(String input) {
         expect:
-        String output = ""
+        String output = ''
+        String tempInput = input
         update.oldModuleVersionKotlinSeparateNamedParametersMatchString().forEach {
-            output = input.replaceAll(it, update.newVersionString())
-            input = output
+            output = tempInput.replaceAll(it, update.newVersionString())
+            tempInput = output
         }
         output == input.replace('oldVersion', 'newVersion')
 
@@ -129,17 +67,59 @@ class DependencyUpdateTest extends Specification {
         '(group="group",name="name",version="oldVersion")'                             | _
         '(   group    ="group"     ,    name   =  "name" ,version =  "oldVersion"   )' | _
         // Variables for group and name instead of string
-        '(group = group, name = name, version = "oldVersion")'                         | _
+        '(group = "group", name = "name", version = "oldVersion")'                     | _
         // Additional parameter
-        '(ext = "ext", group = group, name = name, version = "oldVersion")'            | _
-        '(group = group, name = name, version = "oldVersion", ext = "ext")'            | _
+        '(ext = "ext", group = "group", name = "name", version = "oldVersion")'        | _
+        '(group = "group", name = "name", version = "oldVersion", ext = "ext")'        | _
         // Permutations
-        '(group = group, name = name, version = "oldVersion")'                         | _
-        '(group = group, version = "oldVersion", name = name)'                         | _
-        '(name = name, version = "oldVersion", group = group)'                         | _
-        '(name = name, group = group, version = "oldVersion")'                         | _
-        '(version = "oldVersion", name = name, group = group)'                         | _
-        '(version = "oldVersion", group = group, name = name)'                         | _
+        '(group = "group", name = "name", version = "oldVersion")'                     | _
+        '(group = "group", version = "oldVersion", name = "name")'                     | _
+        '(name = "name", version = "oldVersion", group = "group")'                     | _
+        '(name = "name", group = "group", version = "oldVersion")'                     | _
+        '(version = "oldVersion", name = "name", group = "group")'                     | _
+        '(version = "oldVersion", group = "group", name = "name")'                     | _
     }
 
+    void "variableKotlinSeparateNamedParametersMatchString"(String input) {
+        expect:
+        Matcher variableMatch
+        List<String> versionVariables = []
+        update.variableKotlinSeparateNamedParametersMatchString().each { String it ->
+            variableMatch = input =~ it
+            String variableName = getVariableFromMatches(variableMatch)
+            if (variableName != null) {
+                versionVariables.add(variableName)
+            }
+        }
+
+        input && versionVariables.size() == 1 && versionVariables.first() == 'oldVersion'
+
+        where:
+        input                                                                        | _
+        // Allowed whitespaces
+        '(group = "group", name = "name", version = oldVersion)'                     | _
+        '(group="group",name="name",version=oldVersion)'                             | _
+        '(   group    ="group"     ,    name   =  "name" ,version =  oldVersion   )' | _
+        // Variables for group and name instead of string
+        '(group = "group", name = "name", version = oldVersion)'                     | _
+        // Additional parameter
+        '(ext = "ext", group = "group", name = "name", version = oldVersion)'        | _
+        '(group = "group", name = "name", version = oldVersion, ext = "ext")'        | _
+        // Permutations
+        '(group = "group", name = "name", version = oldVersion)'                     | _
+        '(group = "group", version = oldVersion, name = "name")'                     | _
+        '(name = "name", version = oldVersion, group = "group")'                     | _
+        '(name = "name", group = "group", version = oldVersion)'                     | _
+        '(version = oldVersion, name = "name", group = "group")'                     | _
+        '(version = oldVersion, group = "group", name = "name")'                     | _
+        'testCompile(group = "group", name = "name", version = oldVersion)'          | _
+    }
+
+    private static String getVariableFromMatches(Matcher variableMatch) {
+        if (variableMatch.size() == 1) {
+            String variableName = ((List) variableMatch[0])[1]
+            return variableName
+        }
+        null
+    }
 }

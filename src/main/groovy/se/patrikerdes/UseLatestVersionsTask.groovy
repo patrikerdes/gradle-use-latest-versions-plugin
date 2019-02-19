@@ -91,7 +91,7 @@ class UseLatestVersionsTask extends DefaultTask {
                                 update.oldModuleVersionKotlinUnnamedParametersMatchString(), update.newVersionString())
 
                 // Kotlin named notation
-                update.oldModuleVersionKotlinSeparateNamedParametersMatchString().forEach { String it ->
+                update.oldModuleVersionKotlinSeparateNamedParametersMatchString().each { String it ->
                     gradleFileContents[dotGradleFileName] =
                             gradleFileContents[dotGradleFileName].replaceAll(
                                     it, update.newVersionString())
@@ -113,38 +113,9 @@ class UseLatestVersionsTask extends DefaultTask {
 
     void updateVariables(Map<String, String> gradleFileContents, List<String> dotGradleFileNames,
                          List<DependencyUpdate> dependencyUpdates, List<DependencyUpdate> dependencyStables) {
-        // Find variables with version numbers
-        Map<String, String> versionVariables = [:]
         Set problemVariables = []
-
-        for (String dotGradleFileName in dotGradleFileNames) {
-            for (DependencyUpdate update in dependencyUpdates + dependencyStables) {
-                // Variable in string format with string interpolation
-                Matcher variableMatch = gradleFileContents[dotGradleFileName] =~
-                        update.variableUseStringFormatInterpolationMatchString()
-                getVariablesFromMatches(variableMatch, versionVariables, update, problemVariables)
-
-                // Variable in string format with plus
-                variableMatch = gradleFileContents[dotGradleFileName] =~
-                        update.variableUseStringFormatPlusMatchString()
-                getVariablesFromMatches(variableMatch, versionVariables, update, problemVariables)
-
-                // Variable in map format
-                variableMatch = gradleFileContents[dotGradleFileName] =~
-                        update.variableUseMapFormatMatchString()
-                getVariablesFromMatches(variableMatch, versionVariables, update, problemVariables)
-
-                // Variable in dependencySet format
-                variableMatch = gradleFileContents[dotGradleFileName] =~
-                        update.variableInDependencySetString()
-                getVariablesFromMatches(variableMatch, versionVariables, update, problemVariables)
-
-                // Variable in Kotlin notation
-                variableMatch = gradleFileContents[dotGradleFileName] =~
-                        update.variableKotlinUnnamedParametersMatchString()
-                getVariablesFromMatches(variableMatch, versionVariables, update, problemVariables)
-            }
-        }
+        Map<String, String> versionVariables = Common.findVariables(dotGradleFileNames,
+                dependencyUpdates + dependencyStables, gradleFileContents, problemVariables)
 
         for (problemVariable in problemVariables) {
             versionVariables.remove(problemVariable)
@@ -207,20 +178,5 @@ class UseLatestVersionsTask extends DefaultTask {
         Files.copy(dependencyUpdatesJsonReportFile.toPath(),
                 new File(useLatestVersionsFolder, 'latestDependencyUpdatesReport.json').toPath(),
                 StandardCopyOption.REPLACE_EXISTING)
-    }
-
-    void getVariablesFromMatches(Matcher variableMatch, Map<String, String> versionVariables, DependencyUpdate update,
-                                 Set problemVariables) {
-        if (variableMatch.size() == 1) {
-            String variableName = ((List) variableMatch[0])[1]
-            if (versionVariables.containsKey(variableName) &&
-                    versionVariables[variableName as String] != update.newVersion) {
-                println("A problem was detected: $variableName is supposed to be updated to both " +
-                        "${versionVariables[variableName as String]} and ${update.newVersion}, it won't be changed.")
-                problemVariables.add(variableName)
-            } else {
-                versionVariables.put(variableName as String, update.newVersion)
-            }
-        }
     }
 }

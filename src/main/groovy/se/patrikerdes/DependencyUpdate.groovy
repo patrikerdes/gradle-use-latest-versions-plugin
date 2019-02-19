@@ -41,25 +41,23 @@ class DependencyUpdate {
                 'testKotlinScriptDefExtensions|testRuntime|testRuntimeClasspath|testRuntimeOnlyDependenciesMetadata)' +
                 "\\s*\\(\\s*\"${this.group}\"\\s*,\\s*\"${this.name}\"\\s*,\\s*\")${this.oldVersion}(\"\\s*\\))"
     }
+    String parameterName = '\\w*'
+    String parameterValueWithQuotes = '\"[^\"]*\"'
+    String parameterValueWithoutQuotes = '[^\"\\s,]+'
+    String parameterValue = "(?:$parameterValueWithQuotes|$parameterValueWithoutQuotes)"
+    String additionalParameter = "(?:\\s*$parameterName\\s*=\\s*$parameterValue\\s*,?\\s*)"
+    String groupParameter = "group\\s*=\\s*\"$group\"\\s*,?\\s*"
+    String nameParameter = "name\\s*=\\s*\"$name\"\\s*,?\\s*"
     List<String> oldModuleVersionKotlinSeparateNamedParametersMatchString() {
-        String parameterName = '\\w*'
-        String parameterValueWithQuotes = '\"[^\"]*\"'
-        String parameterValueWithoutQuotes = '[^\"\\s]+'
-        String parameterValue = "(?:$parameterValueWithQuotes|$parameterValueWithoutQuotes)"
         String versionParameterValue = '\")[^\"]*(\"'
-        String additionalParameter = "(?:\\s*$parameterName\\s*=\\s*$parameterValue\\s*,?\\s*)"
         String versionParameter = "version\\s*=\\s*$versionParameterValue\\s*,?\\s*"
-        String parameterAppendix = "\\s*=\\s*$parameterValue\\s*,?\\s*"
-        String groupParameter = "group$parameterAppendix"
-        String nameParameter = "name$parameterAppendix"
 
         Closure<String> createPermutation = { String permutation ->
-            return "(\\(" +
-                    "\\s*$additionalParameter*" +
-                    // Permutations
-                    permutation +
-                    "$additionalParameter*" +
-                    "\\))"
+            '(\\(' +
+                "\\s*$additionalParameter*" +
+                permutation +
+                "$additionalParameter*" +
+            '\\))'
         }
 
         List<GString> permutations = [
@@ -68,7 +66,7 @@ class DependencyUpdate {
                 "$nameParameter$groupParameter$versionParameter",
                 "$nameParameter$versionParameter$groupParameter",
                 "$versionParameter$groupParameter$nameParameter",
-                "$versionParameter$nameParameter$groupParameter"
+                "$versionParameter$nameParameter$groupParameter",
         ]
         permutations.collect {
             createPermutation(it)
@@ -102,6 +100,30 @@ class DependencyUpdate {
                 'testImplementation|testImplementationDependenciesMetadata|testKotlinScriptDef|' +
                 'testKotlinScriptDefExtensions|testRuntime|testRuntimeClasspath|testRuntimeOnlyDependenciesMetadata)' +
                 "\\s*\\(\\s*\"${this.group}\"\\s*,\\s*\"${this.name}\"\\s*,\\s*([^\\s\"']+)\\s*\\)"
+    }
+    List<String> variableKotlinSeparateNamedParametersMatchString() {
+        String versionParameterValue = "($parameterValueWithoutQuotes)"
+        String versionParameter = "version\\s*=\\s*$versionParameterValue\\s*,?\\s*"
+
+        Closure<String> createPermutation = { String permutation ->
+            '\\(' +
+                "\\s*$additionalParameter*" +
+                permutation +
+                "$additionalParameter*" +
+            '\\)'
+        }
+
+        List<GString> permutations = [
+                "$groupParameter$nameParameter$versionParameter",
+                "$groupParameter$versionParameter$nameParameter",
+                "$nameParameter$groupParameter$versionParameter",
+                "$nameParameter$versionParameter$groupParameter",
+                "$versionParameter$groupParameter$nameParameter",
+                "$versionParameter$nameParameter$groupParameter",
+        ]
+        permutations.collect {
+            createPermutation(it)
+        }
     }
     String toString() {
         "${this.group}:${this.name} [${this.oldVersion} -> ${this.newVersion}]"
