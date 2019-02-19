@@ -47,4 +47,18 @@ class DependencyUpdateTest extends Specification {
         '''testRuntimeClasspath("group", "name", "oldVersion")'''                   | _
         '''testRuntimeOnlyDependenciesMetadata("group", "name", "oldVersion")'''    | _
     }
+
+    def "Regex to match Kotlin named parameters"(String input, boolean matches) {
+        expect:
+
+        String regex = "\\((\\s*\\w*\\s*=\\s*(\"[^\"]*\"|[^\"\\s]+)\\s*,?\\s*)*(?:(group\\s*=\\s*(\"[^\"]*\"|[^\"\\s]+)\\s*,?\\s*|name\\s*=\\s*(\"[^\"]*\"|[^\"\\s]+)\\s*,?\\s*|version\\s*=\\s*(\"[^\"]*\"|[^\"\\s]+)?\\s*,?\\s*)(?!.*\\1)){3}(\\s*\\w*\\s*=\\s*(\"[^\"]*\"|[^\"\\s]+)\\s*,?)*\\)"
+
+        input.matches(regex) == matches
+
+        where:
+        input                                                                          | matches
+        '(group = "group", name = "name", version = "oldVersion")'                     | true
+        '(group="group",name="name",version="oldVersion")'                             | true
+//        '(   group    ="group"     ,    name   =  "name" ,version =  "oldVersion"   )' | true
+    }
 }
