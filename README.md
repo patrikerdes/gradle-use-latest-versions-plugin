@@ -16,7 +16,7 @@ Include in your `build.gradle`
 
 ```groovy
 plugins {
-  id 'se.patrikerdes.use-latest-versions' version '0.2.7'
+  id 'se.patrikerdes.use-latest-versions' version '0.2.8'
   id 'com.github.ben-manes.versions' version '0.20.0'
 }
 ```
@@ -32,7 +32,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath "se.patrikerdes:gradle-use-latest-versions-plugin:0.2.7"
+        classpath "se.patrikerdes:gradle-use-latest-versions-plugin:0.2.8"
         classpath 'com.github.ben-manes:gradle-versions-plugin:0.20.0'
     }
 }
@@ -47,7 +47,7 @@ apply plugin: 'se.patrikerdes.use-latest-versions'
 Include in your `build.gradle.kts`
 ```groovy
 plugins {
-  id("se.patrikerdes.use-latest-versions") version "0.2.7"
+  id("se.patrikerdes.use-latest-versions") version "0.2.8"
   id("com.github.ben-manes.versions") version "0.20.0"
 }
 ```
@@ -63,7 +63,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath("gradle.plugin.se.patrikerdes:gradle-use-latest-versions-plugin:0.2.7")
+        classpath("gradle.plugin.se.patrikerdes:gradle-use-latest-versions-plugin:0.2.8")
         classpath("com.github.ben-manes:gradle-versions-plugin:0.20.0")
     }
 }
@@ -81,7 +81,7 @@ Given this build.gradle file:
 
 ```groovy
 plugins {
-    id 'se.patrikerdes.use-latest-versions' version '0.2.7'
+    id 'se.patrikerdes.use-latest-versions' version '0.2.8'
     id 'com.github.ben-manes.versions' version '0.19.0'
 }
 
@@ -115,7 +115,7 @@ variables – and you build.gradle file will look like this:
 
 ```groovy
 plugins {
-    id 'se.patrikerdes.use-latest-versions' version '0.2.7'
+    id 'se.patrikerdes.use-latest-versions' version '0.2.8'
     id 'com.github.ben-manes.versions' version '0.20.0' // <- Updated
 }
 
@@ -269,7 +269,7 @@ buildscript {
     dependencies{
         classpath group: 'se.patrikerdes',
 				name: 'gradle-use-latest-versions-plugin',
-				version: '0.2.7'
+				version: '0.2.8'
     }
 }
 
@@ -290,6 +290,16 @@ From the [Maven Versions Plugin](http://www.mojohaus.org/versions-maven-plugin/i
 [use-latest-versions](http://www.mojohaus.org/versions-maven-plugin/use-latest-versions-mojo.html)
 
 ## Changelog
+
+### 0.2.8
+
+[PR #18](https://github.com/patrikerdes/gradle-use-latest-versions-plugin/pull/18), Support kt files within buildSrc. ([Balthasar Biedermann](https://github.com/usr42))
+
+Fixed [issue #14](https://github.com/patrikerdes/gradle-use-latest-versions-plugin/issues/14), Kotlin dsl separate named and unnamed group name and version. ([Balthasar Biedermann](https://github.com/usr42))
+
+Fixed [issue #15](https://github.com/patrikerdes/gradle-use-latest-versions-plugin/issues/15), changed the README to contain the correct way to use the plugin in a buildscript block.
+
+Made the plugin work on [Windows](https://github.com/patrikerdes/gradle-use-latest-versions-plugin/commit/9f8a34fd2011bda2991ad317ad5f35a8438bc13b).
 
 ### 0.2.7
 
