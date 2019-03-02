@@ -17,10 +17,10 @@ class UseLatestVersionsCheckTask extends DefaultTask {
     @TaskAction
     void useLatestVersionsCheckTask() {
         File previousDependencyUpdatesReport =
-                new File(new File(project.rootDir, 'build' + File.separator + 'useLatestVersions'),
+                new File(new File(project.projectDir, 'build' + File.separator + 'useLatestVersions'),
                         'latestDependencyUpdatesReport.json')
         File currentDependencyUpdatesReport =
-                new File(project.rootDir,
+                new File(project.projectDir,
                         'build' + File.separator + 'dependencyUpdates' + File.separator + 'report.json')
 
         if (!previousDependencyUpdatesReport.exists()) {
