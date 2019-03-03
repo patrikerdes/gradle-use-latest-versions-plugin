@@ -57,6 +57,38 @@ class ModuleUpdatesFunctionalTest extends BaseFunctionalTest {
         updatedBuildFile.contains("compile \"log4j:log4j:$CurrentVersions.LOG4J\"")
     }
 
+    void "classifier bug (issue #21)"() {
+        given:
+        buildFile << """
+            plugins {
+                id 'se.patrikerdes.use-latest-versions'
+                id 'com.github.ben-manes.versions' version '$CurrentVersions.VERSIONS'
+            }
+
+            apply plugin: 'java'
+            
+            repositories {
+                mavenCentral()
+            }
+            
+            ext.log4jVersion = '1.2.16'
+            
+            dependencies {
+                compile "log4j:log4j:" + log4jVersion
+                compile group: 'junit', name: 'junit', version: '4.0'
+            }
+        """
+
+        when:
+        useLatestVersions()
+        String updatedBuildFile = buildFile.getText('UTF-8')
+
+        then:
+        updatedBuildFile.contains("ext.log4jVersion = '$CurrentVersions.LOG4J'")
+        updatedBuildFile.contains('compile "log4j:log4j:" + log4jVersion')
+        updatedBuildFile.contains("compile group: 'junit', name: 'junit', version: '$CurrentVersions.JUNIT'")
+    }
+
     void "one outdated and one up-to-date module dependency with a fixed version can be updated, string notation"() {
         given:
         buildFile << """
