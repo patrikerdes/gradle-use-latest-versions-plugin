@@ -34,15 +34,21 @@ class UseLatestVersionsTask extends DefaultTask {
 
     @TaskAction
     void useLatestVersions() {
-        File dependencyUpdatesJsonReportFile = new File(project.rootDir, 'build' + File.separator +
+        File dependencyUpdatesJsonReportFile = new File(project.projectDir, 'build' + File.separator +
                 'dependencyUpdates' + File.separator + 'report.json')
         saveDependencyUpdatesReport(dependencyUpdatesJsonReportFile)
 
         List<String> dotGradleFileNames =
-                new FileNameFinder().getFileNames(project.rootDir.absolutePath, '**/*.gradle')
-        dotGradleFileNames += new FileNameFinder().getFileNames(project.rootDir.absolutePath, '**/*.gradle.kts')
-        dotGradleFileNames += new FileNameFinder().getFileNames(project.rootDir.absolutePath, '**/gradle.properties')
-        dotGradleFileNames += new FileNameFinder().getFileNames(project.rootDir.absolutePath, 'buildSrc/**/*.kt')
+                new FileNameFinder().getFileNames(project.projectDir.absolutePath, '**/*.gradle')
+        dotGradleFileNames += new FileNameFinder().getFileNames(project.projectDir.absolutePath, '**/*.gradle.kts')
+        dotGradleFileNames += new FileNameFinder().getFileNames(project.projectDir.absolutePath, '**/gradle.properties')
+        dotGradleFileNames += new FileNameFinder().getFileNames(project.projectDir.absolutePath, 'buildSrc/**/*.kt')
+
+        // Exclude any files that belong to sub-projects
+        List<String> subprojectPaths = project.subprojects.collect { it.projectDir.absolutePath }
+        dotGradleFileNames = dotGradleFileNames.findAll { dotGradleFileName ->
+            !subprojectPaths.any { subprojectPath -> dotGradleFileName.startsWith(subprojectPath) }
+        }
 
         Object dependencyUpdatesJson = new JsonSlurper().parse(dependencyUpdatesJsonReportFile)
 
@@ -171,7 +177,7 @@ class UseLatestVersionsTask extends DefaultTask {
     }
 
     void saveDependencyUpdatesReport(File dependencyUpdatesJsonReportFile) {
-        File useLatestVersionsFolder = new File(project.rootDir, 'build' + File.separator + 'useLatestVersions')
+        File useLatestVersionsFolder = new File(project.projectDir, 'build' + File.separator + 'useLatestVersions')
         if (!useLatestVersionsFolder.exists()) {
             useLatestVersionsFolder.mkdirs()
         }
