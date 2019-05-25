@@ -17,11 +17,9 @@ class UseLatestVersionsCheckTask extends DefaultTask {
     @TaskAction
     void useLatestVersionsCheckTask() {
         File previousDependencyUpdatesReport =
-                new File(new File(project.projectDir, 'build' + File.separator + 'useLatestVersions'),
-                        'latestDependencyUpdatesReport.json')
+                new File(new File(project.buildDir, 'useLatestVersions'), 'latestDependencyUpdatesReport.json')
         File currentDependencyUpdatesReport =
-                new File(project.projectDir,
-                        'build' + File.separator + 'dependencyUpdates' + File.separator + 'report.json')
+                new File(project.buildDir, 'dependencyUpdates' + File.separator + 'report.json')
 
         if (!previousDependencyUpdatesReport.exists()) {
             throw new GradleException('No results from useLatestVersions were found, aborting')

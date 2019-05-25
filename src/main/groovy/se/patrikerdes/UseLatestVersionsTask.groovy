@@ -34,8 +34,8 @@ class UseLatestVersionsTask extends DefaultTask {
 
     @TaskAction
     void useLatestVersions() {
-        File dependencyUpdatesJsonReportFile = new File(project.projectDir, 'build' + File.separator +
-                'dependencyUpdates' + File.separator + 'report.json')
+        File dependencyUpdatesJsonReportFile = new File(project.buildDir, 'dependencyUpdates' + File.separator +
+                'report.json')
         saveDependencyUpdatesReport(dependencyUpdatesJsonReportFile)
 
         List<String> dotGradleFileNames =
@@ -177,7 +177,7 @@ class UseLatestVersionsTask extends DefaultTask {
     }
 
     void saveDependencyUpdatesReport(File dependencyUpdatesJsonReportFile) {
-        File useLatestVersionsFolder = new File(project.projectDir, 'build' + File.separator + 'useLatestVersions')
+        File useLatestVersionsFolder = new File(project.buildDir, 'useLatestVersions')
         if (!useLatestVersionsFolder.exists()) {
             useLatestVersionsFolder.mkdirs()
         }
