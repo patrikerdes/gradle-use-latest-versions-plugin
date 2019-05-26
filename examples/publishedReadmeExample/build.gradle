@@ -3,7 +3,7 @@
 // To see what the plugin can do, run ./gradlew useLatestVersions in this folder
 
 plugins {
-    id 'se.patrikerdes.use-latest-versions' version '0.2.9'
+    id 'se.patrikerdes.use-latest-versions' version '0.2.10'
     id 'com.github.ben-manes.versions' version '0.16.0'
 }
 

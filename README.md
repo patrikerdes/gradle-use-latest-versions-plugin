@@ -16,7 +16,7 @@ Include in your `build.gradle`
 
 ```groovy
 plugins {
-  id 'se.patrikerdes.use-latest-versions' version '0.2.9'
+  id 'se.patrikerdes.use-latest-versions' version '0.2.10'
   id 'com.github.ben-manes.versions' version '0.21.0'
 }
 ```
@@ -32,7 +32,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath "se.patrikerdes:gradle-use-latest-versions-plugin:0.2.9"
+        classpath "se.patrikerdes:gradle-use-latest-versions-plugin:0.2.10"
         classpath 'com.github.ben-manes:gradle-versions-plugin:0.21.0'
     }
 }
@@ -47,7 +47,7 @@ apply plugin: 'se.patrikerdes.use-latest-versions'
 Include in your `build.gradle.kts`
 ```groovy
 plugins {
-  id("se.patrikerdes.use-latest-versions") version "0.2.9"
+  id("se.patrikerdes.use-latest-versions") version "0.2.10"
   id("com.github.ben-manes.versions") version "0.21.0"
 }
 ```
@@ -63,7 +63,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath("gradle.plugin.se.patrikerdes:gradle-use-latest-versions-plugin:0.2.9")
+        classpath("gradle.plugin.se.patrikerdes:gradle-use-latest-versions-plugin:0.2.10")
         classpath("com.github.ben-manes:gradle-versions-plugin:0.21.0")
     }
 }
@@ -81,7 +81,7 @@ Given this build.gradle file:
 
 ```groovy
 plugins {
-    id 'se.patrikerdes.use-latest-versions' version '0.2.9'
+    id 'se.patrikerdes.use-latest-versions' version '0.2.10'
     id 'com.github.ben-manes.versions' version '0.19.0'
 }
 
@@ -115,7 +115,7 @@ variables – and you build.gradle file will look like this:
 
 ```groovy
 plugins {
-    id 'se.patrikerdes.use-latest-versions' version '0.2.9'
+    id 'se.patrikerdes.use-latest-versions' version '0.2.10'
     id 'com.github.ben-manes.versions' version '0.21.0' // <- Updated
 }
 
@@ -269,7 +269,7 @@ buildscript {
     dependencies{
         classpath group: 'se.patrikerdes',
 				name: 'gradle-use-latest-versions-plugin',
-				version: '0.2.9'
+				version: '0.2.10'
     }
 }
 
@@ -291,9 +291,13 @@ From the [Maven Versions Plugin](http://www.mojohaus.org/versions-maven-plugin/i
 
 ## Changelog
 
+### 0.2.10
+
+Fixed [issue #24](https://github.com/patrikerdes/gradle-use-latest-versions-plugin/issues/24), Allow for non-standard buildDir setting
+
 ### 0.2.9
 
-[PR #23](https://github.com/patrikerdes/gradle-use-latest-versions-plugin/pull/23) Changes to address issues with Gradle multi-project builds. ([b-behan](https://github.com/b-behan))
+[PR #23](https://github.com/patrikerdes/gradle-use-latest-versions-plugin/pull/23), Changes to address issues with Gradle multi-project builds. ([b-behan](https://github.com/b-behan))
 
 [Support com.github.ben-manes.versions version 0.21.0](https://github.com/patrikerdes/gradle-use-latest-versions-plugin/commit/8bba5f675beb1def73e76581e3673eaf7d3e347c)
 
