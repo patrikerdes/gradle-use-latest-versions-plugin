@@ -11,6 +11,7 @@ import org.gradle.api.tasks.TaskAction
 import java.nio.file.Files
 import java.nio.file.StandardCopyOption
 import java.util.regex.Matcher
+import java.util.regex.Pattern
 
 @CompileStatic
 class UseLatestVersionsTask extends DefaultTask {
@@ -21,11 +22,11 @@ class UseLatestVersionsTask extends DefaultTask {
     }
 
     String variableDefinitionMatchString(String variable) {
-        '(' + variable + "[ \t]*=[ \t]*[\"'])(.*)([\"'])"
+        '(' + Pattern.quote(variable) + "[ \t]*=[ \t]*[\"'])(.*)([\"'])"
     }
 
     String gradlePropertiesVariableDefinitionMatchString(String variable) {
-        '(' + variable + '[ \t]*=[ \t]*)(.*)([ \t]*)'
+        '(' + Pattern.quote(variable) + '[ \t]*=[ \t]*)(.*)([ \t]*)'
     }
 
     String newVariableDefinitionString(String newVersion) {
