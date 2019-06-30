@@ -6,6 +6,7 @@ import static se.patrikerdes.Common.getOutDatedDependencies
 import groovy.json.JsonSlurper
 import groovy.transform.CompileStatic
 import org.gradle.api.DefaultTask
+import org.gradle.api.tasks.options.Option
 import org.gradle.api.tasks.TaskAction
 
 import java.nio.file.Files
@@ -15,6 +16,10 @@ import java.util.regex.Pattern
 
 @CompileStatic
 class UseLatestVersionsTask extends DefaultTask {
+    @Option(option='update-dependency',
+            description = 'A whitelist of dependencies to update, in the format of group:name')
+    List<String> updateWhitelist = Collections.emptyList()
+
     UseLatestVersionsTask() {
         description = 'Updates module and plugin versions in all *.gradle and *.gradle.kts files to the latest ' +
                 'available versions.'
@@ -53,7 +58,10 @@ class UseLatestVersionsTask extends DefaultTask {
 
         Object dependencyUpdatesJson = new JsonSlurper().parse(dependencyUpdatesJsonReportFile)
 
-        List<DependencyUpdate> dependecyUpdates = getOutDatedDependencies(dependencyUpdatesJson)
+        List<DependencyUpdate> dependencyUpdates = getOutDatedDependencies(dependencyUpdatesJson)
+        if (!updateWhitelist.empty) {
+            dependencyUpdates = dependencyUpdates.findAll { updateWhitelist.contains(it.groupAndName()) }
+        }
 
         List<DependencyUpdate> dependencyStables = getCurrentDependencies(dependencyUpdatesJson)
 
@@ -64,9 +72,9 @@ class UseLatestVersionsTask extends DefaultTask {
             gradleFileContents[dotGradleFileName] = currentGradleFileContents
         }
 
-        updateModuleVersions(gradleFileContents, dotGradleFileNames, dependecyUpdates)
-        updatePluginVersions(gradleFileContents, dotGradleFileNames, dependecyUpdates)
-        updateVariables(gradleFileContents, dotGradleFileNames, dependecyUpdates, dependencyStables)
+        updateModuleVersions(gradleFileContents, dotGradleFileNames, dependencyUpdates)
+        updatePluginVersions(gradleFileContents, dotGradleFileNames, dependencyUpdates)
+        updateVariables(gradleFileContents, dotGradleFileNames, dependencyUpdates, dependencyStables)
 
         // Write all files back
         for (dotGradleFileName in dotGradleFileNames) {
