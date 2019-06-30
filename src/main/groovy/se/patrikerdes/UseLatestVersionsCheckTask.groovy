@@ -5,10 +5,15 @@ import groovy.json.JsonSlurper
 import groovy.transform.CompileStatic
 import org.gradle.api.DefaultTask
 import org.gradle.api.GradleException
+import org.gradle.api.tasks.options.Option
 import org.gradle.api.tasks.TaskAction
 
 @CompileStatic
 class UseLatestVersionsCheckTask extends DefaultTask {
+    @Option(option='update-dependency',
+            description = 'The same argument that was passed to useLatestVersions')
+    List<String> updateWhitelist = Collections.emptyList()
+
     UseLatestVersionsCheckTask() {
         description = 'Check if all available updates were successfully applied by the useLatestVersions task.'
         group = 'Help'
@@ -31,12 +36,16 @@ class UseLatestVersionsCheckTask extends DefaultTask {
         List<DependencyUpdate> wasUpdateable = getOutDatedDependencies(previousDependencyUpdatesJson)
         List<DependencyUpdate> leftToUpdate = getOutDatedDependencies(currentDependencyUpdatesJson)
 
-        int failedCount = leftToUpdate.size()
+        int skippedCount = updateWhitelist.empty ? 0 :
+                leftToUpdate.count { !updateWhitelist.contains(it.groupAndName()) } as int
+        int failedCount = leftToUpdate.size() - skippedCount
         if (failedCount > 0) {
             println("useLatestVersions failed to update $failedCount ${deps(failedCount)} " +
                     'to the latest version:')
             for (dependencyUpdate in leftToUpdate) {
-                println(' - ' + dependencyUpdate)
+                if (skippedCount == 0 || updateWhitelist.contains(dependencyUpdate.groupAndName())) {
+                    println(' - ' + dependencyUpdate)
+                }
             }
         }
 
@@ -57,6 +66,16 @@ class UseLatestVersionsCheckTask extends DefaultTask {
                 }
                 if (wasUpdated) {
                     println(' - ' + dependencyWasUpdateable)
+                }
+            }
+        }
+
+        if (skippedCount > 0) {
+            println("useLatestVersions skipped updating $skippedCount ${deps(skippedCount)} " +
+                    'not in --dependency-update:')
+            for (dependencyLeftToUpdate in leftToUpdate) {
+                if (!updateWhitelist.contains(dependencyLeftToUpdate.groupAndName())) {
+                    println(' - ' + dependencyLeftToUpdate)
                 }
             }
         }

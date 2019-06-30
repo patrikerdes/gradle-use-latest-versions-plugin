@@ -215,6 +215,38 @@ class CheckFunctionalTest extends BaseFunctionalTest {
         result.output.contains("- log4j:log4j [1.2.16 -> $CurrentVersions.LOG4J]")
     }
 
+    void "useLatestVersionsCheck notes skipped updates due to not being in --update-dependency"() {
+        given:
+        buildFile << """
+            plugins {
+                id 'se.patrikerdes.use-latest-versions'
+                id 'com.github.ben-manes.versions' version '$CurrentVersions.VERSIONS'
+            }
+
+            apply plugin: 'java'
+            
+            repositories {
+                mavenCentral()
+            }
+            
+            dependencies {
+                compile "log4j:log4j:1.2.16"
+                testCompile "junit:junit:3.0"
+            }
+        """
+
+        when:
+        useLatestVersionsOnly('log4j:log4j')
+        BuildResult result = useLatestVersionsCheckOnly('log4j:log4j')
+
+        then:
+        result.task(':useLatestVersionsCheck').outcome == SUCCESS
+        result.output.contains("""useLatestVersions successfully updated 1 dependency to the latest version:
+ - log4j:log4j [1.2.16 -> $CurrentVersions.LOG4J]""")
+        result.output.contains("""useLatestVersions skipped updating 1 dependency not in --dependency-update:
+ - junit:junit [3.0 -> $CurrentVersions.JUNIT]""")
+    }
+
     void "useLatestVersionsCheck outputs a special message when there was nothing to update"() {
         given:
         buildFile << """

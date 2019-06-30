@@ -165,6 +165,15 @@ successfully updated.
 will check the *.gradle files as they were when the gradle build started, which means that it can not pick up the
 changes applied by `useLatestVersions`.
 
+## Updating only specific dependencies
+If your Gradle version is 4.6 or higher, you can pass the `--update-dependency` flag to `useLatestVersions` and
+`useLatestVersionsCheck` with a value in the format `$GROUP:$NAME`.  Multiple dependencies can be updated by passing
+the flag multiple times.
+
+```bash
+# gradle useLatestVersions --update-dependency junit:junit --update-dependency com.google.guava:guava && gradle useLatestVersionsCheck --update-dependency junit:junit --update-dependency com.google.guava:guava
+```
+
 ## Supported dependency formats
 
 Dependencies stated in the following formats should cause the version to be successfully updated by the

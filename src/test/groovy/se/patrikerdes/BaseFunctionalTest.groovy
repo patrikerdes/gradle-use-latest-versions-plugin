@@ -24,6 +24,20 @@ class BaseFunctionalTest extends Specification {
                 .build()
     }
 
+    BuildResult useLatestVersionsOnly(String update) {
+        useLatestVersionsOnly([update])
+    }
+
+    BuildResult useLatestVersionsOnly(List<String> updates) {
+        List<String> arguments = ['useLatestVersions']
+        updates.each { arguments << '--update-dependency' << it }
+        GradleRunner.create()
+                .withProjectDir(testProjectDir.root)
+                .withArguments(arguments)
+                .withPluginClasspath()
+                .build()
+    }
+
     BuildResult useLatestVersions(String gradleVersion) {
         GradleRunner.create()
                 .withProjectDir(testProjectDir.root)
@@ -55,6 +69,20 @@ class BaseFunctionalTest extends Specification {
                 .withArguments('useLatestVersionsCheck')
                 .withPluginClasspath()
                 .buildAndFail()
+    }
+
+    BuildResult useLatestVersionsCheckOnly(String update) {
+        useLatestVersionsCheckOnly([update])
+    }
+
+    BuildResult useLatestVersionsCheckOnly(List<String> updates) {
+        List<String> arguments = ['useLatestVersionsCheck']
+        updates.each { arguments << '--update-dependency' << it }
+        GradleRunner.create()
+                .withProjectDir(testProjectDir.root)
+                .withArguments(arguments)
+                .withPluginClasspath()
+                .build()
     }
 
     BuildResult clean() {
