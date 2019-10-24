@@ -1,6 +1,7 @@
 package se.patrikerdes
 
 import static se.patrikerdes.Common.getCurrentDependencies
+import static se.patrikerdes.Common.getDependencyUpdatesJsonReportFilePath
 import static se.patrikerdes.Common.getOutDatedDependencies
 
 import groovy.json.JsonSlurper
@@ -40,8 +41,7 @@ class UseLatestVersionsTask extends DefaultTask {
 
     @TaskAction
     void useLatestVersions() {
-        File dependencyUpdatesJsonReportFile = new File(project.buildDir, 'dependencyUpdates' + File.separator +
-                'report.json')
+        File dependencyUpdatesJsonReportFile = new File(getDependencyUpdatesJsonReportFilePath(project))
         saveDependencyUpdatesReport(dependencyUpdatesJsonReportFile)
 
         List<String> dotGradleFileNames =
