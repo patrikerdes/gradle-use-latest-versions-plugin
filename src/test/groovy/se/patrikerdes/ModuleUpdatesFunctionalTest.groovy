@@ -360,4 +360,33 @@ class ModuleUpdatesFunctionalTest extends BaseFunctionalTest {
         updatedBuildFile.contains('testCompile \"junit:junit:4.0:javadoc@jar\"')
         updatedBuildFile.contains("compile \"log4j:log4j:$CurrentVersions.LOG4J\"")
     }
+
+    void "don't updates blacklisted dependencies with --ignore-dependency"() {
+        given:
+        buildFile << """
+            plugins {
+                id 'se.patrikerdes.use-latest-versions'
+                id 'com.github.ben-manes.versions' version '$CurrentVersions.VERSIONS'
+            }
+
+            apply plugin: 'java'
+            
+            repositories {
+                mavenCentral()
+            }
+            
+            dependencies {
+                testCompile "junit:junit:4.0:javadoc@jar"
+                compile "log4j:log4j:1.2.16"
+            }
+        """
+
+        when:
+        useLatestVersionsWithout('junit:junit')
+        String updatedBuildFile = buildFile.getText('UTF-8')
+
+        then:
+        updatedBuildFile.contains('testCompile \"junit:junit:4.0:javadoc@jar\"')
+        updatedBuildFile.contains("compile \"log4j:log4j:$CurrentVersions.LOG4J\"")
+    }
 }
