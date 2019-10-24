@@ -119,6 +119,70 @@ class CheckFunctionalTest extends BaseFunctionalTest {
         result.task(':useLatestVersionsCheck').outcome == SUCCESS
     }
 
+    void "useLatestVersionsCheck works with dependencyUpdates reportfileName and outputDir (using buildDir) set"() {
+        given:
+        buildFile << """
+            plugins {
+                id 'se.patrikerdes.use-latest-versions'
+                id 'com.github.ben-manes.versions' version '$CurrentVersions.VERSIONS'
+            }
+
+            apply plugin: 'java'
+            
+            dependencyUpdates {
+                outputDir = "\$buildDir/reports"
+                reportfileName = "dependency-updates"
+            }
+
+            repositories {
+                mavenCentral()
+            }
+            
+            dependencies {
+                testCompile 'junit:junit:4.0'
+            }
+        """
+
+        when:
+        useLatestVersions()
+        BuildResult result = useLatestVersionsCheck()
+
+        then:
+        result.task(':useLatestVersionsCheck').outcome == SUCCESS
+    }
+
+    void "useLatestVersionsCheck works with dependencyUpdates reportfileName and outputDir set"() {
+        given:
+        buildFile << """
+            plugins {
+                id 'se.patrikerdes.use-latest-versions'
+                id 'com.github.ben-manes.versions' version '$CurrentVersions.VERSIONS'
+            }
+
+            apply plugin: 'java'
+            
+            dependencyUpdates {
+                outputDir = "subfolder/reports"
+                reportfileName = "dependency-updates"
+            }
+
+            repositories {
+                mavenCentral()
+            }
+            
+            dependencies {
+                testCompile 'junit:junit:4.0'
+            }
+        """
+
+        when:
+        useLatestVersions()
+        BuildResult result = useLatestVersionsCheck()
+
+        then:
+        result.task(':useLatestVersionsCheck').outcome == SUCCESS
+    }
+
     void "useLatestVersionsCheck outputs success if all updates were successful"() {
         given:
         buildFile << """
