@@ -93,7 +93,8 @@ class UseLatestVersionsCheckTask extends DefaultTask {
             println("useLatestVersions skipped updating $skippedCount ${deps(skippedCount)} " +
                     'not in --update-dependency:')
             for (dependencyLeftToUpdate in leftToUpdate) {
-                if (!updateWhitelist.contains(dependencyLeftToUpdate.groupAndName())) {
+                if (!updateWhitelist.contains(dependencyLeftToUpdate.groupAndName() &&
+                        !updateWhitelist.contains(dependencyLeftToUpdate.group))) {
                     println(' - ' + dependencyLeftToUpdate)
                 }
             }
@@ -102,7 +103,8 @@ class UseLatestVersionsCheckTask extends DefaultTask {
             println("useLatestVersions skipped updating $skippedCount ${deps(skippedCount)} " +
                     'in --ignore-dependency:')
             for (dependencyLeftToUpdate in leftToUpdate) {
-                if (updateBlacklist.contains(dependencyLeftToUpdate.groupAndName())) {
+                if (updateBlacklist.contains(dependencyLeftToUpdate.groupAndName()) ||
+                        updateBlacklist.contains(dependencyLeftToUpdate.group)) {
                     println(' - ' + dependencyLeftToUpdate)
                 }
             }
@@ -110,10 +112,16 @@ class UseLatestVersionsCheckTask extends DefaultTask {
     }
 
     private int getSkippedCount(List<DependencyUpdate> leftToUpdate) {
-        int skippedCount = updateWhitelist.empty ? 0 :
-                leftToUpdate.count { !updateWhitelist.contains(it.groupAndName()) } as int
+        int skippedCount = 0
+        if (!updateWhitelist.empty) {
+            skippedCount = leftToUpdate.count {
+                !updateWhitelist.contains(it.groupAndName()) && !updateWhitelist.contains(it.group)
+            } as int
+        }
         if (!updateBlacklist.empty) {
-            skippedCount = leftToUpdate.count { updateBlacklist.contains(it.groupAndName()) } as int
+            skippedCount = leftToUpdate.count {
+                updateBlacklist.contains(it.groupAndName()) || updateBlacklist.contains(it.group)
+            } as int
         }
         skippedCount
     }

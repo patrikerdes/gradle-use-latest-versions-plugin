@@ -249,6 +249,41 @@ class CheckFunctionalTest extends BaseFunctionalTest {
             " - junit:junit [3.0 -> $CurrentVersions.JUNIT]")
     }
 
+    void "useLatestVersionsCheck notes skipped updates due to not being in --update-dependency as group"() {
+        given:
+        buildFile << """
+            plugins {
+                id 'se.patrikerdes.use-latest-versions'
+                id 'com.github.ben-manes.versions' version '$CurrentVersions.VERSIONS'
+            }
+
+            apply plugin: 'java'
+            
+            repositories {
+                mavenCentral()
+            }
+            
+            dependencies {
+                compile "log4j:log4j:1.2.16"
+                testCompile "junit:junit:3.0"
+                testCompile "junit:junit-dep:4.9"
+            }
+        """
+
+        when:
+        useLatestVersionsOnly('junit')
+        BuildResult result = useLatestVersionsCheckOnly('junit')
+
+        then:
+        result.task(':useLatestVersionsCheck').outcome == SUCCESS
+        String output = result.output.replaceAll('\r', '').replaceAll('\n', '#')
+        output.contains('useLatestVersions successfully updated 2 dependencies to the latest version:#' +
+            " - junit:junit [3.0 -> $CurrentVersions.JUNIT]#" +
+            ' - junit:junit-dep [4.9 -> ')
+        output.contains('useLatestVersions skipped updating 1 dependency not in --update-dependency:#' +
+            " - log4j:log4j [1.2.16 -> $CurrentVersions.LOG4J]")
+    }
+
     void "useLatestVersionsCheck notes skipped updates due to being in --ignore-dependency"() {
         given:
         buildFile << """
@@ -280,6 +315,41 @@ class CheckFunctionalTest extends BaseFunctionalTest {
             " - log4j:log4j [1.2.16 -> $CurrentVersions.LOG4J]")
         output.contains('useLatestVersions skipped updating 1 dependency in --ignore-dependency:#' +
             " - junit:junit [3.0 -> $CurrentVersions.JUNIT]")
+    }
+
+    void "useLatestVersionsCheck notes skipped updates due to being in --ignore-dependency as group"() {
+        given:
+        buildFile << """
+            plugins {
+                id 'se.patrikerdes.use-latest-versions'
+                id 'com.github.ben-manes.versions' version '$CurrentVersions.VERSIONS'
+            }
+
+            apply plugin: 'java'
+            
+            repositories {
+                mavenCentral()
+            }
+            
+            dependencies {
+                compile "log4j:log4j:1.2.16"
+                testCompile "junit:junit:3.0"
+                testCompile "junit:junit-dep:4.9"
+            }
+        """
+
+        when:
+        useLatestVersionsWithout('junit')
+        BuildResult result = useLatestVersionsCheckWithout('junit')
+
+        then:
+        result.task(':useLatestVersionsCheck').outcome == SUCCESS
+        String output = result.output.replaceAll('\r', '').replaceAll('\n', '#')
+        output.contains('useLatestVersions successfully updated 1 dependency to the latest version:#' +
+            " - log4j:log4j [1.2.16 -> $CurrentVersions.LOG4J]")
+        output.contains('useLatestVersions skipped updating 2 dependencies in --ignore-dependency:#' +
+            " - junit:junit [3.0 -> $CurrentVersions.JUNIT]#" +
+            ' - junit:junit-dep [4.9 -> ')
     }
 
     void "useLatestVersions fails if both --ignore-dependency and --update-dependency are set"() {

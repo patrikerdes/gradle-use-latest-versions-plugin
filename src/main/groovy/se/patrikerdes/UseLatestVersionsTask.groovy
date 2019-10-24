@@ -67,10 +67,14 @@ class UseLatestVersionsTask extends DefaultTask {
 
         List<DependencyUpdate> dependencyUpdates = getOutDatedDependencies(dependencyUpdatesJson)
         if (!updateWhitelist.empty) {
-            dependencyUpdates = dependencyUpdates.findAll { updateWhitelist.contains(it.groupAndName()) }
+            dependencyUpdates = dependencyUpdates.findAll {
+                updateWhitelist.contains(it.groupAndName()) || updateWhitelist.contains(it.group)
+            }
         }
         if (!updateBlacklist.empty) {
-            dependencyUpdates = dependencyUpdates.findAll { !updateBlacklist.contains(it.groupAndName()) }
+            dependencyUpdates = dependencyUpdates.findAll {
+                !updateBlacklist.contains(it.groupAndName()) && !updateBlacklist.contains(it.group)
+            }
         }
 
         List<DependencyUpdate> dependencyStables = getCurrentDependencies(dependencyUpdatesJson)
