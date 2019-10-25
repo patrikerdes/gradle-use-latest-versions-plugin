@@ -4,6 +4,7 @@ import groovy.transform.CompileStatic
 import org.gradle.api.Project
 import org.gradle.api.Task
 
+import java.nio.file.Paths
 import java.util.regex.Matcher
 
 @CompileStatic
@@ -108,7 +109,7 @@ class Common {
     }
 
     private static String ensureOutputDirIsAbsolute(String outputDir, Project project) {
-        if (!outputDir.startsWith('/')) {
+        if (!Paths.get(outputDir).isAbsolute()) {
             return project.buildDir.parent + File.separator + outputDir
         }
         outputDir
