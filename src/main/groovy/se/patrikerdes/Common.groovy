@@ -1,6 +1,8 @@
 package se.patrikerdes
 
 import groovy.transform.CompileStatic
+import org.gradle.api.Project
+import org.gradle.api.Task
 
 import java.util.regex.Matcher
 
@@ -98,6 +100,21 @@ class Common {
             }
         }
         versionVariables
+    }
+
+    static String getDependencyUpdatesJsonReportFilePath(Project project) {
+        Task dependencyUpdatesTask = project.tasks.getByPath('dependencyUpdates')
+        String outputDir = dependencyUpdatesTask.properties['outputDir'] as String
+        outputDir = ensureOutputDirIsAbsolute(outputDir, project)
+        String reportfileName = dependencyUpdatesTask.properties['reportfileName'] as String
+        outputDir + File.separator + reportfileName + '.json'
+    }
+
+    private static String ensureOutputDirIsAbsolute(String outputDir, Project project) {
+        if (!outputDir.startsWith('/')) {
+            return project.buildDir.parent + File.separator + outputDir
+        }
+        outputDir
     }
 }
 

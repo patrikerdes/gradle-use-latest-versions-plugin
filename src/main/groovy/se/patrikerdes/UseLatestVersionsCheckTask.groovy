@@ -1,5 +1,6 @@
 package se.patrikerdes
 
+import static se.patrikerdes.Common.getDependencyUpdatesJsonReportFilePath
 import static se.patrikerdes.Common.getOutDatedDependencies
 import static se.patrikerdes.Common.WHITE_BLACKLIST_ERROR_MESSAGE
 import groovy.json.JsonSlurper
@@ -30,7 +31,7 @@ class UseLatestVersionsCheckTask extends DefaultTask {
         File previousDependencyUpdatesReport =
                 new File(new File(project.buildDir, 'useLatestVersions'), 'latestDependencyUpdatesReport.json')
         File currentDependencyUpdatesReport =
-                new File(project.buildDir, 'dependencyUpdates' + File.separator + 'report.json')
+                new File(getDependencyUpdatesJsonReportFilePath(project))
 
         if (!previousDependencyUpdatesReport.exists()) {
             throw new GradleException('No results from useLatestVersions were found, aborting')
