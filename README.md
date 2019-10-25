@@ -167,20 +167,20 @@ changes applied by `useLatestVersions`.
 
 ## Updating only specific dependencies (whitelist)
 If your Gradle version is 4.6 or higher, you can pass the `--update-dependency` flag to `useLatestVersions` and
-`useLatestVersionsCheck` with a value in the format `$GROUP:$NAME`.  Multiple dependencies can be updated by passing
-the flag multiple times.
+`useLatestVersionsCheck` with a value in the format `$GROUP:$NAME`.  A complete dependency group can be updated by 
+using the format `$GROUP`. Multiple dependencies can be updated by passing the flag multiple times.
 
 ```bash
-# gradle useLatestVersions --update-dependency junit:junit --update-dependency com.google.guava:guava && gradle useLatestVersionsCheck --update-dependency junit:junit --update-dependency com.google.guava:guava
+# gradle useLatestVersions --update-dependency junit:junit --update-dependency com.google.guava && gradle useLatestVersionsCheck --update-dependency junit:junit --update-dependency com.google.guava
 ```
 
 ## Ignore specific dependency updates (blacklist)
 If your Gradle version is 4.6 or higher, you can pass the `--ignore-dependency` flag to `useLatestVersions` and
-`useLatestVersionsCheck` with a value in the format `$GROUP:$NAME`.  Multiple dependencies can be ignored by passing
-the flag multiple times.
+`useLatestVersionsCheck` with a value in the format `$GROUP:$NAME`. A complete dependency group can be ignored by 
+using the format `$GROUP`. Multiple dependencies can be ignored by passing the flag multiple times.
 
 ```bash
-# gradle useLatestVersions --ignore-dependency junit:junit --ignore-dependency com.google.guava:guava && gradle useLatestVersionsCheck --ignore-dependency junit:junit --ignore-dependency com.google.guava:guava
+# gradle useLatestVersions --ignore-dependency junit:junit --ignore-dependency com.google.guava && gradle useLatestVersionsCheck --ignore-dependency junit:junit --ignore-dependency com.google.guava
 ```
 
 ## Supported dependency formats
