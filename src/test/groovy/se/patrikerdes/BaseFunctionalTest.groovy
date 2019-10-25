@@ -38,6 +38,31 @@ class BaseFunctionalTest extends Specification {
                 .build()
     }
 
+    BuildResult useLatestVersionsWithout(String update) {
+        useLatestVersionsWithout([update])
+    }
+
+    BuildResult useLatestVersionsWithout(List<String> updates) {
+        List<String> arguments = ['useLatestVersions']
+        updates.each { arguments << '--ignore-dependency' << it }
+        GradleRunner.create()
+                .withProjectDir(testProjectDir.root)
+                .withArguments(arguments)
+                .withPluginClasspath()
+                .build()
+    }
+
+    BuildResult useLatestVersionsWithBlackAndWhitelist() {
+        List<String> arguments = ['useLatestVersions']
+        arguments << '--update-dependency' << 'junit:junit'
+        arguments << '--ignore-dependency' << 'log4j:log4j'
+        GradleRunner.create()
+                .withProjectDir(testProjectDir.root)
+                .withArguments(arguments)
+                .withPluginClasspath()
+                .buildAndFail()
+    }
+
     BuildResult useLatestVersions(String gradleVersion) {
         GradleRunner.create()
                 .withProjectDir(testProjectDir.root)
@@ -83,6 +108,31 @@ class BaseFunctionalTest extends Specification {
                 .withArguments(arguments)
                 .withPluginClasspath()
                 .build()
+    }
+
+    BuildResult useLatestVersionsCheckWithout(String update) {
+        useLatestVersionsCheckWithout([update])
+    }
+
+    BuildResult useLatestVersionsCheckWithout(List<String> updates) {
+        List<String> arguments = ['useLatestVersionsCheck']
+        updates.each { arguments << '--ignore-dependency' << it }
+        GradleRunner.create()
+                .withProjectDir(testProjectDir.root)
+                .withArguments(arguments)
+                .withPluginClasspath()
+                .build()
+    }
+
+    BuildResult useLatestVersionsCheckWithBlackAndWhitelist() {
+        List<String> arguments = ['useLatestVersionsCheck']
+        arguments << '--update-dependency' << 'junit:junit'
+        arguments << '--ignore-dependency' << 'log4j:log4j'
+        GradleRunner.create()
+                .withProjectDir(testProjectDir.root)
+                .withArguments(arguments)
+                .withPluginClasspath()
+                .buildAndFail()
     }
 
     BuildResult clean() {

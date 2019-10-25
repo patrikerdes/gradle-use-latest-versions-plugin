@@ -9,6 +9,9 @@ import java.util.regex.Matcher
 
 @CompileStatic
 class Common {
+    public static final String WHITE_BLACKLIST_ERROR_MESSAGE = 'Using both, --update-dependency and ' +
+            '--ignore-dependency, is not allowed.'
+
     static List<DependencyUpdate> getOutDatedDependencies(Object dependencyUpdatesJson) {
         Object outdatedDependencies = dependencyUpdatesJson['outdated']['dependencies']
         List<DependencyUpdate> dependecyUpdates = []

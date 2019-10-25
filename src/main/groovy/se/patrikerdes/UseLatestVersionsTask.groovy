@@ -1,5 +1,6 @@
 package se.patrikerdes
 
+import static se.patrikerdes.Common.WHITE_BLACKLIST_ERROR_MESSAGE
 import static se.patrikerdes.Common.getCurrentDependencies
 import static se.patrikerdes.Common.getDependencyUpdatesJsonReportFilePath
 import static se.patrikerdes.Common.getOutDatedDependencies
@@ -7,6 +8,7 @@ import static se.patrikerdes.Common.getOutDatedDependencies
 import groovy.json.JsonSlurper
 import groovy.transform.CompileStatic
 import org.gradle.api.DefaultTask
+import org.gradle.api.GradleException
 import org.gradle.api.tasks.options.Option
 import org.gradle.api.tasks.TaskAction
 
@@ -20,6 +22,10 @@ class UseLatestVersionsTask extends DefaultTask {
     @Option(option='update-dependency',
             description = 'A whitelist of dependencies to update, in the format of group:name')
     List<String> updateWhitelist = Collections.emptyList()
+
+    @Option(option='ignore-dependency',
+            description = 'A blacklist of dependencies to update, in the format of group:name')
+    List<String> updateBlacklist = Collections.emptyList()
 
     UseLatestVersionsTask() {
         description = 'Updates module and plugin versions in all *.gradle and *.gradle.kts files to the latest ' +
@@ -41,6 +47,7 @@ class UseLatestVersionsTask extends DefaultTask {
 
     @TaskAction
     void useLatestVersions() {
+        validateExclusiveWhiteOrBlacklist()
         File dependencyUpdatesJsonReportFile = new File(getDependencyUpdatesJsonReportFilePath(project))
         saveDependencyUpdatesReport(dependencyUpdatesJsonReportFile)
 
@@ -60,7 +67,14 @@ class UseLatestVersionsTask extends DefaultTask {
 
         List<DependencyUpdate> dependencyUpdates = getOutDatedDependencies(dependencyUpdatesJson)
         if (!updateWhitelist.empty) {
-            dependencyUpdates = dependencyUpdates.findAll { updateWhitelist.contains(it.groupAndName()) }
+            dependencyUpdates = dependencyUpdates.findAll {
+                updateWhitelist.contains(it.groupAndName()) || updateWhitelist.contains(it.group)
+            }
+        }
+        if (!updateBlacklist.empty) {
+            dependencyUpdates = dependencyUpdates.findAll {
+                !updateBlacklist.contains(it.groupAndName()) && !updateBlacklist.contains(it.group)
+            }
         }
 
         List<DependencyUpdate> dependencyStables = getCurrentDependencies(dependencyUpdatesJson)
@@ -193,5 +207,11 @@ class UseLatestVersionsTask extends DefaultTask {
         Files.copy(dependencyUpdatesJsonReportFile.toPath(),
                 new File(useLatestVersionsFolder, 'latestDependencyUpdatesReport.json').toPath(),
                 StandardCopyOption.REPLACE_EXISTING)
+    }
+
+    private void validateExclusiveWhiteOrBlacklist() {
+        if (!updateWhitelist.empty && !updateBlacklist.empty) {
+            throw new GradleException(WHITE_BLACKLIST_ERROR_MESSAGE)
+        }
     }
 }

@@ -2,6 +2,7 @@ package se.patrikerdes
 
 import static org.gradle.testkit.runner.TaskOutcome.FAILED
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
+import static se.patrikerdes.Common.WHITE_BLACKLIST_ERROR_MESSAGE
 
 import org.gradle.testkit.runner.BuildResult
 
@@ -308,8 +309,167 @@ class CheckFunctionalTest extends BaseFunctionalTest {
         String output = result.output.replaceAll('\r', '').replaceAll('\n', '#')
         output.contains('useLatestVersions successfully updated 1 dependency to the latest version:#' +
             " - log4j:log4j [1.2.16 -> $CurrentVersions.LOG4J]")
-        output.contains('useLatestVersions skipped updating 1 dependency not in --dependency-update:#' +
+        output.contains('useLatestVersions skipped updating 1 dependency not in --update-dependency:#' +
             " - junit:junit [3.0 -> $CurrentVersions.JUNIT]")
+    }
+
+    void "useLatestVersionsCheck notes skipped updates due to not being in --update-dependency as group"() {
+        given:
+        buildFile << """
+            plugins {
+                id 'se.patrikerdes.use-latest-versions'
+                id 'com.github.ben-manes.versions' version '$CurrentVersions.VERSIONS'
+            }
+
+            apply plugin: 'java'
+            
+            repositories {
+                mavenCentral()
+            }
+            
+            dependencies {
+                compile "log4j:log4j:1.2.16"
+                testCompile "junit:junit:3.0"
+                testCompile "junit:junit-dep:4.9"
+            }
+        """
+
+        when:
+        useLatestVersionsOnly('junit')
+        BuildResult result = useLatestVersionsCheckOnly('junit')
+
+        then:
+        result.task(':useLatestVersionsCheck').outcome == SUCCESS
+        String output = result.output.replaceAll('\r', '').replaceAll('\n', '#')
+        output.contains('useLatestVersions successfully updated 2 dependencies to the latest version:#' +
+            " - junit:junit [3.0 -> $CurrentVersions.JUNIT]#" +
+            ' - junit:junit-dep [4.9 -> ')
+        output.contains('useLatestVersions skipped updating 1 dependency not in --update-dependency:#' +
+            " - log4j:log4j [1.2.16 -> $CurrentVersions.LOG4J]")
+    }
+
+    void "useLatestVersionsCheck notes skipped updates due to being in --ignore-dependency"() {
+        given:
+        buildFile << """
+            plugins {
+                id 'se.patrikerdes.use-latest-versions'
+                id 'com.github.ben-manes.versions' version '$CurrentVersions.VERSIONS'
+            }
+
+            apply plugin: 'java'
+            
+            repositories {
+                mavenCentral()
+            }
+            
+            dependencies {
+                compile "log4j:log4j:1.2.16"
+                testCompile "junit:junit:3.0"
+            }
+        """
+
+        when:
+        useLatestVersionsWithout('junit:junit')
+        BuildResult result = useLatestVersionsCheckWithout('junit:junit')
+
+        then:
+        result.task(':useLatestVersionsCheck').outcome == SUCCESS
+        String output = result.output.replaceAll('\r', '').replaceAll('\n', '#')
+        output.contains('useLatestVersions successfully updated 1 dependency to the latest version:#' +
+            " - log4j:log4j [1.2.16 -> $CurrentVersions.LOG4J]")
+        output.contains('useLatestVersions skipped updating 1 dependency in --ignore-dependency:#' +
+            " - junit:junit [3.0 -> $CurrentVersions.JUNIT]")
+    }
+
+    void "useLatestVersionsCheck notes skipped updates due to being in --ignore-dependency as group"() {
+        given:
+        buildFile << """
+            plugins {
+                id 'se.patrikerdes.use-latest-versions'
+                id 'com.github.ben-manes.versions' version '$CurrentVersions.VERSIONS'
+            }
+
+            apply plugin: 'java'
+            
+            repositories {
+                mavenCentral()
+            }
+            
+            dependencies {
+                compile "log4j:log4j:1.2.16"
+                testCompile "junit:junit:3.0"
+                testCompile "junit:junit-dep:4.9"
+            }
+        """
+
+        when:
+        useLatestVersionsWithout('junit')
+        BuildResult result = useLatestVersionsCheckWithout('junit')
+
+        then:
+        result.task(':useLatestVersionsCheck').outcome == SUCCESS
+        String output = result.output.replaceAll('\r', '').replaceAll('\n', '#')
+        output.contains('useLatestVersions successfully updated 1 dependency to the latest version:#' +
+            " - log4j:log4j [1.2.16 -> $CurrentVersions.LOG4J]")
+        output.contains('useLatestVersions skipped updating 2 dependencies in --ignore-dependency:#' +
+            " - junit:junit [3.0 -> $CurrentVersions.JUNIT]#" +
+            ' - junit:junit-dep [4.9 -> ')
+    }
+
+    void "useLatestVersions fails if both --ignore-dependency and --update-dependency are set"() {
+        given:
+        buildFile << """
+            plugins {
+                id 'se.patrikerdes.use-latest-versions'
+                id 'com.github.ben-manes.versions' version '$CurrentVersions.VERSIONS'
+            }
+
+            apply plugin: 'java'
+            
+            repositories {
+                mavenCentral()
+            }
+            
+            dependencies {
+                compile "log4j:log4j:1.2.16"
+                testCompile "junit:junit:3.0"
+            }
+        """
+
+        when:
+        BuildResult result = useLatestVersionsWithBlackAndWhitelist()
+
+        then:
+        result.task(':useLatestVersions').outcome == FAILED
+        result.output.contains(WHITE_BLACKLIST_ERROR_MESSAGE)
+    }
+
+    void "useLatestVersionsCheck fails if both --ignore-dependency and --update-dependency are set"() {
+        given:
+        buildFile << """
+            plugins {
+                id 'se.patrikerdes.use-latest-versions'
+                id 'com.github.ben-manes.versions' version '$CurrentVersions.VERSIONS'
+            }
+
+            apply plugin: 'java'
+            
+            repositories {
+                mavenCentral()
+            }
+            
+            dependencies {
+                compile "log4j:log4j:1.2.16"
+                testCompile "junit:junit:3.0"
+            }
+        """
+
+        when:
+        BuildResult result = useLatestVersionsCheckWithBlackAndWhitelist()
+
+        then:
+        result.task(':useLatestVersionsCheck').outcome == FAILED
+        result.output.contains(WHITE_BLACKLIST_ERROR_MESSAGE)
     }
 
     void "useLatestVersionsCheck outputs a special message when there was nothing to update"() {
