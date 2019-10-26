@@ -102,7 +102,7 @@ class KotlinVersionsIntegrationFunctionalTest extends KotlinBaseFunctionalTest {
             }
             
             dependencies {
-                testCompile("junit:junit:4.0")
+                compile("log4j:log4j:1.2.16")
             }
         """
 
@@ -111,7 +111,7 @@ class KotlinVersionsIntegrationFunctionalTest extends KotlinBaseFunctionalTest {
         String updatedBuildFile = buildFile.getText('UTF-8')
 
         then:
-        updatedBuildFile.contains("junit:junit:$CurrentVersions.JUNIT")
+        updatedBuildFile.contains("log4j:log4j:$CurrentVersions.LOG4J")
 
         where:
         versionsVersion | gradleVersion

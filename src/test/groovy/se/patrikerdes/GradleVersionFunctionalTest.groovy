@@ -30,7 +30,7 @@ class GradleVersionFunctionalTest extends BaseFunctionalTest {
             }
             
             dependencies {
-                testCompile 'junit:junit:4.0'
+                compile "log4j:log4j:1.2.16"
             }
         """
 
@@ -39,7 +39,7 @@ class GradleVersionFunctionalTest extends BaseFunctionalTest {
         String updatedBuildFile = buildFile.getText('UTF-8')
 
         then:
-        updatedBuildFile.contains("junit:junit:$CurrentVersions.JUNIT")
+        updatedBuildFile.contains("log4j:log4j:$CurrentVersions.LOG4J")
         gradleVersion in PLUGIN_UPDATE_NOT_SUPPORTED ||
                 updatedBuildFile.contains("'com.github.ben-manes.versions' version '$CurrentVersions.VERSIONS'")
 
