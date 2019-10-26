@@ -107,7 +107,7 @@ class Common {
         Task dependencyUpdatesTask = project.tasks.getByPath('dependencyUpdates')
         String outputDir = dependencyUpdatesTask.properties['outputDir'] as String
         outputDir = ensureOutputDirIsAbsolute(outputDir, project)
-        String reportfileName = dependencyUpdatesTask.properties['reportfileName'] as String
+        String reportfileName = dependencyUpdatesTask.properties['reportfileName'] ?: 'report'
         outputDir + File.separator + reportfileName + '.json'
     }
 
