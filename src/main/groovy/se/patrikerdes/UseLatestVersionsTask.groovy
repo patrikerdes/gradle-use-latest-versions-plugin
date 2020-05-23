@@ -11,6 +11,7 @@ import org.gradle.api.DefaultTask
 import org.gradle.api.GradleException
 import org.gradle.api.tasks.options.Option
 import org.gradle.api.tasks.TaskAction
+import org.gradle.api.tasks.Input
 
 import java.nio.file.Files
 import java.nio.file.StandardCopyOption
@@ -19,10 +20,12 @@ import java.util.regex.Pattern
 
 @CompileStatic
 class UseLatestVersionsTask extends DefaultTask {
+    @Input
     @Option(option='update-dependency',
             description = 'A whitelist of dependencies to update, in the format of group:name')
     List<String> updateWhitelist = Collections.emptyList()
 
+    @Input
     @Option(option='ignore-dependency',
             description = 'A blacklist of dependencies to update, in the format of group:name')
     List<String> updateBlacklist = Collections.emptyList()
