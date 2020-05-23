@@ -107,7 +107,7 @@ class KotlinModuleUpdatesFunctionalTest extends KotlinBaseFunctionalTest {
         File buildSrcBuildGradleFile = testProjectDir.newFile('buildSrc/build.gradle.kts')
         buildSrcBuildGradleFile << '''
             plugins {
-                id("org.gradle.kotlin.kotlin-dsl.base") version "1.1.3"
+                id("org.gradle.kotlin.kotlin-dsl.base") version "1.3.6"
             }
             
             repositories {
