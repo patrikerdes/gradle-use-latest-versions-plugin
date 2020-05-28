@@ -5,18 +5,19 @@ import static se.patrikerdes.Common.getCurrentDependencies
 import static se.patrikerdes.Common.getDependencyUpdatesJsonReportFilePath
 import static se.patrikerdes.Common.getOutDatedDependencies
 
+import org.gradle.api.Project
+import groovy.json.JsonBuilder
 import groovy.json.JsonSlurper
 import groovy.transform.CompileStatic
 import org.gradle.api.DefaultTask
 import org.gradle.api.GradleException
-import org.gradle.api.tasks.options.Option
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.options.Option
 
 import java.nio.file.Files
 import java.nio.file.StandardCopyOption
 import java.util.regex.Matcher
-import java.util.regex.Pattern
 
 @CompileStatic
 class UseLatestVersionsTask extends DefaultTask {
@@ -30,22 +31,15 @@ class UseLatestVersionsTask extends DefaultTask {
             description = 'A blacklist of dependencies to update, in the format of group:name')
     List<String> updateBlacklist = Collections.emptyList()
 
+    @Input
+    @Option(option='update-root-properties',
+            description = 'Update root project gradle.properties with subprojects versions in multi-project build')
+    boolean updateRootProperties
+
     UseLatestVersionsTask() {
         description = 'Updates module and plugin versions in all *.gradle and *.gradle.kts files to the latest ' +
                 'available versions.'
         group = 'Help'
-    }
-
-    String variableDefinitionMatchString(String variable) {
-        '(' + Pattern.quote(variable) + "[ \t]*=[ \t]*[\"'])(.*)([\"'])"
-    }
-
-    String gradlePropertiesVariableDefinitionMatchString(String variable) {
-        '(' + Pattern.quote(variable) + '[ \t]*=[ \t]*)(.*)([ \t]*)'
-    }
-
-    String newVariableDefinitionString(String newVersion) {
-        '$1' + newVersion + '$3'
     }
 
     @TaskAction
@@ -59,6 +53,11 @@ class UseLatestVersionsTask extends DefaultTask {
         dotGradleFileNames += new FileNameFinder().getFileNames(project.projectDir.absolutePath, '**/*.gradle.kts')
         dotGradleFileNames += new FileNameFinder().getFileNames(project.projectDir.absolutePath, '**/gradle.properties')
         dotGradleFileNames += new FileNameFinder().getFileNames(project.projectDir.absolutePath, 'buildSrc/**/*.kt')
+        String rootGradleProperties = getRootGradlePropertiesPath(project)
+        if (rootGradleProperties && updateRootProperties && project != project.rootProject) {
+            // Append so we don't update variables if defined in multiple files
+            dotGradleFileNames += rootGradleProperties
+        }
 
         // Exclude any files that belong to sub-projects
         List<String> subprojectPaths = project.subprojects.collect { it.projectDir.absolutePath }
@@ -91,11 +90,22 @@ class UseLatestVersionsTask extends DefaultTask {
 
         updateModuleVersions(gradleFileContents, dotGradleFileNames, dependencyUpdates)
         updatePluginVersions(gradleFileContents, dotGradleFileNames, dependencyUpdates)
-        updateVariables(gradleFileContents, dotGradleFileNames, dependencyUpdates, dependencyStables)
+        Map<String, String> versionVariables = getVersionVariables(gradleFileContents, dotGradleFileNames,
+                dependencyUpdates, dependencyStables)
+        Common.updateVersionVariables(gradleFileContents, dotGradleFileNames, versionVariables)
 
         // Write all files back
         for (dotGradleFileName in dotGradleFileNames) {
-            new File(dotGradleFileName).setText(gradleFileContents[dotGradleFileName], 'UTF-8')
+            if (dotGradleFileName != rootGradleProperties) {
+                // Root Gradle properties are handled in
+                // internalAggregateRoot task that reads version-variables.json
+                new File(dotGradleFileName).setText(gradleFileContents[dotGradleFileName], 'UTF-8')
+            }
+        }
+
+        if (project == project.rootProject || updateRootProperties) {
+            new File(project.buildDir, 'useLatestVersions/version-variables.json')
+                    .write(new JsonBuilder(versionVariables).toPrettyString())
         }
     }
 
@@ -143,12 +153,11 @@ class UseLatestVersionsTask extends DefaultTask {
         }
     }
 
-    void updateVariables(Map<String, String> gradleFileContents, List<String> dotGradleFileNames,
+    Map<String, String> getVersionVariables(Map<String, String> gradleFileContents, List<String> dotGradleFileNames,
                          List<DependencyUpdate> dependencyUpdates, List<DependencyUpdate> dependencyStables) {
         Set problemVariables = []
         Map<String, String> versionVariables = Common.findVariables(dotGradleFileNames,
                 dependencyUpdates + dependencyStables, gradleFileContents, problemVariables)
-
         for (problemVariable in problemVariables) {
             versionVariables.remove(problemVariable)
         }
@@ -160,7 +169,7 @@ class UseLatestVersionsTask extends DefaultTask {
         for (String dotGradleFileName in dotGradleFileNames) {
             for (variableName in versionVariables.keySet()) {
                 Matcher variableDefinitionMatch = gradleFileContents[dotGradleFileName] =~
-                        variableDefinitionMatchStringForFileName(variableName, dotGradleFileName)
+                        Common.variableDefinitionMatchStringForFileName(variableName, dotGradleFileName)
                 if (variableDefinitionMatch.size() == 1) {
                     if (variableDefinitions.contains(variableName)) {
                         // The variable is assigned to in more than one file
@@ -183,23 +192,7 @@ class UseLatestVersionsTask extends DefaultTask {
             versionVariables.remove(problemVariable)
         }
 
-        // Update variables
-        for (String dotGradleFileName in dotGradleFileNames) {
-            for (versionVariable in versionVariables) {
-                gradleFileContents[dotGradleFileName] =
-                        gradleFileContents[dotGradleFileName].replaceAll(
-                                variableDefinitionMatchStringForFileName(versionVariable.key, dotGradleFileName),
-                                newVariableDefinitionString(versionVariable.value))
-            }
-        }
-    }
-
-    String variableDefinitionMatchStringForFileName(String variable, String fileName) {
-        String splitter = File.separator.replace('\\', '\\\\')
-        if (fileName.split(splitter).last() == 'gradle.properties') {
-            return gradlePropertiesVariableDefinitionMatchString(variable)
-        }
-        variableDefinitionMatchString(variable)
+        versionVariables
     }
 
     void saveDependencyUpdatesReport(File dependencyUpdatesJsonReportFile) {
@@ -210,6 +203,11 @@ class UseLatestVersionsTask extends DefaultTask {
         Files.copy(dependencyUpdatesJsonReportFile.toPath(),
                 new File(useLatestVersionsFolder, 'latestDependencyUpdatesReport.json').toPath(),
                 StandardCopyOption.REPLACE_EXISTING)
+    }
+
+    private String getRootGradlePropertiesPath(Project project) {
+        File rootGradleProperties = new File(project.rootDir.absolutePath, 'gradle.properties')
+        rootGradleProperties.exists() ? rootGradleProperties.absolutePath : null
     }
 
     private void validateExclusiveWhiteOrBlacklist() {

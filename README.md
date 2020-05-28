@@ -75,6 +75,24 @@ apply {
 
 ```
 
+### Multi-project usage
+In case you have a Multi-project build and you have some common dependency configuration in some common file in root project 
+(like *.gradle file), you should apply plugin to all projects. Easiest way to do this is with `allprojects` block like:
+```
+plugins {
+  id 'se.patrikerdes.use-latest-versions' version '0.2.13'
+  id 'com.github.ben-manes.versions' version '0.21.0'
+}
+
+allprojects {
+    apply plugin: 'se.patrikerdes.use-latest-versions'
+    apply plugin: 'com.github.ben-manes.versions'
+}
+```
+This is because `se.patrikerdes.use-latest-versions` plugin scans files for every project separately. 
+
+In case you handle dependencies per project separately this is not needed and you can apply plugin just to selected projects.
+
 ## Example
 
 Given this build.gradle file:
@@ -143,7 +161,22 @@ dependencies {
 ### useLatestVersions
 
 ```bash
-# gradle useLatestVersions
+gradle useLatestVersions
+
+# Configuration and default values:
+useLatestVersions {
+   # A whitelist of dependencies to update, in the format of group:name
+   # Equal to command line: --update-dependency=[values]
+   updateWhitelist = []
+   # A blacklist of dependencies to update, in the format of group:name
+   # Equal to command line: --ignore-dependency=[values]
+   updateBlacklist = []
+   # When enabled, root project gradle.properties will also be populated with 
+   # versions from subprojects in multi-project build
+   # Equal to command line: --update-root-properties
+   updateRootProperties = false
+}
+
 ```
 
 Updates module and plugin versions in all *.gradle files in the project root folder or any subfolder to the latest

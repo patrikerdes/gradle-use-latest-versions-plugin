@@ -6,6 +6,7 @@ import org.gradle.api.Task
 
 import java.nio.file.Paths
 import java.util.regex.Matcher
+import java.util.regex.Pattern
 
 @CompileStatic
 class Common {
@@ -48,7 +49,9 @@ class Common {
 
     static void getVariablesFromMatches(Matcher variableMatch, Map<String, String> versionVariables,
                                         DependencyUpdate update, Set problemVariables) {
-        if (variableMatch.size() == 1) {
+        // File can have more dependencies with same version variable
+        // We anyway check that versions of dependencies for that variable are the same
+        if (variableMatch.size() >= 1) {
             String variableName = ((List) variableMatch[0])[1]
             if (versionVariables.containsKey(variableName) &&
                     versionVariables[variableName as String] != update.newVersion) {
@@ -117,5 +120,38 @@ class Common {
         }
         outputDir
     }
+
+    static void updateVersionVariables(Map<String, String> gradleFileContents, List<String> dotGradleFileNames,
+                                       Map<String, String> versionVariables) {
+        for (String dotGradleFileName in dotGradleFileNames) {
+            for (versionVariable in versionVariables) {
+                gradleFileContents[dotGradleFileName] =
+                        gradleFileContents[dotGradleFileName].replaceAll(
+                                variableDefinitionMatchStringForFileName(versionVariable.key, dotGradleFileName),
+                                newVariableDefinitionString(versionVariable.value))
+            }
+        }
+    }
+
+    static String variableDefinitionMatchStringForFileName(String variable, String fileName) {
+        String splitter = File.separator.replace('\\', '\\\\')
+        if (fileName.split(splitter).last() == 'gradle.properties') {
+            return gradlePropertiesVariableDefinitionMatchString(variable)
+        }
+        variableDefinitionMatchString(variable)
+    }
+
+    static String variableDefinitionMatchString(String variable) {
+        '(' + Pattern.quote(variable) + "[ \t]*=[ \t]*[\"'])(.*)([\"'])"
+    }
+
+    static String gradlePropertiesVariableDefinitionMatchString(String variable) {
+        '(' + Pattern.quote(variable) + '[ \t]*=[ \t]*)(.*)([ \t]*)'
+    }
+
+    static String newVariableDefinitionString(String newVersion) {
+        '$1' + newVersion + '$3'
+    }
+
 }
 
