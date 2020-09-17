@@ -3,9 +3,10 @@ package se.patrikerdes
 import static se.patrikerdes.Common.WHITE_BLACKLIST_ERROR_MESSAGE
 import static se.patrikerdes.Common.getCurrentDependencies
 import static se.patrikerdes.Common.getDependencyUpdatesJsonReportFilePath
+import static se.patrikerdes.Common.getGradleConfigFilesOnPath
+import static se.patrikerdes.Common.getKotlinConfigFilesOnPath
 import static se.patrikerdes.Common.getOutDatedDependencies
 
-import org.gradle.api.Project
 import groovy.json.JsonBuilder
 import groovy.json.JsonSlurper
 import groovy.transform.CompileStatic
@@ -48,15 +49,12 @@ class UseLatestVersionsTask extends DefaultTask {
         File dependencyUpdatesJsonReportFile = new File(getDependencyUpdatesJsonReportFilePath(project))
         saveDependencyUpdatesReport(dependencyUpdatesJsonReportFile)
 
-        List<String> dotGradleFileNames =
-                new FileNameFinder().getFileNames(project.projectDir.absolutePath, '**/*.gradle')
-        dotGradleFileNames += new FileNameFinder().getFileNames(project.projectDir.absolutePath, '**/*.gradle.kts')
-        dotGradleFileNames += new FileNameFinder().getFileNames(project.projectDir.absolutePath, '**/gradle.properties')
-        dotGradleFileNames += new FileNameFinder().getFileNames(project.projectDir.absolutePath, 'buildSrc/**/*.kt')
-        String rootGradleProperties = getRootGradlePropertiesPath(project)
-        if (rootGradleProperties && updateRootProperties && project != project.rootProject) {
+        List<String> dotGradleFileNames = getGradleConfigFilesOnPath(project.projectDir.absolutePath)
+        dotGradleFileNames += getKotlinConfigFilesOnPath(project.projectDir.absolutePath)
+        List<String> rootGradleConfigFiles = getGradleConfigFilesOnPath(project.rootDir.absolutePath)
+        if (!rootGradleConfigFiles.empty && updateRootProperties && project != project.rootProject) {
             // Append so we don't update variables if defined in multiple files
-            dotGradleFileNames += rootGradleProperties
+            dotGradleFileNames += rootGradleConfigFiles
         }
 
         // Exclude any files that belong to sub-projects
@@ -96,7 +94,7 @@ class UseLatestVersionsTask extends DefaultTask {
 
         // Write all files back
         for (dotGradleFileName in dotGradleFileNames) {
-            if (dotGradleFileName != rootGradleProperties) {
+            if (!updateRootProperties || !rootGradleConfigFiles.contains(dotGradleFileName)) {
                 // Root Gradle properties are handled in
                 // internalAggregateRoot task that reads version-variables.json
                 new File(dotGradleFileName).setText(gradleFileContents[dotGradleFileName], 'UTF-8')
@@ -203,11 +201,6 @@ class UseLatestVersionsTask extends DefaultTask {
         Files.copy(dependencyUpdatesJsonReportFile.toPath(),
                 new File(useLatestVersionsFolder, 'latestDependencyUpdatesReport.json').toPath(),
                 StandardCopyOption.REPLACE_EXISTING)
-    }
-
-    private String getRootGradlePropertiesPath(Project project) {
-        File rootGradleProperties = new File(project.rootDir.absolutePath, 'gradle.properties')
-        rootGradleProperties.exists() ? rootGradleProperties.absolutePath : null
     }
 
     private void validateExclusiveWhiteOrBlacklist() {

@@ -153,5 +153,17 @@ class Common {
         '$1' + newVersion + '$3'
     }
 
+    static List<String> getGradleConfigFilesOnPath(String absolutePath) {
+        List<String> filePaths = new FileNameFinder().getFileNames(absolutePath, '**/*.gradle')
+        filePaths += new FileNameFinder().getFileNames(absolutePath, '**/gradle.properties')
+        return filePaths
+    }
+
+    static List<String> getKotlinConfigFilesOnPath(String absolutePath) {
+        List<String> filePaths = new FileNameFinder().getFileNames(absolutePath, '**/*.gradle.kts')
+        filePaths += new FileNameFinder().getFileNames(absolutePath, 'buildSrc/**/*.kt')
+        return filePaths
+    }
+
 }
 

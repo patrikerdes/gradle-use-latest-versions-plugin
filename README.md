@@ -171,8 +171,8 @@ useLatestVersions {
    # A blacklist of dependencies to update, in the format of group:name
    # Equal to command line: --ignore-dependency=[values]
    updateBlacklist = []
-   # When enabled, root project gradle.properties will also be populated with 
-   # versions from subprojects in multi-project build
+   # When enabled, root project gradle.properties and *.gradle will also
+   # be populated with versions from subprojects in multi-project build
    # Equal to command line: --update-root-properties
    updateRootProperties = false
 }
