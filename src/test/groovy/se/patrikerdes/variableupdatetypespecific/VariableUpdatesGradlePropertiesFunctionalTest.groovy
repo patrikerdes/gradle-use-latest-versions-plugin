@@ -1,11 +1,11 @@
-package se.patrikerdes.VariableUpdatesTypeSpecificFunctionalTests
+package se.patrikerdes.variableupdatetypespecific
 
 import org.gradle.testkit.runner.BuildResult
 import se.patrikerdes.BaseFunctionalTest
 import se.patrikerdes.CurrentVersions
 
-class VariableUpdatesCommonGradleFunctionalTest extends BaseFunctionalTest {
-    void "a variable assigned in test.gradle will be updated"() {
+class VariableUpdatesGradlePropertiesFunctionalTest extends BaseFunctionalTest {
+    void "a variable assigned in gradle.properties will be updated"() {
         given:
         buildFile << """
             plugins {
@@ -14,7 +14,6 @@ class VariableUpdatesCommonGradleFunctionalTest extends BaseFunctionalTest {
             }
 
             apply plugin: 'java'
-            apply from: "test.gradle"
 
             repositories {
                 mavenCentral()
@@ -25,24 +24,22 @@ class VariableUpdatesCommonGradleFunctionalTest extends BaseFunctionalTest {
                 compile "log4j:log4j:\$log4j_version"
             }
         """
-        File commonGradleFile = testProjectDir.newFile('test.gradle')
-        commonGradleFile << '''
-        ext {
-            junit_version = '4.0'
-            log4j_version='1.2.16'
-        }
+        File gradlePropertiesFile = testProjectDir.newFile('gradle.properties')
+        gradlePropertiesFile << '''
+            junit_version = 4.0
+            log4j_version=1.2.16
         '''
 
         when:
         useLatestVersions()
-        String updatedCommonGradleFile = commonGradleFile.getText('UTF-8')
+        String updatedGradlePropertiesFile = gradlePropertiesFile.getText('UTF-8')
 
         then:
-        updatedCommonGradleFile.contains("junit_version = '$CurrentVersions.JUNIT'")
-        updatedCommonGradleFile.contains("log4j_version='$CurrentVersions.LOG4J'")
+        updatedGradlePropertiesFile.contains("junit_version = $CurrentVersions.JUNIT")
+        updatedGradlePropertiesFile.contains("log4j_version=$CurrentVersions.LOG4J")
     }
 
-    void "will update variables in test.gradle when specified twice in build gradle"() {
+    void "will update variables in gradle.properties when specified twice in build gradle"() {
         given:
         buildFile << """
             plugins {
@@ -51,7 +48,6 @@ class VariableUpdatesCommonGradleFunctionalTest extends BaseFunctionalTest {
             }
 
             apply plugin: 'java'
-            apply from: "test.gradle"
 
             repositories {
                 mavenCentral()
@@ -63,24 +59,22 @@ class VariableUpdatesCommonGradleFunctionalTest extends BaseFunctionalTest {
                 runtimeOnly "log4j:log4j:\$log4j_version"
             }
         """
-        File commonGradleFile = testProjectDir.newFile('test.gradle')
-        commonGradleFile << '''
-        ext {
-            junit_version = '4.0'
-            log4j_version='1.2.16'
-        }
+        File gradlePropertiesFile = testProjectDir.newFile('gradle.properties')
+        gradlePropertiesFile << '''
+            junit_version = 4.0
+            log4j_version=1.2.16
         '''
 
         when:
         useLatestVersions()
-        String updatedCommonGradleFile = commonGradleFile.getText('UTF-8')
+        String updatedGradlePropertiesFile = gradlePropertiesFile.getText('UTF-8')
 
         then:
-        updatedCommonGradleFile.contains("junit_version = '$CurrentVersions.JUNIT'")
-        updatedCommonGradleFile.contains("log4j_version='$CurrentVersions.LOG4J'")
+        updatedGradlePropertiesFile.contains("junit_version = $CurrentVersions.JUNIT")
+        updatedGradlePropertiesFile.contains("log4j_version=$CurrentVersions.LOG4J")
     }
 
-    void "will not update variables in root test.gradle in Multi-project without --update-root-properties"() {
+    void "will not update variables in root gradle.properties in Multi-project without --update-root-properties"() {
         given:
         buildFile << """
             plugins {
@@ -92,18 +86,15 @@ class VariableUpdatesCommonGradleFunctionalTest extends BaseFunctionalTest {
                 apply plugin: 'se.patrikerdes.use-latest-versions'
                 apply plugin: 'com.github.ben-manes.versions'
                 apply plugin: 'java'
-                apply from: "\$rootDir/test.gradle"
                 repositories {
                     mavenCentral()
                 }
             }
         """
-        File rootCommonGradleFile = testProjectDir.newFile('test.gradle')
-        rootCommonGradleFile << '''
-        ext {
-            junit_version = '4.0'
-            log4j_version='1.2.16'
-        }
+        File rootGradlePropertiesFile = testProjectDir.newFile('gradle.properties')
+        rootGradlePropertiesFile << '''
+            junit_version = 4.0
+            log4j_version=1.2.16
         '''
         File rootGradleSettingsFile = testProjectDir.newFile('settings.gradle')
         rootGradleSettingsFile << '''
@@ -122,12 +113,12 @@ class VariableUpdatesCommonGradleFunctionalTest extends BaseFunctionalTest {
         useLatestVersions()
 
         then:
-        String updatedCommonGradleFile = rootCommonGradleFile.getText('UTF-8')
-        updatedCommonGradleFile.contains('junit_version = \'4.0\'')
-        updatedCommonGradleFile.contains('log4j_version=\'1.2.16\'')
+        String updatedGradlePropertiesFile = rootGradlePropertiesFile.getText('UTF-8')
+        updatedGradlePropertiesFile.contains('junit_version = 4.0')
+        updatedGradlePropertiesFile.contains('log4j_version=1.2.16')
     }
 
-    void "will update variables in root test.gradle for Multi-project build"() {
+    void "will update variables in root gradle.properties for Multi-project build"() {
         given:
         buildFile << """
             plugins {
@@ -139,18 +130,15 @@ class VariableUpdatesCommonGradleFunctionalTest extends BaseFunctionalTest {
                 apply plugin: 'se.patrikerdes.use-latest-versions'
                 apply plugin: 'com.github.ben-manes.versions'
                 apply plugin: 'java'
-                apply from: "\$rootDir/test.gradle"
                 repositories {
                     mavenCentral()
                 }
             }
         """
-        File rootCommonGradleFile = testProjectDir.newFile('test.gradle')
-        rootCommonGradleFile << '''
-        ext {
-            junit_version = '4.0'
-            log4j_version='1.2.16'
-        }
+        File rootGradlePropertiesFile = testProjectDir.newFile('gradle.properties')
+        rootGradlePropertiesFile << '''
+            junit_version = 4.0
+            log4j_version=1.2.16
         '''
         File rootGradleSettingsFile = testProjectDir.newFile('settings.gradle')
         rootGradleSettingsFile << '''
@@ -169,12 +157,12 @@ class VariableUpdatesCommonGradleFunctionalTest extends BaseFunctionalTest {
         useLatestVersionsUpdatingRootProperties()
 
         then:
-        String updatedCommonGradleFile = rootCommonGradleFile.getText('UTF-8')
-        updatedCommonGradleFile.contains("junit_version = '$CurrentVersions.JUNIT'")
-        updatedCommonGradleFile.contains("log4j_version='$CurrentVersions.LOG4J'")
+        String updatedGradlePropertiesFile = rootGradlePropertiesFile.getText('UTF-8')
+        updatedGradlePropertiesFile.contains("junit_version = $CurrentVersions.JUNIT")
+        updatedGradlePropertiesFile.contains("log4j_version=$CurrentVersions.LOG4J")
     }
 
-    void "will update variables in root test.gradle for Multi-project when plugin applied to subproject only"() {
+    void "will update variables in root gradle.properties for Multi-project when plugin applied to subproject only"() {
         given:
         buildFile << """
             plugins {
@@ -186,18 +174,15 @@ class VariableUpdatesCommonGradleFunctionalTest extends BaseFunctionalTest {
                 apply plugin: 'se.patrikerdes.use-latest-versions'
                 apply plugin: 'com.github.ben-manes.versions'
                 apply plugin: 'java'
-                apply from: "\$rootDir/test.gradle"
                 repositories {
                     mavenCentral()
                 }
             }
         """
-        File rootCommonGradleFile = testProjectDir.newFile('test.gradle')
-        rootCommonGradleFile << '''
-        ext {
-            junit_version = '4.0'
-            log4j_version='1.2.16'
-        }
+        File rootGradlePropertiesFile = testProjectDir.newFile('gradle.properties')
+        rootGradlePropertiesFile << '''
+            junit_version = 4.0
+            log4j_version=1.2.16
         '''
         File rootGradleSettingsFile = testProjectDir.newFile('settings.gradle')
         rootGradleSettingsFile << '''
@@ -216,12 +201,12 @@ class VariableUpdatesCommonGradleFunctionalTest extends BaseFunctionalTest {
         useLatestVersionsUpdatingRootProperties()
 
         then:
-        String updatedCommonGradleFile = rootCommonGradleFile.getText('UTF-8')
-        updatedCommonGradleFile.contains("junit_version = '$CurrentVersions.JUNIT'")
-        updatedCommonGradleFile.contains("log4j_version='$CurrentVersions.LOG4J'")
+        String updatedGradlePropertiesFile = rootGradlePropertiesFile.getText('UTF-8')
+        updatedGradlePropertiesFile.contains("junit_version = $CurrentVersions.JUNIT")
+        updatedGradlePropertiesFile.contains("log4j_version=$CurrentVersions.LOG4J")
     }
 
-    void "will update variables in root test.gradle for Multi-project when present in multiple projects"() {
+    void "will update variables in root gradle.properties for Multi-project when present in multiple projects"() {
         given:
         buildFile << """
             plugins {
@@ -233,18 +218,15 @@ class VariableUpdatesCommonGradleFunctionalTest extends BaseFunctionalTest {
                 apply plugin: 'se.patrikerdes.use-latest-versions'
                 apply plugin: 'com.github.ben-manes.versions'
                 apply plugin: 'java'
-                apply from: "\$rootDir/test.gradle"
                 repositories {
                     mavenCentral()
                 }
             }
         """
-        File rootCommonGradleFile = testProjectDir.newFile('test.gradle')
-        rootCommonGradleFile << '''
-        ext {
-            junit_version = '4.0'
-            log4j_version='1.2.16'
-        }
+        File rootGradlePropertiesFile = testProjectDir.newFile('gradle.properties')
+        rootGradlePropertiesFile << '''
+            junit_version = 4.0
+            log4j_version=1.2.16
         '''
         File rootGradleSettingsFile = testProjectDir.newFile('settings.gradle')
         rootGradleSettingsFile << '''
@@ -272,12 +254,12 @@ class VariableUpdatesCommonGradleFunctionalTest extends BaseFunctionalTest {
         useLatestVersionsUpdatingRootProperties()
 
         then:
-        String updatedCommonGradleFile = rootCommonGradleFile.getText('UTF-8')
-        updatedCommonGradleFile.contains("junit_version = '$CurrentVersions.JUNIT'")
-        updatedCommonGradleFile.contains("log4j_version='$CurrentVersions.LOG4J'")
+        String updatedGradlePropertiesFile = rootGradlePropertiesFile.getText('UTF-8')
+        updatedGradlePropertiesFile.contains("junit_version = $CurrentVersions.JUNIT")
+        updatedGradlePropertiesFile.contains("log4j_version=$CurrentVersions.LOG4J")
     }
 
-    void "will not update variables in root test.gradle for Multi-project when not resolved to same version"() {
+    void "will not update variables in root gradle.properties for Multi-project when not resolved to same version"() {
         given:
         buildFile << """
             plugins {
@@ -289,18 +271,15 @@ class VariableUpdatesCommonGradleFunctionalTest extends BaseFunctionalTest {
                 apply plugin: 'se.patrikerdes.use-latest-versions'
                 apply plugin: 'com.github.ben-manes.versions'
                 apply plugin: 'java'
-                apply from: "\$rootDir/test.gradle"
                 repositories {
                     mavenCentral()
                 }
             }
         """
-        File rootCommonGradleFile = testProjectDir.newFile('test.gradle')
-        rootCommonGradleFile << '''
-        ext {
-            junit_version = '4.0'
-            log4j_version='1.2.16'
-        }
+        File rootGradlePropertiesFile = testProjectDir.newFile('gradle.properties')
+        rootGradlePropertiesFile << '''
+            junit_version = 4.0
+            log4j_version=1.2.16
         '''
         File rootGradleSettingsFile = testProjectDir.newFile('settings.gradle')
         rootGradleSettingsFile << '''
@@ -326,8 +305,8 @@ class VariableUpdatesCommonGradleFunctionalTest extends BaseFunctionalTest {
         BuildResult result = useLatestVersionsUpdatingRootProperties()
 
         then:
-        String updatedCommonGradleFile = rootCommonGradleFile.getText('UTF-8')
-        updatedCommonGradleFile.contains('junit_version = \'4.0\'')
+        String updatedGradlePropertiesFile = rootGradlePropertiesFile.getText('UTF-8')
+        updatedGradlePropertiesFile.contains('junit_version = 4.0')
         result.output.contains("A problem was detected: the variable 'junit_version' has different updated versions " +
                 "in different projects.\nNew updated versions are: '$CurrentVersions.JUNIT' and " +
                 "'$CurrentVersions.JUNIT_DEPS', root config file value won't be be changed.")
