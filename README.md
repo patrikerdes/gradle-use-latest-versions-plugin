@@ -175,6 +175,12 @@ useLatestVersions {
    # versions from subprojects in multi-project build
    # Equal to command line: --update-root-properties
    updateRootProperties = false
+   # List of root project files to update when updateRootProperties is enabled.
+   # `build.gradle` is not an acceptable entry here as it breaks other expected
+   # functionality. Version variables in `build.gradle` need to be moved into
+   # a separate file which can be listed here.
+   # Equal to command line: --root-version-files=[values]
+   rootVersionFiles = ['gradle.properties']
 }
 
 ```

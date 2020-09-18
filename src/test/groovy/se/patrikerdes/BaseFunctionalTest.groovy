@@ -71,6 +71,26 @@ class BaseFunctionalTest extends Specification {
                 .build()
     }
 
+    BuildResult useLatestVersionsUpdatingRootPropertiesAndFail() {
+        GradleRunner.create()
+                .withProjectDir(testProjectDir.root)
+                .withArguments('useLatestVersions', '--update-root-properties')
+                .withPluginClasspath()
+                .buildAndFail()
+    }
+
+    BuildResult useLatestVersionsUpdatingRootPropertiesWithRootList(String... rootVersionsList) {
+        List<String> arguments = ['useLatestVersions', '--update-root-properties']
+        for (versionFile in rootVersionsList) {
+            arguments << '--root-version-files' << versionFile
+        }
+        GradleRunner.create()
+                .withProjectDir(testProjectDir.root)
+                .withArguments(arguments)
+                .withPluginClasspath()
+                .build()
+    }
+
     BuildResult useLatestVersions(String gradleVersion) {
         GradleRunner.create()
                 .withProjectDir(testProjectDir.root)

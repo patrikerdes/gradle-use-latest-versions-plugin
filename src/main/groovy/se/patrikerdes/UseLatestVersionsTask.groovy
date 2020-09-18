@@ -1,5 +1,6 @@
 package se.patrikerdes
 
+import static se.patrikerdes.Common.BUILD_GRADLE_VERSION_FILE
 import static se.patrikerdes.Common.WHITE_BLACKLIST_ERROR_MESSAGE
 import static se.patrikerdes.Common.getCurrentDependencies
 import static se.patrikerdes.Common.getDependencyUpdatesJsonReportFilePath
@@ -36,6 +37,11 @@ class UseLatestVersionsTask extends DefaultTask {
             description = 'Update root project gradle.properties with subprojects versions in multi-project build')
     boolean updateRootProperties
 
+    @Input
+    @Option(option='root-version-files',
+            description = 'The list of files in the root project that contain common versions to be updated')
+    List<String> rootVersionFiles = Arrays.asList('gradle.properties')
+
     UseLatestVersionsTask() {
         description = 'Updates module and plugin versions in all *.gradle and *.gradle.kts files to the latest ' +
                 'available versions.'
@@ -53,10 +59,10 @@ class UseLatestVersionsTask extends DefaultTask {
         dotGradleFileNames += new FileNameFinder().getFileNames(project.projectDir.absolutePath, '**/*.gradle.kts')
         dotGradleFileNames += new FileNameFinder().getFileNames(project.projectDir.absolutePath, '**/gradle.properties')
         dotGradleFileNames += new FileNameFinder().getFileNames(project.projectDir.absolutePath, 'buildSrc/**/*.kt')
-        String rootGradleProperties = getRootGradlePropertiesPath(project)
-        if (rootGradleProperties && updateRootProperties && project != project.rootProject) {
+        List<String> rootVersionFilesPath = getRootVersionFilesPath(project)
+        if (!rootVersionFilesPath.empty && updateRootProperties && project != project.rootProject) {
             // Append so we don't update variables if defined in multiple files
-            dotGradleFileNames += rootGradleProperties
+            dotGradleFileNames += rootVersionFilesPath
         }
 
         // Exclude any files that belong to sub-projects
@@ -96,7 +102,7 @@ class UseLatestVersionsTask extends DefaultTask {
 
         // Write all files back
         for (dotGradleFileName in dotGradleFileNames) {
-            if (dotGradleFileName != rootGradleProperties) {
+            if (!rootVersionFilesPath.contains(dotGradleFileName)) {
                 // Root Gradle properties are handled in
                 // internalAggregateRoot task that reads version-variables.json
                 new File(dotGradleFileName).setText(gradleFileContents[dotGradleFileName], 'UTF-8')
@@ -205,9 +211,21 @@ class UseLatestVersionsTask extends DefaultTask {
                 StandardCopyOption.REPLACE_EXISTING)
     }
 
-    private String getRootGradlePropertiesPath(Project project) {
-        File rootGradleProperties = new File(project.rootDir.absolutePath, 'gradle.properties')
-        rootGradleProperties.exists() ? rootGradleProperties.absolutePath : null
+    private List<String> getRootVersionFilesPath(Project project) {
+        if (rootVersionFiles.contains('build.gradle')) {
+            throw new GradleException(BUILD_GRADLE_VERSION_FILE)
+        }
+
+        List<String> rootFiles = Collections.emptyList()
+        String rootPath = project.rootDir.absolutePath
+        for (rootFileName in rootVersionFiles) {
+            File rootFile = new File(rootPath, rootFileName)
+            if (rootFile.exists()) {
+                rootFiles += rootFile.absolutePath
+            }
+        }
+        InternalAggregateRootTask.setRootVersionFiles(rootFiles)
+        rootFiles
     }
 
     private void validateExclusiveWhiteOrBlacklist() {
