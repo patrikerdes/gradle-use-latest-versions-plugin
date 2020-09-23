@@ -8,10 +8,15 @@ import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
 
 class InternalAggregateRootTask extends DefaultTask {
+    protected static List<String> rootVersionFiles = Collections.emptyList()
+
+    static void setRootVersionFiles(List<String> versionFiles) {
+        rootVersionFiles = versionFiles
+    }
 
     InternalAggregateRootTask() {
         description = 'Internal task that aggregates versions of all projects to root. ' +
-                'Currently it updates just gradle.properties in root. Don\'t run it as separate task'
+                'It updates the files listed in rootVersionFiles. Don\'t run it as separate task'
     }
 
     @TaskAction
@@ -19,8 +24,7 @@ class InternalAggregateRootTask extends DefaultTask {
         List<String> versionVariablesFiles = project.gradle.taskGraph.allTasks
                 .findAll { it.name == USE_LATEST_VERSIONS }
                 .collectMany { getVersionVariablesFiles(it.project) }
-        List<String> dotGradleFileNames =
-                new FileNameFinder().getFileNames(project.projectDir.absolutePath, 'gradle.properties')
+        List<String> dotGradleFileNames = rootVersionFiles
 
         Map<String, String> gradleFileContents = dotGradleFileNames.collectEntries {
             [(it): new File(it).getText('UTF-8')]
@@ -53,7 +57,7 @@ class InternalAggregateRootTask extends DefaultTask {
                 if (versionVariables.containsKey(k) && versionVariables.get(k) != v) {
                     println("A problem was detected: the variable '$k' has different updated versions in different " +
                             "projects.\nNew updated versions are: '${versionVariables.get(k)}' and '$v', " +
-                            "root gradle.properties value won't be be changed.")
+                            "root config file value won't be be changed.")
                     problemVariables.add(k)
                 } else {
                     versionVariables.put(k, v)
