@@ -16,7 +16,7 @@ Include in your `build.gradle`
 
 ```groovy
 plugins {
-  id 'se.patrikerdes.use-latest-versions' version '0.2.14'
+  id 'se.patrikerdes.use-latest-versions' version '0.2.15'
   id 'com.github.ben-manes.versions' version '0.21.0'
 }
 ```
@@ -32,7 +32,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath "se.patrikerdes:gradle-use-latest-versions-plugin:0.2.14"
+        classpath "se.patrikerdes:gradle-use-latest-versions-plugin:0.2.15"
         classpath 'com.github.ben-manes:gradle-versions-plugin:0.21.0'
     }
 }
@@ -47,7 +47,7 @@ apply plugin: 'se.patrikerdes.use-latest-versions'
 Include in your `build.gradle.kts`
 ```groovy
 plugins {
-  id("se.patrikerdes.use-latest-versions") version "0.2.14"
+  id("se.patrikerdes.use-latest-versions") version "0.2.15"
   id("com.github.ben-manes.versions") version "0.21.0"
 }
 ```
@@ -63,7 +63,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath("gradle.plugin.se.patrikerdes:gradle-use-latest-versions-plugin:0.2.14")
+        classpath("gradle.plugin.se.patrikerdes:gradle-use-latest-versions-plugin:0.2.15")
         classpath("com.github.ben-manes:gradle-versions-plugin:0.21.0")
     }
 }
@@ -99,7 +99,7 @@ Given this build.gradle file:
 
 ```groovy
 plugins {
-    id 'se.patrikerdes.use-latest-versions' version '0.2.14'
+    id 'se.patrikerdes.use-latest-versions' version '0.2.15'
     id 'com.github.ben-manes.versions' version '0.19.0'
 }
 
@@ -133,7 +133,7 @@ variables – and you build.gradle file will look like this:
 
 ```groovy
 plugins {
-    id 'se.patrikerdes.use-latest-versions' version '0.2.14'
+    id 'se.patrikerdes.use-latest-versions' version '0.2.15'
     id 'com.github.ben-manes.versions' version '0.21.0' // <- Updated
 }
 
@@ -326,7 +326,7 @@ buildscript {
     dependencies{
         classpath group: 'se.patrikerdes',
 				name: 'gradle-use-latest-versions-plugin',
-				version: '0.2.14'
+				version: '0.2.15'
     }
 }
 
@@ -347,6 +347,10 @@ From the [Maven Versions Plugin](http://www.mojohaus.org/versions-maven-plugin/i
 [use-latest-versions](http://www.mojohaus.org/versions-maven-plugin/use-latest-versions-mojo.html)
 
 ## Changelog
+
+### 0.2.15
+
+[PR #45](https://github.com/patrikerdes/gradle-use-latest-versions-plugin/pull/45), Adding list of root files with variables to update ([tony-schellenberg](https://github.com/tony-schellenberg))
 
 ### 0.2.14
 
