@@ -175,6 +175,23 @@ useLatestVersions {
    # versions from subprojects in multi-project build
    # Equal to command line: --update-root-properties
    updateRootProperties = false
+   # By default plugin tries to find all relevant gradle files (e.g. *.gradle, gradle.properties etc). 
+   # This can be slow in some cases when project has a lot of gradle files. For example when using conventions 
+   # in buildSrc. With this option you can specify what files should plugin search and check. Plugin will ignore
+   # files that don't exist. Empty list means use default strategy. File paths are relative to project dir.
+   #
+   # Example:
+   # versionFiles = ["gradle.build", "gradle.properties"]
+   # Will check just $projectDir/gradle.build and $projectDir/gradle.properties
+   #
+   # Note:
+   # You always have to specify file that has dependencies in some common dependency format with artifact coordinates,
+   # e.g. compileOnly "group:module:version" or compileOnly("group:module:version") or val dependency = "group:module:version" etc. 
+   # For example if you set just versionFiles = ["gradle.properties"] this won't work, since plugin 
+   # won't be able to correlate variable with artifact coordinates.
+   #
+   # Equal to command line: --version-files=[values]
+   versionFiles = []
    # List of root project files to update when updateRootProperties is enabled.
    # `build.gradle` is not an acceptable entry here as it breaks other expected
    # functionality. Version variables in `build.gradle` need to be moved into

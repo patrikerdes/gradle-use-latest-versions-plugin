@@ -487,4 +487,49 @@ class VariableUpdatesFunctionalTest extends BaseFunctionalTest {
         updatedGradlePropertiesFile.contains("log4j_version=$CurrentVersions.LOG4J")
     }
 
+    void "will update version only in provided custom versions file"() {
+        given:
+        buildFile << """
+        plugins {
+            id 'se.patrikerdes.use-latest-versions'
+            id 'com.github.ben-manes.versions' version '$CurrentVersions.VERSIONS'
+        }
+
+        apply plugin: 'java'
+
+        repositories {
+            mavenCentral()
+        }
+
+        dependencies {
+            testCompile "junit:junit:4.0"
+            testCompile "log4j:log4j:1.2.16"
+            runtimeOnly "log4j:log4j:1.2.16"
+        }
+        """
+        File myVersionFile = testProjectDir.newFile('my-versions.kt')
+        myVersionFile << '''
+        val junitVersion = "4.0"
+        testCompile "junit:junit:$junitVersion"
+        testCompile "log4j:log4j:1.2.16"
+        runtimeOnly "log4j:log4j:1.2.16"
+        val dependency = "log4j:log4j:1.2.16"
+        '''
+
+        when:
+        useLatestVersionsWithVersionFiles('my-versions.kt')
+        String updatedMyVersionsFile = myVersionFile.getText('UTF-8')
+        String updatedBuildFile = buildFile.getText('UTF-8')
+
+        then:
+        updatedMyVersionsFile.contains("junitVersion = \"$CurrentVersions.JUNIT\"")
+        updatedMyVersionsFile.contains("testCompile \"log4j:log4j:$CurrentVersions.LOG4J\"")
+        updatedMyVersionsFile.contains("runtimeOnly \"log4j:log4j:$CurrentVersions.LOG4J\"")
+        updatedMyVersionsFile.contains("val dependency = \"log4j:log4j:$CurrentVersions.LOG4J\"")
+        // Did not change
+        updatedBuildFile.contains('testCompile "junit:junit:4.0"')
+        updatedBuildFile.contains('testCompile "log4j:log4j:1.2.16"')
+        updatedBuildFile.contains('runtimeOnly "log4j:log4j:1.2.16"')
+    }
+
 }

@@ -42,6 +42,11 @@ class UseLatestVersionsTask extends DefaultTask {
             description = 'The list of files in the root project that contain common versions to be updated')
     List<String> rootVersionFiles = Arrays.asList('gradle.properties')
 
+    @Input
+    @Option(option='version-files',
+            description = 'The list of files that should be checked for update. Empty means: find files automatically.')
+    List<String> versionFiles = Arrays.asList()
+
     UseLatestVersionsTask() {
         description = 'Updates module and plugin versions in all *.gradle and *.gradle.kts files to the latest ' +
                 'available versions.'
@@ -54,11 +59,19 @@ class UseLatestVersionsTask extends DefaultTask {
         File dependencyUpdatesJsonReportFile = new File(getDependencyUpdatesJsonReportFilePath(project))
         saveDependencyUpdatesReport(dependencyUpdatesJsonReportFile)
 
-        List<String> dotGradleFileNames =
-                new FileNameFinder().getFileNames(project.projectDir.absolutePath, '**/*.gradle')
-        dotGradleFileNames += new FileNameFinder().getFileNames(project.projectDir.absolutePath, '**/*.gradle.kts')
-        dotGradleFileNames += new FileNameFinder().getFileNames(project.projectDir.absolutePath, '**/gradle.properties')
-        dotGradleFileNames += new FileNameFinder().getFileNames(project.projectDir.absolutePath, 'buildSrc/**/*.kt')
+        List<String> dotGradleFileNames
+        if (versionFiles == null || versionFiles.isEmpty()) {
+            dotGradleFileNames = new FileNameFinder().getFileNames(project.projectDir.absolutePath, '**/*.gradle')
+            dotGradleFileNames += new FileNameFinder().getFileNames(project.projectDir.absolutePath, '**/*.gradle.kts')
+            dotGradleFileNames += new FileNameFinder().getFileNames(project.projectDir.absolutePath,
+                    '**/gradle.properties')
+            dotGradleFileNames += new FileNameFinder().getFileNames(project.projectDir.absolutePath, 'buildSrc/**/*.kt',
+                    'buildSrc/build/**/*.kt')
+        } else {
+            dotGradleFileNames = versionFiles
+                    .collect { new File(project.projectDir.absolutePath, it).absolutePath }
+                    .findAll { new File(it).exists() }
+        }
         List<String> rootVersionFilesPath = getRootVersionFilesPath(project)
         if (!rootVersionFilesPath.empty && updateRootProperties && project != project.rootProject) {
             // Append so we don't update variables if defined in multiple files
