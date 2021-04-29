@@ -145,11 +145,11 @@ class Common {
     }
 
     static String variableDefinitionMatchString(String variable) {
-        '(' + Pattern.quote(variable) + "[ \t]*=[ \t]*[\"'])(.*)([\"'])"
+        '(\\b' + Pattern.quote(variable) + "[ \t]*=[ \t]*[\"'])(.*)([\"'])"
     }
 
     static String gradlePropertiesVariableDefinitionMatchString(String variable) {
-        '(' + Pattern.quote(variable) + '[ \t]*=[ \t]*)(.*)([ \t]*)'
+        '(\\b' + Pattern.quote(variable) + '[ \t]*=[ \t]*)(.*)([ \t]*)'
     }
 
     static String newVariableDefinitionString(String newVersion) {
