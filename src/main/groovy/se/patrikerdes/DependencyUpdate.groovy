@@ -39,6 +39,9 @@ class DependencyUpdate {
     String oldPluginVersionMatchString() {
         "(id[ \\t\\(]+[\"']" + this.groupQ + "[\"'][ \\t\\)]+version[ \\t]+[\"'])" + this.oldVersionQ + "([\"'])"
     }
+    String oldKotlinPluginVersionMatchString() {
+        '(kotlin\\(\"' + this.group.split('\\.').last() + '\"\\)\\s+version\\s+\")' + this.oldVersionQ + '(\")'
+    }
     String oldModuleVersionKotlinUnnamedParametersMatchString() {
         '((?:testRuntimeOnly|implementation|annotationProcessor|api|apiDependenciesMetadata|apiElements|compile|' +
                 'compileClasspath|compileOnly|compileOnlyDependenciesMetadata|implementation|' +
