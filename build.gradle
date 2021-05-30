@@ -12,13 +12,13 @@ repositories {
 }
 
 dependencies {
-    testCompile('org.spockframework:spock-core:1.1-groovy-2.4') {
+    testImplementation('org.spockframework:spock-core:1.1-groovy-2.4') {
         exclude(module: 'groovy-all')
     }
 }
 
 group = 'se.patrikerdes'
-version = '0.2.16'
+version = '0.2.17'
 
 sourceCompatibility = 1.7
 targetCompatibility = 1.7

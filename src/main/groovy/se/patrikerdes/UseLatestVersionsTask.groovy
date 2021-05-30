@@ -168,6 +168,10 @@ class UseLatestVersionsTask extends DefaultTask {
                 gradleFileContents[dotGradleFileName] =
                         gradleFileContents[dotGradleFileName].replaceAll(
                                 update.oldPluginVersionMatchString(), update.newVersionString())
+
+                gradleFileContents[dotGradleFileName] =
+                        gradleFileContents[dotGradleFileName].replaceAll(
+                                update.oldKotlinPluginVersionMatchString(), update.newVersionString())
             }
         }
     }
