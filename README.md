@@ -16,7 +16,7 @@ Include in your `build.gradle`
 
 ```groovy
 plugins {
-  id 'se.patrikerdes.use-latest-versions' version '0.2.16'
+  id 'se.patrikerdes.use-latest-versions' version '0.2.17'
   id 'com.github.ben-manes.versions' version '0.21.0'
 }
 ```
@@ -32,7 +32,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath "se.patrikerdes:gradle-use-latest-versions-plugin:0.2.16"
+        classpath "se.patrikerdes:gradle-use-latest-versions-plugin:0.2.17"
         classpath 'com.github.ben-manes:gradle-versions-plugin:0.21.0'
     }
 }
@@ -47,7 +47,7 @@ apply plugin: 'se.patrikerdes.use-latest-versions'
 Include in your `build.gradle.kts`
 ```groovy
 plugins {
-  id("se.patrikerdes.use-latest-versions") version "0.2.16"
+  id("se.patrikerdes.use-latest-versions") version "0.2.17"
   id("com.github.ben-manes.versions") version "0.21.0"
 }
 ```
@@ -63,7 +63,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath("gradle.plugin.se.patrikerdes:gradle-use-latest-versions-plugin:0.2.16")
+        classpath("gradle.plugin.se.patrikerdes:gradle-use-latest-versions-plugin:0.2.17")
         classpath("com.github.ben-manes:gradle-versions-plugin:0.21.0")
     }
 }
@@ -99,7 +99,7 @@ Given this build.gradle file:
 
 ```groovy
 plugins {
-    id 'se.patrikerdes.use-latest-versions' version '0.2.16'
+    id 'se.patrikerdes.use-latest-versions' version '0.2.17'
     id 'com.github.ben-manes.versions' version '0.19.0'
 }
 
@@ -133,7 +133,7 @@ variables – and you build.gradle file will look like this:
 
 ```groovy
 plugins {
-    id 'se.patrikerdes.use-latest-versions' version '0.2.16'
+    id 'se.patrikerdes.use-latest-versions' version '0.2.17'
     id 'com.github.ben-manes.versions' version '0.21.0' // <- Updated
 }
 
@@ -343,7 +343,7 @@ buildscript {
     dependencies{
         classpath group: 'se.patrikerdes',
 				name: 'gradle-use-latest-versions-plugin',
-				version: '0.2.16'
+				version: '0.2.17'
     }
 }
 
@@ -365,7 +365,14 @@ From the [Maven Versions Plugin](http://www.mojohaus.org/versions-maven-plugin/i
 
 ## Changelog
 
+### 0.2.17
+
+[PR #53](https://github.com/patrikerdes/gradle-use-latest-versions-plugin/pull/53), Recognise kotlin plugin format, e.g. 'kotlin("jvm") version "1.5.10"' ([MxKaras](https://github.com/MxKaras))
+
+[PR #52](https://github.com/patrikerdes/gradle-use-latest-versions-plugin/pull/52), Fix "The variable ... is assigned more than once" message if variable has another as a suffix ([xenomachina](https://github.com/xenomachina))
+
 ### 0.2.16
+
 [PR #49](https://github.com/patrikerdes/gradle-use-latest-versions-plugin/pull/49), Add option to specify version files ([asodja](https://github.com/asodja))
 
 ### 0.2.15
