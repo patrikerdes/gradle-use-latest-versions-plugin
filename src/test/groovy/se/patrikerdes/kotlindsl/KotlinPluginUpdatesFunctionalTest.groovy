@@ -32,6 +32,7 @@ class KotlinPluginUpdatesFunctionalTest extends KotlinBaseFunctionalTest {
                 id("se.patrikerdes.use-latest-versions")
                 id("com.github.ben-manes.versions") version "$CurrentVersions.VERSIONS"
                 kotlin("jvm") version "1.4.32"
+                kotlin("plugin.spring") version "1.4.32"
             }
         """
 
@@ -45,5 +46,8 @@ class KotlinPluginUpdatesFunctionalTest extends KotlinBaseFunctionalTest {
             version.size() == 2
             version[1].split('\\.')[1].toInteger() > 4
         }
+        def matcher = updatedBuildFile =~ 'kotlin\\(\"plugin\\.spring\"\\) version \"(.+)\"'
+        matcher.size() == 1
+        matcher[0][1].split("\\.")[1].toInteger() > 4
     }
 }
