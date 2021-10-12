@@ -1,6 +1,7 @@
 package se.patrikerdes.kotlindsl
 
 import se.patrikerdes.CurrentVersions
+import java.util.regex.Pattern
 
 class KotlinPluginUpdatesFunctionalTest extends KotlinBaseFunctionalTest {
     void "an outdated plugin dependency can be updated"() {
@@ -46,8 +47,8 @@ class KotlinPluginUpdatesFunctionalTest extends KotlinBaseFunctionalTest {
             version.size() == 2
             version[1].split('\\.')[1].toInteger() > 4
         }
-        def matcher = updatedBuildFile =~ 'kotlin\\(\"plugin\\.spring\"\\) version \"(.+)\"'
+        Pattern matcher = updatedBuildFile =~ 'kotlin\\(\"plugin\\.spring\"\\) version \"(.+)\"'
         matcher.size() == 1
-        matcher[0][1].split("\\.")[1].toInteger() > 4
+        matcher[0][1].split('\\.')[1].toInteger() > 4
     }
 }

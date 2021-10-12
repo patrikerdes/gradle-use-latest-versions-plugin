@@ -40,7 +40,9 @@ class DependencyUpdate {
         "(id[ \\t\\(]+[\"']" + this.groupQ + "[\"'][ \\t\\)]+version[ \\t]+[\"'])" + this.oldVersionQ + "([\"'])"
     }
     String oldKotlinPluginVersionMatchString() {
-        '(kotlin\\(\"' + (this.group.startsWith("org.jetbrains.kotlin.") ? this.group - "org.jetbrains.kotlin." : this.group) + '\"\\)\\s+version\\s+\")' + this.oldVersionQ + '(\")'
+        '(kotlin\\(\"' +
+                (this.group.startsWith('org.jetbrains.kotlin.') ? this.group - 'org.jetbrains.kotlin.' : this.group) +
+                '\"\\)\\s+version\\s+\")' + this.oldVersionQ + '(\")'
     }
     String oldModuleVersionKotlinUnnamedParametersMatchString() {
         '((?:testRuntimeOnly|implementation|annotationProcessor|api|apiDependenciesMetadata|apiElements|compile|' +
