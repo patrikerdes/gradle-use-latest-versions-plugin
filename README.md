@@ -17,7 +17,7 @@ Include in your `build.gradle`
 ```groovy
 plugins {
   id 'se.patrikerdes.use-latest-versions' version '0.2.18'
-  id 'com.github.ben-manes.versions' version '0.21.0'
+  id 'com.github.ben-manes.versions' version '0.41.0'
 }
 ```
 
