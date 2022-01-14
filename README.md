@@ -17,7 +17,7 @@ Include in your `build.gradle`
 ```groovy
 plugins {
   id 'se.patrikerdes.use-latest-versions' version '0.2.18'
-  id 'com.github.ben-manes.versions' version '0.21.0'
+  id 'com.github.ben-manes.versions' version '0.41.0'
 }
 ```
 
@@ -33,7 +33,7 @@ buildscript {
     }
     dependencies {
         classpath "se.patrikerdes:gradle-use-latest-versions-plugin:0.2.18"
-        classpath 'com.github.ben-manes:gradle-versions-plugin:0.21.0'
+        classpath 'com.github.ben-manes:gradle-versions-plugin:0.41.0'
     }
 }
 
@@ -48,7 +48,7 @@ Include in your `build.gradle.kts`
 ```groovy
 plugins {
   id("se.patrikerdes.use-latest-versions") version "0.2.18"
-  id("com.github.ben-manes.versions") version "0.21.0"
+  id("com.github.ben-manes.versions") version "0.41.0"
 }
 ```
 
@@ -64,7 +64,7 @@ buildscript {
     }
     dependencies {
         classpath("gradle.plugin.se.patrikerdes:gradle-use-latest-versions-plugin:0.2.18")
-        classpath("com.github.ben-manes:gradle-versions-plugin:0.21.0")
+        classpath("com.github.ben-manes:gradle-versions-plugin:0.41.0")
     }
 }
 
@@ -81,7 +81,7 @@ In case you have a Multi-project build and you have some common dependency confi
 ```
 plugins {
   id 'se.patrikerdes.use-latest-versions' version '0.2.13'
-  id 'com.github.ben-manes.versions' version '0.21.0'
+  id 'com.github.ben-manes.versions' version '0.41.0'
 }
 
 allprojects {
@@ -134,7 +134,7 @@ variables – and you build.gradle file will look like this:
 ```groovy
 plugins {
     id 'se.patrikerdes.use-latest-versions' version '0.2.18'
-    id 'com.github.ben-manes.versions' version '0.21.0' // <- Updated
+    id 'com.github.ben-manes.versions' version '0.41.0' // <- Updated
 }
 
 apply plugin: 'java'
@@ -325,7 +325,7 @@ dependencies {
 ## Compatibility
 
 **Gradle version:** 2.8 - 4.10.2 (Updating plugin dependencies only work in 4.4+)<br/>
-**Versions Plugin version:** 0.12.0 - 0.21.0<br/>
+**Versions Plugin version:** 0.12.0 - 0.41.0<br/>
 **JDK version:** 7 - 11 (7 is targeted but not tested, 11 is currently not tested but is known to work)
 
 ## Instructions for building this plugin from source
