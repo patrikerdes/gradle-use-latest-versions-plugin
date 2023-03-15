@@ -472,6 +472,35 @@ class CheckFunctionalTest extends BaseFunctionalTest {
         result.output.contains(WHITE_BLACKLIST_ERROR_MESSAGE)
     }
 
+    void "useLatestVersionsCheck doesn't fail on --ignore-dependency --update-dependency --no-ignore-dependencies"() {
+        given:
+        buildFile << """
+            plugins {
+                id 'se.patrikerdes.use-latest-versions'
+                id 'com.github.ben-manes.versions' version '$CurrentVersions.VERSIONS'
+            }
+
+            apply plugin: 'java'
+            
+            repositories {
+                mavenCentral()
+            }
+            
+            dependencies {
+                compile "log4j:log4j:1.2.16"
+                testCompile "junit:junit:3.0"
+            }
+        """
+
+        when:
+        useLatestVersionsWithBlackAndWhitelistAndNoIgnoreDependencies()
+        BuildResult result = useLatestVersionsCheckWithBlackAndWhitelistAndNoIgnoreDependencies()
+
+        then:
+        result.task(':useLatestVersionsCheck').outcome == SUCCESS
+        !result.output.contains(WHITE_BLACKLIST_ERROR_MESSAGE)
+    }
+
     void "useLatestVersionsCheck outputs a special message when there was nothing to update"() {
         given:
         buildFile << """

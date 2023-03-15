@@ -32,6 +32,12 @@ class UseLatestVersionsTask extends DefaultTask {
             description = 'A blacklist of dependencies to update, in the format of group:name')
     List<String> updateBlacklist = Collections.emptyList()
 
+    @Option(option='no-ignore-dependencies',
+            description = 'Forces the ignore-dependencies collection to be empty')
+    void setNoBlacklist() {
+        updateBlacklist = Collections.emptyList()
+    }
+
     @Input
     @Option(option='update-root-properties',
             description = 'Update root project gradle.properties with subprojects versions in multi-project build')

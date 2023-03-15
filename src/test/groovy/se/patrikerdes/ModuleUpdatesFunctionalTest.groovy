@@ -390,7 +390,7 @@ class ModuleUpdatesFunctionalTest extends BaseFunctionalTest {
         updatedBuildFile.contains("compile \"log4j:log4j:$CurrentVersions.LOG4J\"")
     }
 
-    void "don't updates blacklisted dependencies with --ignore-dependency"() {
+    void "don't update blacklisted dependencies with --ignore-dependency"() {
         given:
         buildFile << """
             plugins {
@@ -419,7 +419,7 @@ class ModuleUpdatesFunctionalTest extends BaseFunctionalTest {
         updatedBuildFile.contains("compile \"log4j:log4j:$CurrentVersions.LOG4J\"")
     }
 
-    void "don't updates blacklisted dependencies with --ignore-dependency as group"() {
+    void "don't update blacklisted dependencies with --ignore-dependency as group"() {
         given:
         buildFile << """
             plugins {
@@ -442,6 +442,68 @@ class ModuleUpdatesFunctionalTest extends BaseFunctionalTest {
 
         when:
         useLatestVersionsWithout('junit')
+        String updatedBuildFile = buildFile.getText('UTF-8')
+
+        then:
+        updatedBuildFile.contains('testCompile \"junit:junit:4.0:javadoc@jar\"')
+        updatedBuildFile.contains('testCompile "junit:junit-dep:4.9"')
+        updatedBuildFile.contains("compile \"log4j:log4j:$CurrentVersions.LOG4J\"")
+    }
+
+    void "only updates whitelist with --update-dependency when --no-ignore-dependencies is also passed"() {
+        given:
+        buildFile << """
+            plugins {
+                id 'se.patrikerdes.use-latest-versions'
+                id 'com.github.ben-manes.versions' version '$CurrentVersions.VERSIONS'
+            }
+
+            apply plugin: 'java'
+            
+            repositories {
+                mavenCentral()
+            }
+            
+            dependencies {
+                testCompile "junit:junit:4.0:javadoc@jar"
+                testCompile "junit:junit-dep:4.9"
+                compile "log4j:log4j:1.2.16"
+            }
+        """
+
+        when:
+        useLatestVersionsWithWhitelistAndNoIgnoreDependencies()
+        String updatedBuildFile = buildFile.getText('UTF-8')
+
+        then:
+        updatedBuildFile.contains('testCompile \"junit:junit:4.0:javadoc@jar\"')
+        updatedBuildFile.contains('testCompile "junit:junit-dep:4.9"')
+        updatedBuildFile.contains("compile \"log4j:log4j:$CurrentVersions.LOG4J\"")
+    }
+
+    void "ignores --ignore-blacklist entries when --no-ignore-dependencies is passed"() {
+        given:
+        buildFile << """
+            plugins {
+                id 'se.patrikerdes.use-latest-versions'
+                id 'com.github.ben-manes.versions' version '$CurrentVersions.VERSIONS'
+            }
+
+            apply plugin: 'java'
+            
+            repositories {
+                mavenCentral()
+            }
+            
+            dependencies {
+                testCompile "junit:junit:4.0:javadoc@jar"
+                testCompile "junit:junit-dep:4.9"
+                compile "log4j:log4j:1.2.16"
+            }
+        """
+
+        when:
+        useLatestVersionsWithBlackAndWhitelistAndNoIgnoreDependencies()
         String updatedBuildFile = buildFile.getText('UTF-8')
 
         then:
