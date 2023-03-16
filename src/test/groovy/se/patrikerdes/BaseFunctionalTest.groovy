@@ -120,6 +120,29 @@ class BaseFunctionalTest extends Specification {
                 .buildAndFail()
     }
 
+    BuildResult useLatestVersionsWithWhitelistAndNoIgnoreDependencies() {
+        List<String> arguments = ['useLatestVersions']
+        arguments << '--update-dependency' << 'log4j:log4j'
+        arguments << '--no-ignore-dependencies'
+        GradleRunner.create()
+                .withProjectDir(testProjectDir.root)
+                .withArguments(arguments)
+                .withPluginClasspath()
+                .build()
+    }
+
+    BuildResult useLatestVersionsWithBlackAndWhitelistAndNoIgnoreDependencies() {
+        List<String> arguments = ['useLatestVersions']
+        arguments << '--update-dependency' << 'log4j:log4j'
+        arguments << '--ignore-dependency' << 'junit:junit'
+        arguments << '--no-ignore-dependencies'
+        GradleRunner.create()
+                .withProjectDir(testProjectDir.root)
+                .withArguments(arguments)
+                .withPluginClasspath()
+                .build()
+    }
+
     BuildResult useLatestVersionsCheck() {
         GradleRunner.create()
                 .withProjectDir(testProjectDir.root)
@@ -173,6 +196,18 @@ class BaseFunctionalTest extends Specification {
                 .withArguments(arguments)
                 .withPluginClasspath()
                 .buildAndFail()
+    }
+
+    BuildResult useLatestVersionsCheckWithBlackAndWhitelistAndNoIgnoreDependencies() {
+        List<String> arguments = ['useLatestVersionsCheck']
+        arguments << '--update-dependency' << 'log4j:log4j'
+        arguments << '--ignore-dependency' << 'junit:junit'
+        arguments << '--no-ignore-dependencies'
+        GradleRunner.create()
+                .withProjectDir(testProjectDir.root)
+                .withArguments(arguments)
+                .withPluginClasspath()
+                .build()
     }
 
     BuildResult clean() {

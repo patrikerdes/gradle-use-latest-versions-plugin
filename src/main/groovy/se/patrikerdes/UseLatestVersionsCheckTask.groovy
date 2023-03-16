@@ -23,6 +23,12 @@ class UseLatestVersionsCheckTask extends DefaultTask {
             description = 'A blacklist of dependencies to update, in the format of group:name')
     List<String> updateBlacklist = Collections.emptyList()
 
+    @Option(option='no-ignore-dependencies',
+            description = 'Forces the ignore-dependencies collection to be empty')
+    void setNoBlacklist() {
+        updateBlacklist = Collections.emptyList()
+    }
+
     UseLatestVersionsCheckTask() {
         description = 'Check if all available updates were successfully applied by the useLatestVersions task.'
         group = 'Help'

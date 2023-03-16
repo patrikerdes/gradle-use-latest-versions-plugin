@@ -170,6 +170,7 @@ useLatestVersions {
    updateWhitelist = []
    # A blacklist of dependencies to update, in the format of group:name
    # Equal to command line: --ignore-dependency=[values]
+   # Can be overridden to be an empty list with the command line: --no-ignore-dependencies which takes precedence over any --ignore-dependency=[value] options
    updateBlacklist = []
    # When enabled, root project gradle.properties will also be populated with 
    # versions from subprojects in multi-project build
@@ -234,9 +235,22 @@ using the format `$GROUP`. Multiple dependencies can be updated by passing the f
 If your Gradle version is 4.6 or higher, you can pass the `--ignore-dependency` flag to `useLatestVersions` and
 `useLatestVersionsCheck` with a value in the format `$GROUP:$NAME`. A complete dependency group can be ignored by 
 using the format `$GROUP`. Multiple dependencies can be ignored by passing the flag multiple times.
+Passing the flag `--no-ignore-dependencies` overwrites any `--ignore-dependency` values passed.
 
 ```bash
 # gradle useLatestVersions --ignore-dependency junit:junit --ignore-dependency com.google.guava && gradle useLatestVersionsCheck --ignore-dependency junit:junit --ignore-dependency com.google.guava
+```
+
+## Ignore all blacklisted dependency updates
+The `--no-ignore-dependencies` flag overrides any `--ignore-dependencies` flags which have been set.
+This is only needed where a blacklist is specified in a projects build file and you want to update only a specific version with `--update-dependency` due to the blacklist in the build file being automatically pulled in. 
+
+```bash
+# gradle useLatestVersions --update-dependency junit:junit --ignore-dependency com.google.guava --no-ignore-dependencies
+```
+is the equivalent of 
+```bash
+# gradle useLatestVersions --update-dependency junit:junit
 ```
 
 ## Supported dependency formats
