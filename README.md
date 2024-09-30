@@ -80,7 +80,7 @@ In case you have a Multi-project build and you have some common dependency confi
 (like *.gradle file), you should apply plugin to all projects. Easiest way to do this is with `allprojects` block like:
 ```
 plugins {
-  id 'se.patrikerdes.use-latest-versions' version '0.2.13'
+  id 'se.patrikerdes.use-latest-versions' version '0.2.18'
   id 'com.github.ben-manes.versions' version '0.41.0'
 }
 
