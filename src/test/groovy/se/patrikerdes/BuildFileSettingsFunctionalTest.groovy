@@ -20,7 +20,7 @@ class BuildFileSettingsFunctionalTest extends BaseFunctionalTest {
             }
             
             dependencies {
-                testCompile 'junit:junit:4.0'
+                testImplementation 'junit:junit:4.0'
             }
 
             buildDir = file 'gradle-build'
@@ -49,7 +49,7 @@ class BuildFileSettingsFunctionalTest extends BaseFunctionalTest {
             }
             
             dependencies {
-                testCompile 'junit:junit:4.0'
+                testImplementation 'junit:junit:4.0'
             }
 
             buildDir = file 'gradle-build'

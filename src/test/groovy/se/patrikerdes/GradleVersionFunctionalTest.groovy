@@ -25,7 +25,7 @@ class GradleVersionFunctionalTest extends BaseFunctionalTest {
         buildFile << """
             plugins {
                 id 'se.patrikerdes.use-latest-versions'
-                id 'com.github.ben-manes.versions' version '0.16.0'
+                id 'com.github.ben-manes.versions' version '0.52.0'
             }
 
             apply plugin: 'java'
@@ -35,7 +35,7 @@ class GradleVersionFunctionalTest extends BaseFunctionalTest {
             }
             
             dependencies {
-                compile "log4j:log4j:1.2.16"
+                implementation "log4j:log4j:1.2.16"
             }
         """
 
@@ -50,23 +50,8 @@ class GradleVersionFunctionalTest extends BaseFunctionalTest {
 
         where:
         gradleVersion << [
-                '2.8',
-                '2.14',
-                '3.0',
-                '3.5',
-                '4.0',
-                '4.1',
-                '4.2',
-                '4.3',
-                '4.4',
-                '4.5',
-                '4.6',
-                '4.7',
-                '4.8',
-                '4.8.1',
-                '4.9',
-                '4.10',
-                '4.10.1',
+          '8.14',
+          '9.0.0',
         ]
     }
 }

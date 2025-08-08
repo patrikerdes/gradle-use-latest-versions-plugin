@@ -18,7 +18,7 @@ class KotlinModuleUpdatesFunctionalTest extends KotlinBaseFunctionalTest {
             }
             
             dependencies {
-                testCompile("junit:junit:4.0")
+                testImplementation("junit:junit:4.0")
             }
         """
 
@@ -45,7 +45,7 @@ class KotlinModuleUpdatesFunctionalTest extends KotlinBaseFunctionalTest {
             }
             
             dependencies {
-                testCompile("junit:junit:[3.0,4.0]")
+                testImplementation("junit:junit:[3.0,4.0]")
             }
         """
 
@@ -72,7 +72,7 @@ class KotlinModuleUpdatesFunctionalTest extends KotlinBaseFunctionalTest {
             }
             
             dependencies {
-                testCompile("junit:junit:4+")
+                testImplementation("junit:junit:4+")
             }
         """
 
@@ -99,19 +99,19 @@ class KotlinModuleUpdatesFunctionalTest extends KotlinBaseFunctionalTest {
             }
 
             dependencies {
-                testCompile("junit:junit:\$junit_version")
-                compile("log4j:log4j:\$log4j_version")
+                testImplementation("junit:junit:\$junit_version")
+                implementation("log4j:log4j:\$log4j_version")
             }
         """
         testProjectDir.newFolder('buildSrc', 'src', 'main', 'kotlin')
         File buildSrcBuildGradleFile = testProjectDir.newFile('buildSrc/build.gradle.kts')
         buildSrcBuildGradleFile << '''
             plugins {
-                id("org.gradle.kotlin.kotlin-dsl.base") version "1.3.6"
+                id("org.gradle.kotlin.kotlin-dsl.base") version "6.2.0"
             }
             
             repositories {
-                jcenter()
+                mavenCentral()
             }
         '''
         File kotlinVersionsFile = testProjectDir.newFile('buildSrc/src/main/kotlin/versions.kt')
@@ -146,7 +146,7 @@ class KotlinModuleUpdatesFunctionalTest extends KotlinBaseFunctionalTest {
             val junitVersion: String by project
 
             dependencies {
-                testCompile("junit", "junit", "4.0")
+                testImplementation("junit", "junit", "4.0")
             }
         """
 
@@ -155,7 +155,7 @@ class KotlinModuleUpdatesFunctionalTest extends KotlinBaseFunctionalTest {
         String updatedBuildFile = buildFile.getText('UTF-8')
 
         then:
-        updatedBuildFile.contains("""testCompile("junit", "junit", "$CurrentVersions.JUNIT")""")
+        updatedBuildFile.contains("""testImplementation("junit", "junit", "$CurrentVersions.JUNIT")""")
     }
 
     void "version delegate and separate, unnamed group, name and version variable can be updated"() {
@@ -175,7 +175,7 @@ class KotlinModuleUpdatesFunctionalTest extends KotlinBaseFunctionalTest {
             val junitVersion: String by project
 
             dependencies {
-                testCompile("junit", "junit", junitVersion)
+                testImplementation("junit", "junit", junitVersion)
             }
         """
         File gradlePropertiesFile = testProjectDir.newFile('gradle.properties')
@@ -208,7 +208,7 @@ class KotlinModuleUpdatesFunctionalTest extends KotlinBaseFunctionalTest {
             val junitVersion: String by project
 
             dependencies {
-                testCompile(group = "junit", name = "junit", version = "4.0")
+                testImplementation(group = "junit", name = "junit", version = "4.0")
             }
         """
 
@@ -217,7 +217,7 @@ class KotlinModuleUpdatesFunctionalTest extends KotlinBaseFunctionalTest {
         String updatedBuildFile = buildFile.getText('UTF-8')
 
         then:
-        updatedBuildFile.contains('testCompile(group = "junit", name = "junit", version = "' +
+        updatedBuildFile.contains('testImplementation(group = "junit", name = "junit", version = "' +
                 CurrentVersions.JUNIT + '")')
     }
 
@@ -238,7 +238,7 @@ class KotlinModuleUpdatesFunctionalTest extends KotlinBaseFunctionalTest {
             val junitVersion: String by project
 
             dependencies {
-                testCompile(group = "junit", name = "junit", version = junitVersion)
+                testImplementation(group = "junit", name = "junit", version = junitVersion)
             }
         """
         File gradlePropertiesFile = testProjectDir.newFile('gradle.properties')

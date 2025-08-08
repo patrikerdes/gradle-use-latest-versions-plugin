@@ -114,11 +114,11 @@ ext.codecVersion = '1.9'
 def commonsLoggingVersion = "1.1.2"
 
 dependencies {
-    testCompile 'junit:junit:4.0'
-    compile "log4j:log4j:$log4jversion"
-    compile "commons-codec:commons-codec:" + codecVersion
-    compile group: 'commons-lang', name: 'commons-lang', version: '2.4'
-    compile group: 'commons-logging', name: 'commons-logging', version: commonsLoggingVersion
+    testImplementation 'junit:junit:4.0'
+    implementation "log4j:log4j:$log4jversion"
+    implementation "commons-codec:commons-codec:" + codecVersion
+    implementation group: 'commons-lang', name: 'commons-lang', version: '2.4'
+    implementation group: 'commons-logging', name: 'commons-logging', version: commonsLoggingVersion
 }
 ```
 
@@ -148,11 +148,11 @@ ext.codecVersion = '1.11' // <- Updated
 def commonsLoggingVersion = "1.2" // <- Updated
 
 dependencies {
-    testCompile 'junit:junit:4.12' // <- Updated
-    compile "log4j:log4j:$log4jversion" // <- The variable above was updated
-    compile "commons-codec:commons-codec:" + codecVersion // <- The variable above was updated
-    compile group: 'commons-lang', name: 'commons-lang', version: '2.6' // <- Updated
-    compile group: 'commons-logging', name: 'commons-logging', version: commonsLoggingVersion // <- The variable above was updated
+    testImplementation 'junit:junit:4.12' // <- Updated
+    implementation "log4j:log4j:$log4jversion" // <- The variable above was updated
+    implementation "commons-codec:commons-codec:" + codecVersion // <- The variable above was updated
+    implementation group: 'commons-lang', name: 'commons-lang', version: '2.6' // <- Updated
+    implementation group: 'commons-logging', name: 'commons-logging', version: commonsLoggingVersion // <- The variable above was updated
 }
 ```
 
@@ -266,8 +266,8 @@ plugins {
 
 ```groovy
 dependencies {
-    compile "log4j:log4j:1.2.15"
-    testCompile 'junit:junit:4.0'
+    implementation "log4j:log4j:1.2.15"
+    testImplementation 'junit:junit:4.0'
 }
 ```
 
@@ -277,7 +277,7 @@ Currently only if the order is `group`, `name`, `version`, without other element
 
 ```groovy
 dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.0'
+    testImplementation group: 'junit', name: 'junit', version: '4.0'
 }
 ```
 
@@ -290,7 +290,7 @@ dependencies {
 ext.junit_version = '4.0'
 
 dependencies {
-    testCompile "junit:junit:$junit_version"
+    testImplementation "junit:junit:$junit_version"
 }
 ```
 
@@ -298,7 +298,7 @@ dependencies {
 def junit_version = '4.0'
 
 dependencies {
-    testCompile "junit:junit:${junit_version}"
+    testImplementation "junit:junit:${junit_version}"
 }
 ```
 
@@ -306,7 +306,7 @@ dependencies {
 ext.junit_version = '4.0'
 
 dependencies {
-    testCompile "junit:junit:" + junit_version
+    testImplementation "junit:junit:" + junit_version
 }
 ```
 
@@ -318,7 +318,7 @@ Currently only if the order is `group`, `name`, `version`, without other element
 ext.junit_version = '4.0'
 
 dependencies {
-    testCompile group: 'junit', name: 'junit', version: junit_version
+    testImplementation group: 'junit', name: 'junit', version: junit_version
 }
 ```
 

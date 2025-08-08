@@ -26,7 +26,7 @@ class VariableUpdatesRootFilesFunctionalTest extends BaseFunctionalTest {
                 }
     
                 dependencies {
-                    compile "log4j:log4j:1.2.16"
+                    implementation "log4j:log4j:1.2.16"
                 }
             """
         File rootGradleSettingsFile = testProjectDir.newFile('settings.gradle')
@@ -81,7 +81,7 @@ class VariableUpdatesRootFilesFunctionalTest extends BaseFunctionalTest {
         File subProjectBuildFile = new File(subProjectFolder, 'build.gradle')
         subProjectBuildFile << '''
         dependencies {
-            testCompile "junit:junit:\$junit_version"
+            testImplementation "junit:junit:\$junit_version"
         }
         '''
 
@@ -128,8 +128,8 @@ class VariableUpdatesRootFilesFunctionalTest extends BaseFunctionalTest {
         File subProjectBuildFile = new File(subProjectFolder, 'build.gradle')
         subProjectBuildFile << '''
         dependencies {
-            testCompile "junit:junit:\$junit_version"
-            compile "log4j:log4j:\$log4j_version"
+            testImplementation "junit:junit:\$junit_version"
+            implementation "log4j:log4j:\$log4j_version"
         }
         '''
 
@@ -172,8 +172,8 @@ class VariableUpdatesRootFilesFunctionalTest extends BaseFunctionalTest {
         File subProjectBuildFile = new File(subProjectFolder, 'build.gradle')
         subProjectBuildFile << '''
         dependencies {
-            testCompile "junit:junit:\$junit_version"
-            compile "log4j:log4j:\$log4j_version"
+            testImplementation "junit:junit:\$junit_version"
+            implementation "log4j:log4j:\$log4j_version"
         }
         '''
 
@@ -216,8 +216,8 @@ class VariableUpdatesRootFilesFunctionalTest extends BaseFunctionalTest {
         File subProjectBuildFile = new File(subProjectFolder, 'build.gradle')
         subProjectBuildFile << '''
         dependencies {
-            testCompile "junit:junit:\$junit_version"
-            compile "log4j:log4j:\$log4j_version"
+            testImplementation "junit:junit:\$junit_version"
+            implementation "log4j:log4j:\$log4j_version"
         }
         '''
 
@@ -261,16 +261,16 @@ class VariableUpdatesRootFilesFunctionalTest extends BaseFunctionalTest {
         File firstSubProjectBuildFile = new File(firstSubProjectFolder, 'build.gradle')
         firstSubProjectBuildFile << '''
         dependencies {
-            testCompile "junit:junit:\$junit_version"
-            compile "log4j:log4j:\$log4j_version"
+            testImplementation "junit:junit:\$junit_version"
+            implementation "log4j:log4j:\$log4j_version"
         }
         '''
         File secondSubProjectFolder = testProjectDir.newFolder('second-sub-project')
         File secondSubProjectBuildFile = new File(secondSubProjectFolder, 'build.gradle')
         secondSubProjectBuildFile << '''
         dependencies {
-            testCompile "junit:junit:\$junit_version"
-            compile "log4j:log4j:\$log4j_version"
+            testImplementation "junit:junit:\$junit_version"
+            implementation "log4j:log4j:\$log4j_version"
         }
         '''
 
@@ -322,14 +322,14 @@ class VariableUpdatesRootFilesFunctionalTest extends BaseFunctionalTest {
         File firstSubProjectBuildFile = new File(firstSubProjectFolder, 'build.gradle')
         firstSubProjectBuildFile << '''
         dependencies {
-            compile "log4j:log4j:\$log4j_version"
+            implementation "log4j:log4j:\$log4j_version"
         }
         '''
         File secondSubProjectFolder = testProjectDir.newFolder('second-sub-project')
         File secondSubProjectBuildFile = new File(secondSubProjectFolder, 'build.gradle')
         secondSubProjectBuildFile << '''
         dependencies {
-            testCompile "junit:junit:\$junit_version"
+            testImplementation "junit:junit:\$junit_version"
         }
         '''
 
@@ -391,14 +391,14 @@ class VariableUpdatesRootFilesFunctionalTest extends BaseFunctionalTest {
         File firstSubProjectBuildFile = new File(firstSubProjectFolder, 'build.gradle')
         firstSubProjectBuildFile << '''
         dependencies {
-            compile "log4j:log4j:\$log4j_version"
+            implementation "log4j:log4j:\$log4j_version"
         }
         '''
         File secondSubProjectFolder = testProjectDir.newFolder('second-sub-project')
         File secondSubProjectBuildFile = new File(secondSubProjectFolder, 'build.gradle')
         secondSubProjectBuildFile << '''
         dependencies {
-            testCompile "junit:junit:\$junit_version"
+            testImplementation "junit:junit:\$junit_version"
         }
         '''
 
@@ -452,14 +452,14 @@ class VariableUpdatesRootFilesFunctionalTest extends BaseFunctionalTest {
         File firstSubProjectBuildFile = new File(firstSubProjectFolder, 'build.gradle')
         firstSubProjectBuildFile << '''
         dependencies {
-            compile "log4j:log4j:\$log4j_version"
+            implementation "log4j:log4j:\$log4j_version"
         }
         '''
         File secondSubProjectFolder = testProjectDir.newFolder('second-sub-project')
         File secondSubProjectBuildFile = new File(secondSubProjectFolder, 'build.gradle')
         secondSubProjectBuildFile << '''
         dependencies {
-            testCompile "junit:junit:\$junit_version"
+            testImplementation "junit:junit:\$junit_version"
         }
         '''
 
@@ -504,14 +504,14 @@ class VariableUpdatesRootFilesFunctionalTest extends BaseFunctionalTest {
         File firstSubProjectBuildFile = new File(firstSubProjectFolder, 'build.gradle')
         firstSubProjectBuildFile << '''
         dependencies {
-            testCompile "junit:junit:\$junit_version"
+            testImplementation "junit:junit:\$junit_version"
         }
         '''
         File secondSubProjectFolder = testProjectDir.newFolder('second-sub-project')
         File secondSubProjectBuildFile = new File(secondSubProjectFolder, 'build.gradle')
         secondSubProjectBuildFile << '''
         dependencies {
-            testCompile "junit:junit-dep:\$junit_version"
+            testImplementation "junit:junit-dep:\$junit_version"
         }
         '''
 
@@ -563,14 +563,14 @@ class VariableUpdatesRootFilesFunctionalTest extends BaseFunctionalTest {
         File firstSubProjectBuildFile = new File(firstSubProjectFolder, 'build.gradle')
         firstSubProjectBuildFile << '''
         dependencies {
-            testCompile "junit:junit:\$junit_version"
+            testImplementation "junit:junit:\$junit_version"
         }
         '''
         File secondSubProjectFolder = testProjectDir.newFolder('second-sub-project')
         File secondSubProjectBuildFile = new File(secondSubProjectFolder, 'build.gradle')
         secondSubProjectBuildFile << '''
         dependencies {
-            testCompile "junit:junit-dep:\$junit_version"
+            testImplementation "junit:junit-dep:\$junit_version"
         }
         '''
 
@@ -629,14 +629,14 @@ class VariableUpdatesRootFilesFunctionalTest extends BaseFunctionalTest {
         File firstSubProjectBuildFile = new File(firstSubProjectFolder, 'build.gradle')
         firstSubProjectBuildFile << '''
         dependencies {
-            testCompile "junit:junit:\$junit_version"
+            testImplementation "junit:junit:\$junit_version"
         }
         '''
         File secondSubProjectFolder = testProjectDir.newFolder('second-sub-project')
         File secondSubProjectBuildFile = new File(secondSubProjectFolder, 'build.gradle')
         secondSubProjectBuildFile << '''
         dependencies {
-            testCompile "junit:junit:\$junit_version"
+            testImplementation "junit:junit:\$junit_version"
         }
         '''
 

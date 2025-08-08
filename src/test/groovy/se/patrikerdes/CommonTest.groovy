@@ -21,7 +21,7 @@ class CommonTest extends Specification {
 
         where:
         fileContent                                                            | _
-        'testCompile(group = "junit", name = "junit", version = junitVersion)' | _
-        'testCompile("junit", "junit", junitVersion)'                          | _
+        'testImplementation(group = "junit", name = "junit", version = junitVersion)' | _
+        'testImplementation("junit", "junit", junitVersion)'                          | _
     }
 }

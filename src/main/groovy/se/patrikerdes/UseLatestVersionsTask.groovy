@@ -19,6 +19,7 @@ import org.gradle.api.tasks.options.Option
 import java.nio.file.Files
 import java.nio.file.StandardCopyOption
 import java.util.regex.Matcher
+import groovy.ant.FileNameFinder
 
 @CompileStatic
 class UseLatestVersionsTask extends DefaultTask {
@@ -60,7 +61,7 @@ class UseLatestVersionsTask extends DefaultTask {
         saveDependencyUpdatesReport(dependencyUpdatesJsonReportFile)
 
         List<String> dotGradleFileNames
-        if (versionFiles == null || versionFiles.isEmpty()) {
+        if (versionFiles == null || versionFiles.empty) {
             dotGradleFileNames = new FileNameFinder().getFileNames(project.projectDir.absolutePath, '**/*.gradle')
             dotGradleFileNames += new FileNameFinder().getFileNames(project.projectDir.absolutePath, '**/*.gradle.kts')
             dotGradleFileNames += new FileNameFinder().getFileNames(project.projectDir.absolutePath,

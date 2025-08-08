@@ -9,7 +9,7 @@ import spock.lang.Specification
 class BaseFunctionalTest extends Specification {
 
     @Rule
-    protected final TemporaryFolder testProjectDir = new TemporaryFolder()
+    protected TemporaryFolder testProjectDir = new TemporaryFolder()
     protected File buildFile
 
     void setup() {

@@ -1,5 +1,5 @@
 plugins {
-    id "com.gradle.plugin-publish" version "0.12.0"
+    id "com.gradle.plugin-publish" version "1.3.1"
 }
 
 apply plugin: 'groovy'
@@ -12,20 +12,29 @@ repositories {
 }
 
 dependencies {
-    testCompile('org.spockframework:spock-core:1.1-groovy-2.4') {
+    testImplementation('org.spockframework:spock-core:2.3-groovy-4.0') {
         exclude(module: 'groovy-all')
     }
+    testImplementation('org.spockframework:spock-junit4:2.3-groovy-4.0')
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.13.1'
+    testImplementation 'junit:junit:4.13.1'
+    testRuntimeOnly 'org.junit.vintage:junit-vintage-engine'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
 group = 'se.patrikerdes'
-version = '0.2.18'
+version = '1.0.0'
 
-sourceCompatibility = 1.7
-targetCompatibility = 1.7
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
 
 test {
+    useJUnitPlatform()
     testLogging {
-        events "STARTED", "PASSED", "FAILED", "SKIPPED", "STANDARD_ERROR", "STANDARD_OUT"
+        events = ["STARTED", "PASSED", "FAILED", "SKIPPED", "STANDARD_ERROR", "STANDARD_OUT"]
     }
 }
 
@@ -38,17 +47,18 @@ codenarcTest {
 }
 
 codenarc {
-    toolVersion = "1.1"
+    toolVersion = "3.6.0"
 }
 
-pluginBundle {
+gradlePlugin  {
     website = 'https://github.com/patrikerdes/gradle-use-latest-versions-plugin/blob/master/README.md'
     vcsUrl = 'https://github.com/patrikerdes/gradle-use-latest-versions-plugin'
     description = 'A plugin that updates the versions of your dependencies in your gradle project to the ' +
             'latest available versions.'
     plugins {
-        useLatestVersionsPlugin {
+        create('useLatestVersionsPlugin') {
             id = 'se.patrikerdes.use-latest-versions'
+            implementationClass = 'se.patrikerdes.UseLatestVersionsPlugin'
             displayName = 'Use Latest Versions'
             description = 'A plugin that updates the versions of your dependencies in your *.gradle files to the ' +
                     'latest available versions. This plugin depends on the Gradle Versions Plugin.'

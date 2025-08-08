@@ -22,7 +22,7 @@ class KotlinCheckFunctionalTest extends KotlinBaseFunctionalTest {
             }
             
             dependencies {
-                testCompile("junit:junit:4.0")
+                testImplementation("junit:junit:4.0")
             }
         """
 
@@ -52,7 +52,7 @@ class KotlinCheckFunctionalTest extends KotlinBaseFunctionalTest {
             }
             
             dependencies {
-                testCompile("junit:junit:4.0")
+                testImplementation("junit:junit:4.0")
             }
         """
 
@@ -79,7 +79,7 @@ class KotlinCheckFunctionalTest extends KotlinBaseFunctionalTest {
             }
             
             dependencies {
-                testCompile("junit:junit:4.0")
+                testImplementation("junit:junit:4.0")
             }
         """
 
@@ -108,7 +108,7 @@ class KotlinCheckFunctionalTest extends KotlinBaseFunctionalTest {
             }
             
             dependencies {
-                testCompile("junit:junit:4.0")
+                testImplementation("junit:junit:4.0")
             }
         """
 
@@ -135,7 +135,7 @@ class KotlinCheckFunctionalTest extends KotlinBaseFunctionalTest {
             }
             
             dependencies {
-                testCompile("junit:junit:4.0")
+                testImplementation("junit:junit:4.0")
             }
         """
 
@@ -164,7 +164,7 @@ class KotlinCheckFunctionalTest extends KotlinBaseFunctionalTest {
             }
             
             dependencies {
-                testCompile("junit:junit:$CurrentVersions.JUNIT")
+                testImplementation("junit:junit:$CurrentVersions.JUNIT")
             }
         """
 

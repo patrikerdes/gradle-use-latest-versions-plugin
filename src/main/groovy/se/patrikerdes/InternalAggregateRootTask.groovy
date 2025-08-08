@@ -2,9 +2,10 @@ package se.patrikerdes
 
 import static se.patrikerdes.UseLatestVersionsPlugin.USE_LATEST_VERSIONS
 
-import org.gradle.api.Project
+import groovy.ant.FileNameFinder
 import groovy.json.JsonSlurper
 import org.gradle.api.DefaultTask
+import org.gradle.api.Project
 import org.gradle.api.tasks.TaskAction
 
 class InternalAggregateRootTask extends DefaultTask {

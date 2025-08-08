@@ -16,7 +16,7 @@ class ModuleUpdatesFunctionalTest extends BaseFunctionalTest {
             }
             
             dependencies {
-                testCompile 'junit:junit:4.0'
+                testImplementation 'junit:junit:4.0'
             }
         """
 
@@ -43,8 +43,8 @@ class ModuleUpdatesFunctionalTest extends BaseFunctionalTest {
             }
             
             dependencies {
-                testCompile "junit:junit:4.0:javadoc@jar"
-                compile "log4j:log4j:1.2.16"
+                testImplementation "junit:junit:4.0:javadoc@jar"
+                implementation "log4j:log4j:1.2.16"
             }
         """
 
@@ -53,8 +53,8 @@ class ModuleUpdatesFunctionalTest extends BaseFunctionalTest {
         String updatedBuildFile = buildFile.getText('UTF-8')
 
         then:
-        updatedBuildFile.contains("testCompile \"junit:junit:$CurrentVersions.JUNIT:javadoc@jar\"")
-        updatedBuildFile.contains("compile \"log4j:log4j:$CurrentVersions.LOG4J\"")
+        updatedBuildFile.contains("testImplementation \"junit:junit:$CurrentVersions.JUNIT:javadoc@jar\"")
+        updatedBuildFile.contains("implementation \"log4j:log4j:$CurrentVersions.LOG4J\"")
     }
 
     void "classifier bug (issue #21)"() {
@@ -74,8 +74,8 @@ class ModuleUpdatesFunctionalTest extends BaseFunctionalTest {
             ext.log4jVersion = '1.2.16'
             
             dependencies {
-                compile "log4j:log4j:" + log4jVersion
-                compile group: 'junit', name: 'junit', version: '4.0'
+                implementation "log4j:log4j:" + log4jVersion
+                implementation group: 'junit', name: 'junit', version: '4.0'
             }
         """
 
@@ -85,8 +85,8 @@ class ModuleUpdatesFunctionalTest extends BaseFunctionalTest {
 
         then:
         updatedBuildFile.contains("ext.log4jVersion = '$CurrentVersions.LOG4J'")
-        updatedBuildFile.contains('compile "log4j:log4j:" + log4jVersion')
-        updatedBuildFile.contains("compile group: 'junit', name: 'junit', version: '$CurrentVersions.JUNIT'")
+        updatedBuildFile.contains('implementation "log4j:log4j:" + log4jVersion')
+        updatedBuildFile.contains("implementation group: 'junit', name: 'junit', version: '$CurrentVersions.JUNIT'")
     }
 
     void "one outdated and one up-to-date module dependency with a fixed version can be updated, string notation"() {
@@ -104,8 +104,8 @@ class ModuleUpdatesFunctionalTest extends BaseFunctionalTest {
             }
             
             dependencies {
-                compile "log4j:log4j:1.2.16:javadoc"
-                testCompile "junit:junit:$CurrentVersions.JUNIT:javadoc"
+                implementation "log4j:log4j:1.2.16:javadoc"
+                testImplementation "junit:junit:$CurrentVersions.JUNIT:javadoc"
             }
         """
 
@@ -114,8 +114,8 @@ class ModuleUpdatesFunctionalTest extends BaseFunctionalTest {
         String updatedBuildFile = buildFile.getText('UTF-8')
 
         then:
-        updatedBuildFile.contains("compile \"log4j:log4j:$CurrentVersions.LOG4J:javadoc\"")
-        updatedBuildFile.contains("testCompile \"junit:junit:$CurrentVersions.JUNIT:javadoc\"")
+        updatedBuildFile.contains("implementation \"log4j:log4j:$CurrentVersions.LOG4J:javadoc\"")
+        updatedBuildFile.contains("testImplementation \"junit:junit:$CurrentVersions.JUNIT:javadoc\"")
     }
 
     void "an outdated dependency with a fixed version can be updated, map notation with classifier and extension"() {
@@ -133,8 +133,8 @@ class ModuleUpdatesFunctionalTest extends BaseFunctionalTest {
             }
             
             dependencies {
-                testCompile group: 'junit', name: 'junit', version: '4.0', classifier: 'javadoc', ext: 'jar'
-                compile "log4j:log4j:1.2.16"
+                testImplementation group: 'junit', name: 'junit', version: '4.0', classifier: 'javadoc', ext: 'jar'
+                implementation "log4j:log4j:1.2.16"
             }
         """
 
@@ -143,9 +143,9 @@ class ModuleUpdatesFunctionalTest extends BaseFunctionalTest {
         String updatedBuildFile = buildFile.getText('UTF-8')
 
         then:
-        updatedBuildFile.contains("testCompile group: 'junit', name: 'junit', version: '$CurrentVersions.JUNIT', " +
-                "classifier: 'javadoc', ext: 'jar'")
-        updatedBuildFile.contains("compile \"log4j:log4j:$CurrentVersions.LOG4J\"")
+        updatedBuildFile.contains("testImplementation group: 'junit', name: 'junit', " +
+          "version: '$CurrentVersions.JUNIT', " + "classifier: 'javadoc', ext: 'jar'")
+        updatedBuildFile.contains("implementation \"log4j:log4j:$CurrentVersions.LOG4J\"")
     }
 
     void "an outdated module dependency with a fixed version can be updated, map notation, single quotes"() {
@@ -163,7 +163,7 @@ class ModuleUpdatesFunctionalTest extends BaseFunctionalTest {
             }
             
             dependencies {
-                testCompile group: 'junit', name: 'junit', version: '4.0'
+                testImplementation group: 'junit', name: 'junit', version: '4.0'
             }
         """
 
@@ -190,7 +190,7 @@ class ModuleUpdatesFunctionalTest extends BaseFunctionalTest {
             }
             
             dependencies {
-                testCompile group: "junit", name: "junit", version: "4.0"
+                testImplementation group: "junit", name: "junit", version: "4.0"
             }
         """
 
@@ -217,7 +217,7 @@ class ModuleUpdatesFunctionalTest extends BaseFunctionalTest {
             }
             
             dependencies {
-                testCompile 'junit:junit:[3.0,4.0]'
+                testImplementation 'junit:junit:[3.0,4.0]'
             }
         """
 
@@ -244,7 +244,7 @@ class ModuleUpdatesFunctionalTest extends BaseFunctionalTest {
             }
             
             dependencies {
-                testCompile 'junit:junit:4+'
+                testImplementation 'junit:junit:4+'
             }
         """
 
@@ -273,13 +273,13 @@ class ModuleUpdatesFunctionalTest extends BaseFunctionalTest {
             }
             
             dependencies {
-                testCompile 'junit:junit:4.0'
+                testImplementation 'junit:junit:4.0'
             }
         """
         File secondFile = testProjectDir.newFile('second.gradle')
         secondFile << """
             dependencies {
-                compile 'log4j:log4j:1.2.16'
+                implementation 'log4j:log4j:1.2.16'
             }
         """
 
@@ -299,7 +299,7 @@ class ModuleUpdatesFunctionalTest extends BaseFunctionalTest {
             plugins {
                 id 'se.patrikerdes.use-latest-versions'
                 id 'com.github.ben-manes.versions' version '$CurrentVersions.VERSIONS'
-                id "io.spring.dependency-management" version "1.0.6.RELEASE"
+                id "io.spring.dependency-management" version "1.1.7"
             }
 
             apply plugin: 'java'
@@ -318,8 +318,8 @@ class ModuleUpdatesFunctionalTest extends BaseFunctionalTest {
             }
             
             dependencies {
-                testCompile "junit:junit"
-                compile "log4j:log4j"
+                testImplementation "junit:junit"
+                implementation "log4j:log4j"
             }
         """
 
@@ -347,8 +347,8 @@ class ModuleUpdatesFunctionalTest extends BaseFunctionalTest {
             }
             
             dependencies {
-                testCompile "junit:junit:4.0:javadoc@jar"
-                compile "log4j:log4j:1.2.16"
+                testImplementation "junit:junit:4.0:javadoc@jar"
+                implementation "log4j:log4j:1.2.16"
             }
         """
 
@@ -357,8 +357,8 @@ class ModuleUpdatesFunctionalTest extends BaseFunctionalTest {
         String updatedBuildFile = buildFile.getText('UTF-8')
 
         then:
-        updatedBuildFile.contains('testCompile \"junit:junit:4.0:javadoc@jar\"')
-        updatedBuildFile.contains("compile \"log4j:log4j:$CurrentVersions.LOG4J\"")
+        updatedBuildFile.contains('testImplementation \"junit:junit:4.0:javadoc@jar\"')
+        updatedBuildFile.contains("implementation \"log4j:log4j:$CurrentVersions.LOG4J\"")
     }
 
     void "only updates whitelisted dependencies with --update-dependency as group"() {
@@ -376,8 +376,8 @@ class ModuleUpdatesFunctionalTest extends BaseFunctionalTest {
             }
             
             dependencies {
-                testCompile "junit:junit:4.0:javadoc@jar"
-                compile "log4j:log4j:1.2.16"
+                testImplementation "junit:junit:4.0:javadoc@jar"
+                implementation "log4j:log4j:1.2.16"
             }
         """
 
@@ -386,8 +386,8 @@ class ModuleUpdatesFunctionalTest extends BaseFunctionalTest {
         String updatedBuildFile = buildFile.getText('UTF-8')
 
         then:
-        updatedBuildFile.contains('testCompile \"junit:junit:4.0:javadoc@jar\"')
-        updatedBuildFile.contains("compile \"log4j:log4j:$CurrentVersions.LOG4J\"")
+        updatedBuildFile.contains('testImplementation \"junit:junit:4.0:javadoc@jar\"')
+        updatedBuildFile.contains("implementation \"log4j:log4j:$CurrentVersions.LOG4J\"")
     }
 
     void "don't updates blacklisted dependencies with --ignore-dependency"() {
@@ -405,8 +405,8 @@ class ModuleUpdatesFunctionalTest extends BaseFunctionalTest {
             }
             
             dependencies {
-                testCompile "junit:junit:4.0:javadoc@jar"
-                compile "log4j:log4j:1.2.16"
+                testImplementation "junit:junit:4.0:javadoc@jar"
+                implementation "log4j:log4j:1.2.16"
             }
         """
 
@@ -415,8 +415,8 @@ class ModuleUpdatesFunctionalTest extends BaseFunctionalTest {
         String updatedBuildFile = buildFile.getText('UTF-8')
 
         then:
-        updatedBuildFile.contains('testCompile \"junit:junit:4.0:javadoc@jar\"')
-        updatedBuildFile.contains("compile \"log4j:log4j:$CurrentVersions.LOG4J\"")
+        updatedBuildFile.contains('testImplementation \"junit:junit:4.0:javadoc@jar\"')
+        updatedBuildFile.contains("implementation \"log4j:log4j:$CurrentVersions.LOG4J\"")
     }
 
     void "don't updates blacklisted dependencies with --ignore-dependency as group"() {
@@ -434,9 +434,9 @@ class ModuleUpdatesFunctionalTest extends BaseFunctionalTest {
             }
             
             dependencies {
-                testCompile "junit:junit:4.0:javadoc@jar"
-                testCompile "junit:junit-dep:4.9"
-                compile "log4j:log4j:1.2.16"
+                testImplementation "junit:junit:4.0:javadoc@jar"
+                testImplementation "junit:junit-dep:4.9"
+                implementation "log4j:log4j:1.2.16"
             }
         """
 
@@ -445,8 +445,8 @@ class ModuleUpdatesFunctionalTest extends BaseFunctionalTest {
         String updatedBuildFile = buildFile.getText('UTF-8')
 
         then:
-        updatedBuildFile.contains('testCompile \"junit:junit:4.0:javadoc@jar\"')
-        updatedBuildFile.contains('testCompile "junit:junit-dep:4.9"')
-        updatedBuildFile.contains("compile \"log4j:log4j:$CurrentVersions.LOG4J\"")
+        updatedBuildFile.contains('testImplementation \"junit:junit:4.0:javadoc@jar\"')
+        updatedBuildFile.contains('testImplementation "junit:junit-dep:4.9"')
+        updatedBuildFile.contains("implementation \"log4j:log4j:$CurrentVersions.LOG4J\"")
     }
 }

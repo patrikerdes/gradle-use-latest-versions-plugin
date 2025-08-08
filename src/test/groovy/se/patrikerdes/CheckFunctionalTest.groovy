@@ -22,7 +22,7 @@ class CheckFunctionalTest extends BaseFunctionalTest {
             }
             
             dependencies {
-                testCompile 'junit:junit:4.0'
+                testImplementation 'junit:junit:4.0'
             }
         """
 
@@ -52,7 +52,7 @@ class CheckFunctionalTest extends BaseFunctionalTest {
             }
             
             dependencies {
-                testCompile 'junit:junit:4.0'
+                testImplementation 'junit:junit:4.0'
             }
         """
 
@@ -79,7 +79,7 @@ class CheckFunctionalTest extends BaseFunctionalTest {
             }
             
             dependencies {
-                testCompile 'junit:junit:4.0'
+                testImplementation 'junit:junit:4.0'
             }
         """
 
@@ -108,7 +108,7 @@ class CheckFunctionalTest extends BaseFunctionalTest {
             }
             
             dependencies {
-                testCompile 'junit:junit:4.0'
+                testImplementation 'junit:junit:4.0'
             }
         """
 
@@ -140,7 +140,7 @@ class CheckFunctionalTest extends BaseFunctionalTest {
             }
             
             dependencies {
-                testCompile 'junit:junit:4.0'
+                testImplementation 'junit:junit:4.0'
             }
         """
 
@@ -172,7 +172,7 @@ class CheckFunctionalTest extends BaseFunctionalTest {
             }
             
             dependencies {
-                testCompile 'junit:junit:4.0'
+                testImplementation 'junit:junit:4.0'
             }
         """
 
@@ -199,7 +199,7 @@ class CheckFunctionalTest extends BaseFunctionalTest {
             }
             
             dependencies {
-                testCompile 'junit:junit:4.0'
+                testImplementation 'junit:junit:4.0'
             }
         """
 
@@ -231,7 +231,7 @@ class CheckFunctionalTest extends BaseFunctionalTest {
             junit_version = '4.0'
             
             dependencies {
-                testCompile "junit:junit:\$junit_version"
+                testImplementation "junit:junit:\$junit_version"
             }
         """
 
@@ -263,8 +263,8 @@ class CheckFunctionalTest extends BaseFunctionalTest {
             junit_version = '4.0'
             
             dependencies {
-                compile "log4j:log4j:1.2.16"
-                testCompile "junit:junit:\$junit_version"
+                implementation "log4j:log4j:1.2.16"
+                testImplementation "junit:junit:\$junit_version"
             }
         """
 
@@ -295,8 +295,8 @@ class CheckFunctionalTest extends BaseFunctionalTest {
             }
             
             dependencies {
-                compile "log4j:log4j:1.2.16"
-                testCompile "junit:junit:3.0"
+                implementation "log4j:log4j:1.2.16"
+                testImplementation "junit:junit:3.0"
             }
         """
 
@@ -328,9 +328,9 @@ class CheckFunctionalTest extends BaseFunctionalTest {
             }
             
             dependencies {
-                compile "log4j:log4j:1.2.16"
-                testCompile "junit:junit:3.0"
-                testCompile "junit:junit-dep:4.9"
+                implementation "log4j:log4j:1.2.16"
+                testImplementation "junit:junit:3.0"
+                testImplementation "junit:junit-dep:4.9"
             }
         """
 
@@ -363,8 +363,8 @@ class CheckFunctionalTest extends BaseFunctionalTest {
             }
             
             dependencies {
-                compile "log4j:log4j:1.2.16"
-                testCompile "junit:junit:3.0"
+                implementation "log4j:log4j:1.2.16"
+                testImplementation "junit:junit:3.0"
             }
         """
 
@@ -396,9 +396,9 @@ class CheckFunctionalTest extends BaseFunctionalTest {
             }
             
             dependencies {
-                compile "log4j:log4j:1.2.16"
-                testCompile "junit:junit:3.0"
-                testCompile "junit:junit-dep:4.9"
+                implementation "log4j:log4j:1.2.16"
+                testImplementation "junit:junit:3.0"
+                testImplementation "junit:junit-dep:4.9"
             }
         """
 
@@ -431,8 +431,8 @@ class CheckFunctionalTest extends BaseFunctionalTest {
             }
             
             dependencies {
-                compile "log4j:log4j:1.2.16"
-                testCompile "junit:junit:3.0"
+                implementation "log4j:log4j:1.2.16"
+                testImplementation "junit:junit:3.0"
             }
         """
 
@@ -459,8 +459,8 @@ class CheckFunctionalTest extends BaseFunctionalTest {
             }
             
             dependencies {
-                compile "log4j:log4j:1.2.16"
-                testCompile "junit:junit:3.0"
+                implementation "log4j:log4j:1.2.16"
+                testImplementation "junit:junit:3.0"
             }
         """
 
@@ -487,7 +487,7 @@ class CheckFunctionalTest extends BaseFunctionalTest {
             }
             
             dependencies {
-                testCompile 'junit:junit:$CurrentVersions.JUNIT'
+                testImplementation 'junit:junit:$CurrentVersions.JUNIT'
             }
         """
 

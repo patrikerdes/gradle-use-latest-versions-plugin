@@ -22,7 +22,7 @@ class UseLatestVersionsPlugin implements Plugin<Project> {
 
     Task setupRootAggregateTask(Project project) {
         Set<Task> tasks = project.rootProject.getTasksByName(INTERNAL_ROOT_AGGREGATE, false)
-        if (tasks.isEmpty()) {
+        if (tasks.empty) {
             // This handles both cases: when UseLatestVersionsPlugin is applied
             // to root project and subprojects or when it is applied only to subprojects
             return project.rootProject.task(INTERNAL_ROOT_AGGREGATE, type: InternalAggregateRootTask)

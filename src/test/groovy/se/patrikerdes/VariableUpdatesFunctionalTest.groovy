@@ -20,7 +20,7 @@ class VariableUpdatesFunctionalTest extends BaseFunctionalTest {
             def junit_version = '4.0'
             
             dependencies {
-                testCompile "junit:junit:\$junit_version"
+                testImplementation "junit:junit:\$junit_version"
             }
         """
 
@@ -49,7 +49,7 @@ class VariableUpdatesFunctionalTest extends BaseFunctionalTest {
             def junit_version = "4.0"
             
             dependencies {
-                testCompile "junit:junit:\$junit_version"
+                testImplementation "junit:junit:\$junit_version"
             }
         """
 
@@ -78,7 +78,7 @@ class VariableUpdatesFunctionalTest extends BaseFunctionalTest {
             def junit_version='4.0'
             
             dependencies {
-                testCompile "junit:junit:\$junit_version"
+                testImplementation "junit:junit:\$junit_version"
             }
         """
 
@@ -107,7 +107,7 @@ class VariableUpdatesFunctionalTest extends BaseFunctionalTest {
             def junit_version\t=\t'4.0'
             
             dependencies {
-                testCompile "junit:junit:\$junit_version"
+                testImplementation "junit:junit:\$junit_version"
             }
         """
 
@@ -136,7 +136,7 @@ class VariableUpdatesFunctionalTest extends BaseFunctionalTest {
             def junit_version = '4.0'
             
             dependencies {
-                testCompile "junit:junit:"+ junit_version
+                testImplementation "junit:junit:"+ junit_version
             }
         """
 
@@ -165,7 +165,7 @@ class VariableUpdatesFunctionalTest extends BaseFunctionalTest {
             def junit_version = "4.0"
             
             dependencies {
-                testCompile group: 'junit', name: 'junit', version: junit_version
+                testImplementation group: 'junit', name: 'junit', version: junit_version
             }
         """
 
@@ -194,7 +194,7 @@ class VariableUpdatesFunctionalTest extends BaseFunctionalTest {
             ext.junit_version = '4.0'
             
             dependencies {
-                testCompile group: 'junit', name: 'junit', version: junit_version
+                testImplementation group: 'junit', name: 'junit', version: junit_version
             }
         """
 
@@ -223,7 +223,7 @@ class VariableUpdatesFunctionalTest extends BaseFunctionalTest {
             def junit_version = '4.0'
             
             dependencies {
-                testCompile "junit:junit:\${junit_version}"
+                testImplementation "junit:junit:\${junit_version}"
             }
         """
 
@@ -252,8 +252,8 @@ class VariableUpdatesFunctionalTest extends BaseFunctionalTest {
             def commons = "1.0"
             
             dependencies {
-                compile "commons-lang:commons-lang:\$commons"
-                compile "commons-logging:commons-logging:\$commons"
+                implementation "commons-lang:commons-lang:\$commons"
+                implementation "commons-logging:commons-logging:\$commons"
             }
         """
 
@@ -283,8 +283,8 @@ class VariableUpdatesFunctionalTest extends BaseFunctionalTest {
             def commons = "1.2"
             
             dependencies {
-                compile "commons-codec:commons-codec:\$commons"       // Latest version: 1.2
-                compile "commons-logging:commons-logging:\$commons"   // Latest version: 1.11
+                implementation "commons-codec:commons-codec:\$commons"       // Latest version: 1.2
+                implementation "commons-logging:commons-logging:\$commons"   // Latest version: 1.11
             }
         """
 
@@ -316,7 +316,7 @@ class VariableUpdatesFunctionalTest extends BaseFunctionalTest {
             junit_version = '4.0'
             
             dependencies {
-                testCompile "junit:junit:\$junit_version"
+                testImplementation "junit:junit:\$junit_version"
             }
         """
 
@@ -348,7 +348,7 @@ class VariableUpdatesFunctionalTest extends BaseFunctionalTest {
             }
 
             dependencies {
-                testCompile "junit:junit:\$junit_version"
+                testImplementation "junit:junit:\$junit_version"
             }
         """
         File secondFile = testProjectDir.newFile('second.gradle')
@@ -373,7 +373,7 @@ class VariableUpdatesFunctionalTest extends BaseFunctionalTest {
             plugins {
                 id 'se.patrikerdes.use-latest-versions'
                 id 'com.github.ben-manes.versions' version '$CurrentVersions.VERSIONS'
-                id "io.spring.dependency-management" version "1.0.6.RELEASE"
+                id "io.spring.dependency-management" version "1.1.7"
             }
 
             apply plugin: 'java'
@@ -395,8 +395,8 @@ class VariableUpdatesFunctionalTest extends BaseFunctionalTest {
             }
             
             dependencies {
-                testCompile "junit:junit"
-                compile "log4j:log4j"
+                testImplementation "junit:junit"
+                implementation "log4j:log4j"
             }
         """
 
@@ -433,8 +433,8 @@ class VariableUpdatesFunctionalTest extends BaseFunctionalTest {
             }
 
             dependencies {
-                testCompile "junit:junit:\$junit_version"
-                compile "log4j:log4j:\$log4j_version"
+                testImplementation "junit:junit:\$junit_version"
+                implementation "log4j:log4j:\$log4j_version"
             }
         """
         File gradlePropertiesFile = testProjectDir.newFile('gradle.properties')
@@ -467,8 +467,8 @@ class VariableUpdatesFunctionalTest extends BaseFunctionalTest {
             }
 
             dependencies {
-                testCompile "junit:junit:\$junit_version"
-                compile "log4j:log4j:\$log4j_version"
+                testImplementation "junit:junit:\$junit_version"
+                implementation "log4j:log4j:\$log4j_version"
             }
         """
         File gradlePropertiesFile = testProjectDir.newFile('gradle.properties')
@@ -503,8 +503,8 @@ class VariableUpdatesFunctionalTest extends BaseFunctionalTest {
             }
 
             dependencies {
-                testCompile "junit:junit:\$junit_version"
-                testCompile "log4j:log4j:\$log4j_version"
+                testImplementation "junit:junit:\$junit_version"
+                testImplementation "log4j:log4j:\$log4j_version"
                 runtimeOnly "log4j:log4j:\$log4j_version"
             }
         """
@@ -538,16 +538,16 @@ class VariableUpdatesFunctionalTest extends BaseFunctionalTest {
         }
 
         dependencies {
-            testCompile "junit:junit:4.0"
-            testCompile "log4j:log4j:1.2.16"
+            testImplementation "junit:junit:4.0"
+            testImplementation "log4j:log4j:1.2.16"
             runtimeOnly "log4j:log4j:1.2.16"
         }
         """
         File myVersionFile = testProjectDir.newFile('my-versions.kt')
         myVersionFile << '''
         val junitVersion = "4.0"
-        testCompile "junit:junit:$junitVersion"
-        testCompile "log4j:log4j:1.2.16"
+        testImplementation "junit:junit:$junitVersion"
+        testImplementation "log4j:log4j:1.2.16"
         runtimeOnly "log4j:log4j:1.2.16"
         val dependency = "log4j:log4j:1.2.16"
         '''
@@ -559,12 +559,12 @@ class VariableUpdatesFunctionalTest extends BaseFunctionalTest {
 
         then:
         updatedMyVersionsFile.contains("junitVersion = \"$CurrentVersions.JUNIT\"")
-        updatedMyVersionsFile.contains("testCompile \"log4j:log4j:$CurrentVersions.LOG4J\"")
+        updatedMyVersionsFile.contains("testImplementation \"log4j:log4j:$CurrentVersions.LOG4J\"")
         updatedMyVersionsFile.contains("runtimeOnly \"log4j:log4j:$CurrentVersions.LOG4J\"")
         updatedMyVersionsFile.contains("val dependency = \"log4j:log4j:$CurrentVersions.LOG4J\"")
         // Did not change
-        updatedBuildFile.contains('testCompile "junit:junit:4.0"')
-        updatedBuildFile.contains('testCompile "log4j:log4j:1.2.16"')
+        updatedBuildFile.contains('testImplementation "junit:junit:4.0"')
+        updatedBuildFile.contains('testImplementation "log4j:log4j:1.2.16"')
         updatedBuildFile.contains('runtimeOnly "log4j:log4j:1.2.16"')
     }
 

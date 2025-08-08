@@ -118,7 +118,7 @@ class Common {
     }
 
     private static String ensureOutputDirIsAbsolute(String outputDir, Project project) {
-        if (!Paths.get(outputDir).isAbsolute()) {
+        if (!Paths.get(outputDir).absolute) {
             return project.buildDir.parent + File.separator + outputDir
         }
         outputDir

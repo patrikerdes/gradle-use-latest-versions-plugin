@@ -49,7 +49,8 @@ class DependencyUpdate {
                 'compileClasspath|compileOnly|compileOnlyDependenciesMetadata|implementation|' +
                 'implementationDependenciesMetadata|runtime|runtimeClasspath|runtimeElements|runtimeOnly|' +
                 'runtimeOnlyDependenciesMetadata|testAnnotationProcessor|testApi|testApiDependenciesMetadata|' +
-                'testCompile|testCompileClasspath|testCompileOnly|testCompileOnlyDependenciesMetadata|' +
+                'testImplementation|testImplementationClasspath|testImplementationOnly|' +
+                'testImplementationOnlyDependenciesMetadata|' +
                 'testImplementation|testImplementationDependenciesMetadata|testKotlinScriptDef|' +
                 'testKotlinScriptDefExtensions|testRuntime|testRuntimeClasspath|testRuntimeOnlyDependenciesMetadata)' +
                 "\\s*\\(\\s*\"${this.groupQ}\"\\s*,\\s*\"${this.nameQ}\"\\s*,\\s*\")${this.oldVersionQ}(\"\\s*\\))"
@@ -109,7 +110,8 @@ class DependencyUpdate {
                 'compileClasspath|compileOnly|compileOnlyDependenciesMetadata|implementation|' +
                 'implementationDependenciesMetadata|runtime|runtimeClasspath|runtimeElements|runtimeOnly|' +
                 'runtimeOnlyDependenciesMetadata|testAnnotationProcessor|testApi|testApiDependenciesMetadata|' +
-                'testCompile|testCompileClasspath|testCompileOnly|testCompileOnlyDependenciesMetadata|' +
+                'testImplementation|testImplementationClasspath|testImplementationOnly|' +
+                'testImplementationOnlyDependenciesMetadata|' +
                 'testImplementation|testImplementationDependenciesMetadata|testKotlinScriptDef|' +
                 'testKotlinScriptDefExtensions|testRuntime|testRuntimeClasspath|testRuntimeOnlyDependenciesMetadata)' +
                 "\\s*\\(\\s*\"${this.groupQ}\"\\s*,\\s*\"${this.nameQ}\"\\s*,\\s*([^\\s\"']+)\\s*\\)"

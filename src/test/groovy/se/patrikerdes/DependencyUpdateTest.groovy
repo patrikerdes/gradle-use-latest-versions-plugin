@@ -37,10 +37,10 @@ class DependencyUpdateTest extends Specification {
         '''testAnnotationProcessor("group", "name", "oldVersion")'''                | _
         '''testApi("group", "name", "oldVersion")'''                                | _
         '''testApiDependenciesMetadata("group", "name", "oldVersion")'''            | _
-        '''testCompile("group", "name", "oldVersion")'''                            | _
-        '''testCompileClasspath("group", "name", "oldVersion")'''                   | _
-        '''testCompileOnly("group", "name", "oldVersion")'''                        | _
-        '''testCompileOnlyDependenciesMetadata("group", "name", "oldVersion")'''    | _
+        '''testImplementation("group", "name", "oldVersion")'''                            | _
+        '''testImplementationClasspath("group", "name", "oldVersion")'''                   | _
+        '''testImplementationOnly("group", "name", "oldVersion")'''                        | _
+        '''testImplementationOnlyDependenciesMetadata("group", "name", "oldVersion")'''    | _
         '''testImplementation("group", "name", "oldVersion")'''                     | _
         '''testImplementationDependenciesMetadata("group", "name", "oldVersion")''' | _
         '''testKotlinScriptDef("group", "name", "oldVersion")'''                    | _
@@ -112,7 +112,7 @@ class DependencyUpdateTest extends Specification {
         '(name = "name", group = "group", version = oldVersion)'                     | _
         '(version = oldVersion, name = "name", group = "group")'                     | _
         '(version = oldVersion, group = "group", name = "name")'                     | _
-        'testCompile(group = "group", name = "name", version = oldVersion)'          | _
+        'testImplementation(group = "group", name = "name", version = oldVersion)'          | _
     }
 
     private static String getVariableFromMatches(Matcher variableMatch) {
