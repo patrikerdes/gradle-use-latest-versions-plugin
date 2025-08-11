@@ -1,0 +1,39 @@
+// Example file that use a locally installed plugin
+//
+// 1. Run ./gradlew publishToMavenLocal in the root folder of the project, to install the plugin to the local Maven cache
+// 2. Run ./gradlew useLatestVersions in this folder, and the local version will be used
+//
+// The buildscript format must be used to be able to use a plugin that has been installed to the local Maven cache,
+// other than that, everything is the same as in publishedReadmeExample
+
+buildscript {
+    repositories {
+        mavenLocal()
+    }
+    dependencies {
+        classpath 'se.patrikerdes:gradle-use-latest-versions-plugin:0.2.18'
+    }
+}
+
+plugins {
+    id 'com.github.ben-manes.versions' version '0.52.0'
+}
+
+apply plugin: 'se.patrikerdes.use-latest-versions'
+apply plugin: 'java'
+
+repositories {
+    mavenCentral()
+}
+
+ext.log4jversion = '1.2.16'
+ext.codecVersion = '1.9'
+def commonsLoggingVersion = "1.1.2"
+
+dependencies {
+    testImplementation "junit:junit:$junitVersion"
+    implementation "log4j:log4j:$log4jversion"
+    implementation "commons-codec:commons-codec:" + codecVersion
+    implementation group: 'commons-lang', name: 'commons-lang', version: '2.4'
+    implementation group: 'commons-logging', name: 'commons-logging', version: commonsLoggingVersion
+}
