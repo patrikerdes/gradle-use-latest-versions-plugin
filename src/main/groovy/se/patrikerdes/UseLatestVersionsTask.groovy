@@ -10,6 +10,7 @@ import org.gradle.api.Project
 import groovy.json.JsonBuilder
 import groovy.json.JsonSlurper
 import groovy.transform.CompileStatic
+import groovy.transform.TypeCheckingMode
 import org.gradle.api.DefaultTask
 import org.gradle.api.GradleException
 import org.gradle.api.tasks.TaskAction
@@ -54,6 +55,8 @@ class UseLatestVersionsTask extends DefaultTask {
     }
 
     @TaskAction
+    @CompileStatic(TypeCheckingMode.SKIP)
+    @SuppressWarnings(['NoDef', 'VariableTypeRequired', 'UnnecessaryGetter', 'MethodSize'])
     void useLatestVersions() {
         validateExclusiveWhiteOrBlacklist()
         File dependencyUpdatesJsonReportFile = new File(getDependencyUpdatesJsonReportFilePath(project))
@@ -61,11 +64,20 @@ class UseLatestVersionsTask extends DefaultTask {
 
         List<String> dotGradleFileNames
         if (versionFiles == null || versionFiles.isEmpty()) {
-            dotGradleFileNames = new FileNameFinder().getFileNames(project.projectDir.absolutePath, '**/*.gradle')
-            dotGradleFileNames += new FileNameFinder().getFileNames(project.projectDir.absolutePath, '**/*.gradle.kts')
-            dotGradleFileNames += new FileNameFinder().getFileNames(project.projectDir.absolutePath,
+            Class finderClass
+            try {
+                // Groovy 4.x location
+                finderClass = this.class.classLoader.loadClass('groovy.ant.FileNameFinder')
+            } catch (ClassNotFoundException e) {
+                // Groovy 2.x / 3.x location
+                finderClass = this.class.classLoader.loadClass('groovy.util.FileNameFinder')
+            }
+            def finder = finderClass.getDeclaredConstructor().newInstance()
+            dotGradleFileNames = finder.getFileNames(project.projectDir.absolutePath, '**/*.gradle')
+            dotGradleFileNames += finder.getFileNames(project.projectDir.absolutePath, '**/*.gradle.kts')
+            dotGradleFileNames += finder.getFileNames(project.projectDir.absolutePath,
                     '**/gradle.properties')
-            dotGradleFileNames += new FileNameFinder().getFileNames(project.projectDir.absolutePath, 'buildSrc/**/*.kt',
+            dotGradleFileNames += finder.getFileNames(project.projectDir.absolutePath, 'buildSrc/**/*.kt',
                     'buildSrc/build/**/*.kt')
         } else {
             dotGradleFileNames = versionFiles
