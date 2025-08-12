@@ -43,9 +43,20 @@ class InternalAggregateRootTask extends DefaultTask {
         }
     }
 
+    @SuppressWarnings(['NoDef', 'VariableTypeRequired', 'UnnecessaryGetter'])
     List<String> getVersionVariablesFiles(Project project) {
         String buildDir = project.buildDir.absolutePath
-        new FileNameFinder().getFileNames(buildDir, 'useLatestVersions/version-variables.json')
+
+        Class finderClass
+        try {
+            // Groovy 4.x location
+            finderClass = this.class.classLoader.loadClass('groovy.ant.FileNameFinder')
+        } catch (ClassNotFoundException e) {
+            // Groovy 2.x / 3.x location
+            finderClass = this.class.classLoader.loadClass('groovy.util.FileNameFinder')
+        }
+        def finder = finderClass.getDeclaredConstructor().newInstance()
+        finder.getFileNames(buildDir, 'useLatestVersions/version-variables.json')
     }
 
     Map<String, String> readVersionVariables(List<String> versionVariablesFiles) {

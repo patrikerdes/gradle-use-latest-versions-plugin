@@ -16,7 +16,7 @@ buildscript {
 }
 
 plugins {
-    id 'com.github.ben-manes.versions' version '0.33.0'
+    id 'com.github.ben-manes.versions' version '0.52.0'
 }
 
 apply plugin: 'se.patrikerdes.use-latest-versions'
@@ -31,9 +31,9 @@ ext.codecVersion = '1.9'
 def commonsLoggingVersion = "1.1.2"
 
 dependencies {
-    testCompile "junit:junit:$junitVersion"
-    compile "log4j:log4j:$log4jversion"
-    compile "commons-codec:commons-codec:" + codecVersion
-    compile group: 'commons-lang', name: 'commons-lang', version: '2.4'
-    compile group: 'commons-logging', name: 'commons-logging', version: commonsLoggingVersion
+    testImplementation "junit:junit:$junitVersion"
+    implementation "log4j:log4j:$log4jversion"
+    implementation "commons-codec:commons-codec:" + codecVersion
+    implementation group: 'commons-lang', name: 'commons-lang', version: '2.4'
+    implementation group: 'commons-logging', name: 'commons-logging', version: commonsLoggingVersion
 }
