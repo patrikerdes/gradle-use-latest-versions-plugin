@@ -16,7 +16,7 @@ Include in your `build.gradle`
 
 ```groovy
 plugins {
-  id 'se.patrikerdes.use-latest-versions' version '0.2.18'
+  id 'se.patrikerdes.use-latest-versions' version '0.2.19'
   id 'com.github.ben-manes.versions' version '0.41.0'
 }
 ```
@@ -32,7 +32,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath "se.patrikerdes:gradle-use-latest-versions-plugin:0.2.18"
+        classpath "se.patrikerdes:gradle-use-latest-versions-plugin:0.2.19"
         classpath 'com.github.ben-manes:gradle-versions-plugin:0.41.0'
     }
 }
@@ -47,12 +47,12 @@ apply plugin: 'se.patrikerdes.use-latest-versions'
 Include in your `build.gradle.kts`
 ```groovy
 plugins {
-  id("se.patrikerdes.use-latest-versions") version "0.2.18"
+  id("se.patrikerdes.use-latest-versions") version "0.2.19"
   id("com.github.ben-manes.versions") version "0.41.0"
 }
 ```
 
-or 
+or
 
 ```groovy
 buildscript {
@@ -63,7 +63,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath("gradle.plugin.se.patrikerdes:gradle-use-latest-versions-plugin:0.2.18")
+        classpath("gradle.plugin.se.patrikerdes:gradle-use-latest-versions-plugin:0.2.19")
         classpath("com.github.ben-manes:gradle-versions-plugin:0.41.0")
     }
 }
@@ -76,7 +76,7 @@ apply {
 ```
 
 ### Multi-project usage
-In case you have a Multi-project build and you have some common dependency configuration in some common file in root project 
+In case you have a Multi-project build and you have some common dependency configuration in some common file in root project
 (like *.gradle file), you should apply plugin to all projects. Easiest way to do this is with `allprojects` block like:
 ```
 plugins {
@@ -89,7 +89,7 @@ allprojects {
     apply plugin: 'com.github.ben-manes.versions'
 }
 ```
-This is because `se.patrikerdes.use-latest-versions` plugin scans files for every project separately. 
+This is because `se.patrikerdes.use-latest-versions` plugin scans files for every project separately.
 
 In case you handle dependencies per project separately this is not needed and you can apply plugin just to selected projects.
 
@@ -99,7 +99,7 @@ Given this build.gradle file:
 
 ```groovy
 plugins {
-    id 'se.patrikerdes.use-latest-versions' version '0.2.18'
+    id 'se.patrikerdes.use-latest-versions' version '0.2.19'
     id 'com.github.ben-manes.versions' version '0.19.0'
 }
 
@@ -133,7 +133,7 @@ variables – and you build.gradle file will look like this:
 
 ```groovy
 plugins {
-    id 'se.patrikerdes.use-latest-versions' version '0.2.18'
+    id 'se.patrikerdes.use-latest-versions' version '0.2.19'
     id 'com.github.ben-manes.versions' version '0.41.0' // <- Updated
 }
 
@@ -171,12 +171,12 @@ useLatestVersions {
    # A blacklist of dependencies to update, in the format of group:name
    # Equal to command line: --ignore-dependency=[values]
    updateBlacklist = []
-   # When enabled, root project gradle.properties will also be populated with 
+   # When enabled, root project gradle.properties will also be populated with
    # versions from subprojects in multi-project build
    # Equal to command line: --update-root-properties
    updateRootProperties = false
-   # By default plugin tries to find all relevant gradle files (e.g. *.gradle, gradle.properties etc). 
-   # This can be slow in some cases when project has a lot of gradle files. For example when using conventions 
+   # By default plugin tries to find all relevant gradle files (e.g. *.gradle, gradle.properties etc).
+   # This can be slow in some cases when project has a lot of gradle files. For example when using conventions
    # in buildSrc. With this option you can specify what files should plugin search and check. Plugin will ignore
    # files that don't exist. Empty list means use default strategy. File paths are relative to project dir.
    #
@@ -186,8 +186,8 @@ useLatestVersions {
    #
    # Note:
    # You always have to specify file that has dependencies in some common dependency format with artifact coordinates,
-   # e.g. compileOnly "group:module:version" or compileOnly("group:module:version") or val dependency = "group:module:version" etc. 
-   # For example if you set just versionFiles = ["gradle.properties"] this won't work, since plugin 
+   # e.g. compileOnly "group:module:version" or compileOnly("group:module:version") or val dependency = "group:module:version" etc.
+   # For example if you set just versionFiles = ["gradle.properties"] this won't work, since plugin
    # won't be able to correlate variable with artifact coordinates.
    #
    # Equal to command line: --version-files=[values]
@@ -223,7 +223,7 @@ changes applied by `useLatestVersions`.
 
 ## Updating only specific dependencies (whitelist)
 If your Gradle version is 4.6 or higher, you can pass the `--update-dependency` flag to `useLatestVersions` and
-`useLatestVersionsCheck` with a value in the format `$GROUP:$NAME`.  A complete dependency group can be updated by 
+`useLatestVersionsCheck` with a value in the format `$GROUP:$NAME`.  A complete dependency group can be updated by
 using the format `$GROUP`. Multiple dependencies can be updated by passing the flag multiple times.
 
 ```bash
@@ -232,7 +232,7 @@ using the format `$GROUP`. Multiple dependencies can be updated by passing the f
 
 ## Ignore specific dependency updates (blacklist)
 If your Gradle version is 4.6 or higher, you can pass the `--ignore-dependency` flag to `useLatestVersions` and
-`useLatestVersionsCheck` with a value in the format `$GROUP:$NAME`. A complete dependency group can be ignored by 
+`useLatestVersionsCheck` with a value in the format `$GROUP:$NAME`. A complete dependency group can be ignored by
 using the format `$GROUP`. Multiple dependencies can be ignored by passing the flag multiple times.
 
 ```bash
@@ -343,7 +343,7 @@ buildscript {
     dependencies{
         classpath group: 'se.patrikerdes',
 				name: 'gradle-use-latest-versions-plugin',
-				version: '0.2.18'
+				version: '0.2.19'
     }
 }
 
@@ -364,6 +364,10 @@ From the [Maven Versions Plugin](http://www.mojohaus.org/versions-maven-plugin/i
 [use-latest-versions](http://www.mojohaus.org/versions-maven-plugin/use-latest-versions-mojo.html)
 
 ## Changelog
+
+### 0.2.19
+
+Fixed [issue #68](https://github.com/patrikerdes/gradle-use-latest-versions-plugin/issues/68), Plugin is incompatible with Gradle 9.0
 
 ### 0.2.18
 
